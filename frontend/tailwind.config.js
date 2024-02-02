@@ -14,6 +14,7 @@ export default {
         dark: "#003F54",
       },
       fontSize: {
+        smallContent: "0.85rem",
         content: "0.9rem",
         smallHeader: "1.2rem",
         mediumHeader: "1.8rem",

@@ -1,4 +1,5 @@
 <script>
+  import Searchbar from "../components/Searchbar.svelte"
   import Spacer from "../components/Spacer.svelte"
 </script>
 
@@ -7,3 +8,5 @@
 <Spacer height={10} />
 <h2 class="text-header font-extrabold tracking-tighter leading-none">FIND A ROOM</h2>
 <p class="font-light">See Available Rooms In Real Time</p>
+<Spacer height={20} />
+<Searchbar />
