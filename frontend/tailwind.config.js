@@ -17,7 +17,7 @@ export default {
         content: "0.9rem",
         smallHeader: "1.2rem",
         mediumHeader: "1.8rem",
-        header: "2.2rem"
+        header: "2.5rem"
       }
     },
   },

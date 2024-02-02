@@ -1,9 +1,11 @@
 <script>
+  import STD from "$lib/STD"
   import "../app.css"
+  import Navbar from "../components/Navbar.svelte"
 </script>
 
-<div
-  class="pr-[4%] pl-[4%] tablet:pr-[4%] tablet:pl-[4%] laptop:pr-[8%] laptop:pl-[8%] desktop:pl-[20%] desktop:pr-[20%] bigScreen:pl-[27%] bigScreen:pr-[27%]"
->
+<Navbar />
+
+<div class="p-[50px] {STD.paddingStyle} flex flex-col items-center">
   <slot />
 </div>
