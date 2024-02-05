@@ -8,7 +8,7 @@
 
 <Navbar />
 
-<div class="pt-[50px] pb-[30px] {STD.paddingStyle} flex flex-col items-center">
+<div class="pt-[70px] pb-[30px] {STD.paddingStyle} flex flex-col items-center">
   <slot />
   <Spacer height={50} />
   <Footer />
