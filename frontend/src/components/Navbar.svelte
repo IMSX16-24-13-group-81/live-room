@@ -3,7 +3,7 @@
   import Spacer from "./Spacer.svelte"
 </script>
 
-<div class="fixed z-20 flex items-center p-2 right-0 left-0 {STD.paddingStyle}">
+<div class="fixed z-20 flex items-center p-2 right-0 left-0 {STD.paddingStyle} bg-white/70 backdrop-blur-md">
   <img src={"/logo.svg"} alt="logo svg" class="w-8 h-8" />
   <Spacer />
   <button>
