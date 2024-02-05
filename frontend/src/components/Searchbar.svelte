@@ -2,7 +2,7 @@
   import IconButton from "./IconButton.svelte"
 </script>
 
-<div class="flex justify-between self-center w-[60%] bg-dark/10 p-1 pl-4 pr-4 rounded-full">
+<div class="flex justify-between self-center w-[100%] tablet:w-[60%] bg-dark/10 p-1 pl-4 pr-4 rounded-full">
   <input
     type="text"
     placeholder="Search for a room"
