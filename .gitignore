@@ -1,3 +1,5 @@
 .DS_Store
 pb_data
 live-room-exc
+backend/node_modules
+backend/dist
