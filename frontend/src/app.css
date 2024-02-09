@@ -5,7 +5,6 @@
 html {
     background: #FFF;
     font-family: 'Montserrat', sans-serif;
-    color: #003F54;
-    -ms-overflow-style: none;  
-    scrollbar-width: none;  
+    color: #003F54; 
+    font-size: 0.9rem;
 }   
