@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  frontend:
+    image: liveinfo-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+
+  backend:
+    image: liveinfo-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - influxdb
+
+  postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: liveinfo
+      POSTGRES_PASSWORD: livepassword
+      POSTGRES_DB: liveinfo
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  influxdb:
+    image: influxdb:latest
+    restart: always
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: liveinfo
+      DOCKER_INFLUXDB_INIT_PASSWORD: livepassword
+      DOCKER_INFLUXDB_INIT_ORG: liveinfo
+      DOCKER_INFLUXDB_INIT_BUCKET: liveinfo
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: super-secret-auth-token
+
+    volumes:
+      - influxdb-data:/var/lib/influxdb
+    ports:
+      - "8086:8086"
+
+volumes:
+  postgres-data:
+  influxdb-data:
