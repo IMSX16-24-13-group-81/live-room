@@ -1,4 +1,4 @@
-name: Backend
+name: Frontend
 on:
   push:
     branches: [main]
@@ -46,4 +46,4 @@ jobs:
         with:
           context: ./frontend
           push: ${{ github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/IMSX16-24-13-group-81/live-room-frontend:latest
+          tags: ghcr.io/imsx16-24-13-group-81/live-room-frontend:latest

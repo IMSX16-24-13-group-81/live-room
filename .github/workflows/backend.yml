@@ -45,4 +45,4 @@ jobs:
         with:
           context: ./backend
           push: ${{ github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/IMSX16-24-13-group-81/live-room-backend:latest
+          tags: ghcr.io/imsx16-24-13-group-81/live-room-backend:latest
