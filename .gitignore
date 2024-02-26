@@ -3,3 +3,4 @@ pb_data
 live-room-exc
 backend/node_modules
 backend/dist
+.env
