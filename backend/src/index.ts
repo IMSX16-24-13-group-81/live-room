@@ -1,5 +1,5 @@
 import fastify from "fastify";
-import { updateOccupants } from "./influx/sensors";
+import { heartbeat, updateOccupants } from "./influx/sensors";
 
 const server = fastify();
 
@@ -10,11 +10,12 @@ server.get("/ping", async (request, reply) => {
 server.get("/sensors/report", async (request, reply) => {
   const randomOccupants = Math.floor(Math.random() * 10);
   updateOccupants(randomOccupants, "sensor1");
-  return "pong\n";
+  return "Success";
 });
 
 server.get("/sensors/heartbeat", async (request, reply) => {
-  return "pong\n";
+  heartbeat("sensor1", "0.0.1");
+  return "Success";
 });
 
 server.listen({ port: 8080, host: "0.0.0.0" }, (err, address) => {

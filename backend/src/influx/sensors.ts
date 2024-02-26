@@ -15,4 +15,14 @@ const updateOccupants = (occupants: number, sensorId: string) => {
   writeClient.flush();
 };
 
-export { updateOccupants };
+const heartbeat = (sensorId: string, firmwareVersion: string) => {
+  let point = new Point("sensors")
+    .tag("sensorId", sensorId)
+    .tag("firmwareVersion", firmwareVersion)
+    .intField("heartbeat", 1);
+
+  writeClient.writePoint(point);
+  writeClient.flush();
+};
+
+export { updateOccupants, heartbeat };
