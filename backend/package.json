@@ -14,12 +14,14 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.11.17",
+    "@types/pg": "^8.11.0",
     "drizzle-kit": "^0.20.14",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "drizzle-orm": "^0.29.3",
+    "drizzle-orm": "^0.29.4",
     "fastify": "^4.26.0",
+    "pg": "^8.11.3",
     "postgres": "^3.4.3"
   }
 }
