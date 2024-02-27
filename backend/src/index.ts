@@ -1,7 +1,6 @@
 import fastify from "fastify"
 import { getDB } from "./db/config"
 import { buildings } from "./db/schema"
-import { serial } from "drizzle-orm/pg-core"
 
 const server = fastify()
 
@@ -24,6 +23,7 @@ const main = async () => {
     console.log(`Server listening at ${address}`)
   })
 
+  console.log("THIS DID RUN")
   server.get("/ping", async (request, reply) => {
     return "pong\n"
   })

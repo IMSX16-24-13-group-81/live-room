@@ -15,8 +15,9 @@ export const getDB = async () => {
 
   await client.connect()
   const db = drizzle(client, { schema })
-  await migrate(db, { migrationsFolder: "drizzle" })
+  //await migrate(db, { migrationsFolder: "drizzle" })
   //console.log("THE PATH", resolve(__dirname, "./drizzle"))
-  //await migrate(db, { migrationsFolder: resolve(__dirname, "../drizzle") })
+  //await migrate(db, { migrationsFolder: resolve(__dirname, "./drizzle") })
+  await migrate(db, { migrationsFolder: "drizzle" });
   return db
 }

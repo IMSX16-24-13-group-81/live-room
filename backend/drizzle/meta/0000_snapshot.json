@@ -1,5 +1,5 @@
 {
-  "id": "c7812537-1d9b-4107-9104-065d9f9c93e6",
+  "id": "c7974352-7096-4c25-99eb-2794b0b531e0",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -11,7 +11,7 @@
         "id": {
           "name": "id",
           "type": "serial",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true
         },
         "name": {
