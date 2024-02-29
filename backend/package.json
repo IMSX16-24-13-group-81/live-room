@@ -21,8 +21,9 @@
   },
   "dependencies": {
     "@influxdata/influxdb-client": "^1.33.2",
-    "drizzle-orm": "^0.29.3",
+    "drizzle-orm": "^0.29.4",
     "fastify": "^4.26.0",
+    "pg": "^8.11.3",
     "postgres": "^3.4.3",
     "prettier": "^3.2.5",
     "ws": "^8.16.0"
