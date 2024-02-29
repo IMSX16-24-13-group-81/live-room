@@ -1,9 +1,15 @@
 <script>
   import STD from "$lib/STD"
+  import { onMount } from "svelte"
   import "../app.css"
   import Footer from "../components/Footer.svelte"
   import Navbar from "../components/Navbar.svelte"
   import Spacer from "../components/Spacer.svelte"
+  import { setupWebsocket } from "../lib/websocket"
+
+  onMount(() => {
+    setupWebsocket()
+  })
 </script>
 
 <Navbar />
