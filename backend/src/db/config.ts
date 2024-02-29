@@ -3,7 +3,7 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import * as schema from './schema';
 
-export const getDB = async () => {
+export const getPG = async () => {
   const client = new Client({
     host: '127.0.0.1',
     port: 5432,
