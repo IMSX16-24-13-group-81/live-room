@@ -5,3 +5,4 @@ backend/node_modules
 backend/dist
 .env
 backend/package-lock.json
+backend/drizzle

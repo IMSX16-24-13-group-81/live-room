@@ -11,9 +11,7 @@
       "drizzle/*": ["./schema/*"] // Adjust the path as necessary
     },
   },
-  "include": [
-    "src/**/*.ts"                         // Specify files to be included in the program
-  ],
+  "include": ["src/**/*.ts"],                       // Specify files to be included in the program,
   "exclude": [
     "node_modules",                       // Exclude the node_modules directory
     "**/*.spec.ts"                        // Exclude test files
