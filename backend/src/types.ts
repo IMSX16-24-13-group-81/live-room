@@ -1,8 +1,6 @@
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
-export type OurPGDatabase = NodePgDatabase<
-  typeof import('/Users/hugoolsson/Documents/Skola/Kandidatarbete/live-room/backend/src/db/schema')
->;
+export type OurPGDatabase = NodePgDatabase<typeof import('./db/schema')>;
 
 export interface OccupantsWebsocketMessage {
   // sensorID should probabily be roomID in the future
