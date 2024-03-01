@@ -9,11 +9,17 @@ For the embedded software that reports the occupation status of the rooms, see [
 ## Running in development
 
 The backend requires at least Node.js 20.
-In order to start in development mode, run:
+In order to start in development mode start off by installing dependencies:
 
 ```bash
 cd backend
-npm install
-npm build
-npm start
+pnpm install
+```
+
+Then, copy the `.env.example` file to `.env` and modify the environment variables as needed.
+After that, generate the database schema and start the server:
+
+```bash
+pnpm generate
+pnpm dev
 ```
