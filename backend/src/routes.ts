@@ -33,14 +33,14 @@ export const setupRoutes = (
 
   server.post('/api/sensors/report', async (request, reply) => {
     const { occupants, sensorId, authorization }: any = request.body;
-    //updateOccupants(occupants, sensorId);
+    updateOccupants(occupants, sensorId);
     broadcastOccupants(wss, occupants, sensorId);
     return 'Success';
   });
 
   server.get('/api/sensors/report/test', async (request, reply) => {
     const randomOccupants = Math.floor(Math.random() * 10);
-    //updateOccupants(randomOccupants, 'sensor1');
+    updateOccupants(randomOccupants, 'sensor1');
     broadcastOccupants(wss, randomOccupants, 'sensor1');
     return 'Success';
   });
