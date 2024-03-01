@@ -15,6 +15,53 @@ const updateOccupants = (occupants: number, sensorId: string) => {
   writeClient.flush();
 };
 
+const getOccupants = async () => {
+  let queryApi = influxClient.getQueryApi(org);
+  const query = `from(bucket: "${bucket}")
+  |> range(start: -1h)
+  |> filter(fn: (r) => r._measurement == "sensors")
+  |> last()`;
+  let result = await queryApi.collectRows(query);
+  return result
+    .filter(
+      (row: any) =>
+        row._field === 'occupants' &&
+        row.result === '_result' &&
+        row._value !== undefined
+    )
+    .map((row: any) => {
+      return {
+        sensorId: row.sensorId,
+        occupants: row._value,
+        lastReported: row._time,
+        // TODO: Use heartbeat timestamp
+        lastSeen: row._time
+      };
+    });
+};
+
+const getOccupantsHistory = async () => {
+  let queryApi = influxClient.getQueryApi(org);
+  const query = `from(bucket: "${bucket}")
+  |> range(start: -1h)
+  |> filter(fn: (r) => r._measurement == "sensors")`;
+  let result = await queryApi.collectRows(query);
+  return result
+    .filter(
+      (row: any) =>
+        row._field === 'occupants' &&
+        row.result === '_result' &&
+        row._value !== undefined
+    )
+    .map((row: any) => {
+      return {
+        sensorId: row.sensorId,
+        occupants: row._value,
+        timestamp: row._time
+      };
+    });
+};
+
 const heartbeat = (sensorId: string, firmwareVersion: string) => {
   let point = new Point('sensors')
     .tag('sensorId', sensorId)
@@ -25,4 +72,4 @@ const heartbeat = (sensorId: string, firmwareVersion: string) => {
   writeClient.flush();
 };
 
-export { updateOccupants, heartbeat };
+export { getOccupants, getOccupantsHistory, updateOccupants, heartbeat };

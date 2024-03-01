@@ -1,5 +1,10 @@
 import { FastifyInstance } from 'fastify';
-import { heartbeat, updateOccupants } from './influx/sensors';
+import {
+  getOccupants,
+  getOccupantsHistory,
+  heartbeat,
+  updateOccupants
+} from './influx/sensors';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import WebSocket from 'ws';
 import { OurPGDatabase } from './types';
@@ -29,6 +34,22 @@ export const setupRoutes = (
   //Ping test
   server.get('/api/ping', async (request, reply) => {
     return 'pong\n';
+  });
+
+  server.get('/api/sensors/occupants', async (request, reply) => {
+    return await getOccupants();
+  });
+
+  server.get('/api/sensors/occupants/history', async (request, reply) => {
+    const { type }: any = request.body ?? { type: 'json' };
+    const occupants = await getOccupantsHistory();
+
+    return type === 'csv'
+      ? [
+          'Timestamp,Sensor ID,Occupants',
+          ...occupants.map((o) => `${o.timestamp},${o.sensorId},${o.occupants}`)
+        ].join('\n')
+      : occupants;
   });
 
   server.post('/api/sensors/report', async (request, reply) => {
