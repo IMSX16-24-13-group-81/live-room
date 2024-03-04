@@ -52,26 +52,29 @@ export const setupRoutes = (
   });
 
   server.post('/api/sensors/report', async (request, reply) => {
-    const { occupants, sensorId, authorization }: any = request.body;
+    const { firmwareVersion, sensorId, occupants, authorization }: any =
+      request.body;
+
     if (authorization !== process.env.AUTHORIZATION_TOKEN) {
       reply.code(401);
       return 'Unauthorized';
     }
 
-    updateOccupants(occupants, sensorId);
+    updateOccupants(firmwareVersion, sensorId, occupants);
     broadcastOccupants(wss, occupants, sensorId);
     return 'Success';
   });
 
   server.get('/api/sensors/report/test', async (request, reply) => {
     const { authorization }: any = request.body;
+
     if (authorization !== process.env.AUTHORIZATION_TOKEN) {
       reply.code(401);
       return 'Unauthorized';
     }
 
     const randomOccupants = Math.floor(Math.random() * 10);
-    updateOccupants(randomOccupants, 'sensor1');
+    updateOccupants('1.0.0', 'sensor1', randomOccupants);
     broadcastOccupants(wss, randomOccupants, 'sensor1');
     return 'Success';
   });
