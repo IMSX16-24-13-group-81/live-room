@@ -1,5 +1,9 @@
 import { FastifyInstance } from 'fastify';
-import { heartbeat, updateOccupants } from './influx/sensors';
+import {
+  getOccupants,
+  getOccupantsHistory,
+  updateOccupants
+} from './influx/sensors';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import WebSocket from 'ws';
 import { OurPGDatabase } from './types';
@@ -31,28 +35,47 @@ export const setupRoutes = (
     return 'pong\n';
   });
 
+  server.get('/api/sensors/occupants', async (request, reply) => {
+    return await getOccupants();
+  });
+
+  server.get('/api/sensors/occupants/history', async (request, reply) => {
+    const { type }: any = request.body ?? { type: 'json' };
+    const occupants = await getOccupantsHistory();
+
+    return type === 'csv'
+      ? [
+          'Timestamp,Sensor ID,Occupants',
+          ...occupants.map((o) => `${o.timestamp},${o.sensorId},${o.occupants}`)
+        ].join('\n')
+      : occupants;
+  });
+
   server.post('/api/sensors/report', async (request, reply) => {
-    const { occupants, sensorId, authorization }: any = request.body;
-    updateOccupants(occupants, sensorId);
+    const { firmwareVersion, sensorId, occupants, authorization }: any =
+      request.body;
+
+    if (authorization !== process.env.AUTHORIZATION_TOKEN) {
+      reply.code(401);
+      return 'Unauthorized';
+    }
+
+    updateOccupants(firmwareVersion, sensorId, occupants);
     broadcastOccupants(wss, occupants, sensorId);
     return 'Success';
   });
 
   server.get('/api/sensors/report/test', async (request, reply) => {
+    const { authorization }: any = request.body;
+
+    if (authorization !== process.env.AUTHORIZATION_TOKEN) {
+      reply.code(401);
+      return 'Unauthorized';
+    }
+
     const randomOccupants = Math.floor(Math.random() * 10);
-    updateOccupants(randomOccupants, 'sensor1');
+    updateOccupants('1.0.0', 'sensor1', randomOccupants);
     broadcastOccupants(wss, randomOccupants, 'sensor1');
-    return 'Success';
-  });
-
-  server.post('/api/sensors/heartbeat', async (request, reply) => {
-    const { sensorId, firmwareVersion, authorization }: any = request.body;
-    heartbeat(sensorId, firmwareVersion);
-    return 'Success';
-  });
-
-  server.get('/api/sensors/heartbeat/test', async (request, reply) => {
-    heartbeat('sensor1', '0.0.1');
     return 'Success';
   });
 };
