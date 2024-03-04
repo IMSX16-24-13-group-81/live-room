@@ -62,14 +62,4 @@ const getOccupantsHistory = async () => {
     });
 };
 
-const heartbeat = (sensorId: string, firmwareVersion: string) => {
-  let point = new Point('sensors')
-    .tag('sensorId', sensorId)
-    .tag('firmwareVersion', firmwareVersion)
-    .intField('heartbeat', 1);
-
-  writeClient.writePoint(point);
-  writeClient.flush();
-};
-
-export { getOccupants, getOccupantsHistory, updateOccupants, heartbeat };
+export { getOccupants, getOccupantsHistory, updateOccupants };

@@ -2,7 +2,6 @@ import { FastifyInstance } from 'fastify';
 import {
   getOccupants,
   getOccupantsHistory,
-  heartbeat,
   updateOccupants
 } from './influx/sensors';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
@@ -54,26 +53,26 @@ export const setupRoutes = (
 
   server.post('/api/sensors/report', async (request, reply) => {
     const { occupants, sensorId, authorization }: any = request.body;
+    if (authorization !== process.env.AUTHORIZATION_TOKEN) {
+      reply.code(401);
+      return 'Unauthorized';
+    }
+
     updateOccupants(occupants, sensorId);
     broadcastOccupants(wss, occupants, sensorId);
     return 'Success';
   });
 
   server.get('/api/sensors/report/test', async (request, reply) => {
+    const { authorization }: any = request.body;
+    if (authorization !== process.env.AUTHORIZATION_TOKEN) {
+      reply.code(401);
+      return 'Unauthorized';
+    }
+
     const randomOccupants = Math.floor(Math.random() * 10);
     updateOccupants(randomOccupants, 'sensor1');
     broadcastOccupants(wss, randomOccupants, 'sensor1');
-    return 'Success';
-  });
-
-  server.post('/api/sensors/heartbeat', async (request, reply) => {
-    const { sensorId, firmwareVersion, authorization }: any = request.body;
-    heartbeat(sensorId, firmwareVersion);
-    return 'Success';
-  });
-
-  server.get('/api/sensors/heartbeat/test', async (request, reply) => {
-    heartbeat('sensor1', '0.0.1');
     return 'Success';
   });
 };

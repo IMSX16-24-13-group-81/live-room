@@ -9,6 +9,5 @@ export const buildings = pgTable('buildings', {
 export const rooms = pgTable('rooms', {
   id: serial('id').primaryKey(),
   name: text('name'),
-  coordiates: text('coordiates'),
-  available: boolean('available')
+  coordiates: text('coordiates')
 });
