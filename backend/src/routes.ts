@@ -52,8 +52,10 @@ export const setupRoutes = (
   });
 
   server.post('/api/sensors/report', async (request, reply) => {
-    const { firmwareVersion, sensorId, occupants, authorization }: any =
-      request.body;
+    const { firmwareVersion, sensorId, occupants }: any = request.body;
+    const { authorization }: any = request.headers;
+
+    console.log('Received authorization', authorization);
 
     if (authorization !== process.env.AUTHORIZATION_TOKEN) {
       reply.code(401);
@@ -66,7 +68,7 @@ export const setupRoutes = (
   });
 
   server.get('/api/sensors/report/test', async (request, reply) => {
-    const { authorization }: any = request.body;
+    const { authorization }: any = request.headers;
 
     if (authorization !== process.env.AUTHORIZATION_TOKEN) {
       reply.code(401);
