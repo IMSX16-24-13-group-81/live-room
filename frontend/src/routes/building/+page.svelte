@@ -1,6 +1,19 @@
 <script>
+  import { onMount } from "svelte"
   import Spacer from "../../components/Spacer.svelte"
   import RoomCell from "../../components/building-page/RoomCell.svelte"
+
+  onMount(async () => {
+    const latestDataUrl = "http://localhost:8086/api/sensors/occupants"
+    const response = await fetch(latestDataUrl, {
+      headers: {
+        Autherization: "application/json",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    })
+    const data = await response.json()
+    console.log("DATA", data)
+  })
 </script>
 
 <div class="flex flex-col w-full">
