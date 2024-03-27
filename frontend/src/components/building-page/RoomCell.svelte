@@ -13,10 +13,14 @@
   <Spacer />
   <div class="flex gap-1 items-center self-end tablet:self-center">
     <Spacer />
-    <p class="{isAvailable ? ' text-[#009760]' : 'text-[#97005A]'} font-bold text-smallContent">
-      {isAvailable ? "AVAILABLE" : "USED"}
-    </p>
+    <div class="p-[2px] pl-4 pr-4 {isAvailable ? ' bg-[#009760]/15' : 'bg-[#97005A]/15'} rounded-full">
+      <p class="{isAvailable ? ' text-[#009760]' : 'text-[#97005A]'} font-bold text-smallContent">
+        {isAvailable ? "Available" : "In Use"}
+      </p>
+    </div>
+    <!--
     <IconButton iconName={"campusmaps.svg"} />
     <IconButton iconName={"timeedit.svg"} />
+    -->
   </div>
 </div>
