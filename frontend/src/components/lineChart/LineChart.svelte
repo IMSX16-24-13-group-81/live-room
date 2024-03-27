@@ -112,9 +112,8 @@
       } else {
         ctx.lineTo(pixelPosition.x, pixelPosition.y)
       }
-
-      ctx.stroke()
     })
+    ctx.stroke()
     ctx.closePath()
     data.points.forEach((point, index) => {
       const xPos = (2 * (point.time - startTime)) / (endTime - startTime) - 1
@@ -130,7 +129,7 @@
   const resizeCanvas = (ctx: CanvasRenderingContext2D) => {
     const ratio = Math.ceil(window.devicePixelRatio)
     ctx.canvas.width = ctx.canvas.offsetWidth * ratio
-    ctx.canvas.height = (ctx.canvas.offsetHeight + 5) * ratio
+    ctx.canvas.height = ctx.canvas.offsetHeight * ratio
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0)
   }
 
@@ -260,7 +259,7 @@
 <div class="flex flex-col w-full">
   <p class="font-medium opacity-50 text-smallContent tablet:text-content">Currenty selected value, <span class="font-bold">{!currentHoverPoint ? "None" : `Value: ${currentHoverPoint.y}, Time: ${formatDateTime(new Date(currentHoverPoint.time))}`}</span></p>
   <div class="relative w-full aspect-video">
-    <canvas id={canvasID} class="absolute w-full aspect-[16/9] bg-transparent" />
+    <canvas id={canvasID} class="absolute w-full aspect-[16/9]" />
     <canvas id={dragCanvasID} class="absolute w-full aspect-[16/9]" />
     <div class="absolute w-full aspect-video bg-[#EDF2F3] flex justify-center items-center {realData ? 'opacity-0 pointer-events-none' : 'opacity-100'}">
       <h2 class="text-smallHeader font-bold opacity-30">SELECT A ROOM</h2>
