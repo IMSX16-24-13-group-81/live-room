@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { LineChartData } from "$lib/data/protocols"
   import { getExampleLineChartData } from "$lib/helpers"
   import CustomButton from "../../components/CustomButton.svelte"
   import RoomSelector from "../../components/RoomSelector.svelte"
@@ -13,12 +14,16 @@
   let showIncorrectToken = false
   let hasAuthenticated = true
 
-  let selectedRooms: Set<string> = new Set()
+  let currentLineChartData: LineChartData | undefined
+
+  $: if (currentLineChartData) {
+    console.log("FROM OUTSIDE WAS UPDATED")
+  }
 
   //Placeholder variable
-  const correctToken = "hej-hej-hej"
+  const correctToken = "placeholder-token"
 
-  let tokenString = correctToken
+  let tokenString = ""
 
   const testAccess = () => {
     if (tokenString === correctToken) {
@@ -37,9 +42,9 @@
 <img src={"/chalmersLogo.svg"} alt="Chalmers University Logo" class="w-[110px]" />
 <Spacer height={10} />
 <h2 class="text-header font-extrabold tracking-tighter leading-none">STATISTICS</h2>
-<p class="font-medium text-smallHeader opacity-50">Explore when and where from a single place.</p>
+<p class="font-medium text-smallHeader opacity-50 text-center">Explore when and where from a single place.</p>
 {#if hasAuthenticated === false}
-  <Spacer height={100} />
+  <Spacer height={50} />
   <StatsIllustration />
   <Spacer height={50} />
   <div class="w-full max-w-[600px]">
@@ -59,13 +64,13 @@
   {/if}
 {:else}
   <Spacer height={40} />
-  <LineChart data={getExampleLineChartData()} />
+  <LineChart data={currentLineChartData ?? getExampleLineChartData()} realData={!!currentLineChartData} />
   <Spacer height={40} />
   <h2 class="text-mediumHeader font-extrabold tracking-tighter leading-none">Select Rooms</h2>
-  <h2 class="text-content font-light tracking-tighter leading-none">Data from the rooms selected will be shown in the line chart.</h2>
+  <h2 class="text-content font-light tracking-tighter leading-none text-center">Data from the rooms selected will be shown in the line chart.</h2>
   <Spacer height={20} />
   <div class="flex">
-    <RoomSelector rooms={data.allRooms} bind:selectedRooms />
+    <RoomSelector rooms={data.allRooms} bind:currentLineChartData />
   </div>
 
   <Spacer height={100} />
@@ -76,7 +81,7 @@
     <Spacer height={20} />
     <p class="text-content font-light leading-none text-center max-w-[700px]">Contact: <span class="font-bold">placeholder-email@domain.com</span></p>
     <Spacer height={40} />
-    <img src={"/stats-pattern.svg"} alt="Pattern illustration" class="  h-full max-w-[400px] object-contain" />
+    <img src={"/stats-pattern.svg"} alt="Pattern illustration" class="w-full max-w-[400px] object-contain" />
     <Spacer height={40} />
   </div>
 {/if}

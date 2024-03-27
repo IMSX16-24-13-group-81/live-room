@@ -8,7 +8,7 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import WebSocket from 'ws';
 import { OurPGDatabase } from './types';
 import { broadcastOccupants } from './websocket/flushes';
-import { rooms } from './db/exampleData';
+import { getExampleTimePoints, rooms } from './db/exampleData';
 
 export const setupRoutes = (
   server: FastifyInstance,
@@ -56,6 +56,19 @@ export const setupRoutes = (
   //Possibly just a placeholder, returns example data.
   server.get('/api/all_rooms', async (request, reply) => {
     return rooms;
+  });
+
+  //Possibly just a placeholder, returns example data.
+  server.get('/api/points_for_room/:roomID', async (request, reply) => {
+    const parameters = request.params as any;
+    const roomID = parameters.roomID;
+    if (!roomID) {
+      reply.code(400);
+      return 'Must include a room ID in request.';
+    }
+    reply.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+    reply.header('Access-Control-Allow-Methods', 'GET, POST');
+    return getExampleTimePoints();
   });
 
   server.get('/api/sensors/occupants/history', async (request, reply) => {

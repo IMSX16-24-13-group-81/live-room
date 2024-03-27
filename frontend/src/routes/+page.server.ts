@@ -6,6 +6,7 @@ export const load = (async ({ params }) => {
   const freeRooms = allRooms.filter((room) => room.isAvailable === true)
 
   return {
+    allRooms,
     freeRooms,
   }
 }) satisfies PageServerLoad

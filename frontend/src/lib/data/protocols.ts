@@ -20,5 +20,4 @@ export interface Point {
 
 export interface LineChartData {
   points: Point[]
-  room: Room
 }

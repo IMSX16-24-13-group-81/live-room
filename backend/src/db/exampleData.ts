@@ -15,6 +15,11 @@ export interface Room {
   isAvailable: boolean;
 }
 
+export interface Point {
+  time: number; //Integer since 1970 in milliseconds
+  y: number; //Number of people in a room as an integer
+}
+
 export const buildings: Building[] = [
   {
     id: '1',
@@ -245,3 +250,19 @@ export const rooms: Room[] = [
     isAvailable: true
   }
 ];
+
+export const getExampleTimePoints = (): Point[] => {
+  const numPoints = 100;
+  return new Array(100).fill(0).map((_, i) => {
+    return {
+      time: new Date().getTime() + i * 86400 * 1000,
+      y:
+        1 +
+        Math.round(
+          (1 + Math.sin(((2 * Math.PI * i) / numPoints) * 5)) *
+            8 *
+            Math.random()
+        )
+    };
+  });
+};
