@@ -1,4 +1,4 @@
-import { getBuildingByID } from "$lib/helpers"
+import { getBuildingByID, getRoomsByBuildingID } from "$lib/helpers"
 import { error } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
 
@@ -12,7 +12,10 @@ export const load = (async ({ params }) => {
     })
   }
 
+  const rooms = await getRoomsByBuildingID(buildingID)
+
   return {
     building,
+    rooms,
   }
 }) satisfies PageServerLoad

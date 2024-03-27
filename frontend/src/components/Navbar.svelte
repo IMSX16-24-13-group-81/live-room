@@ -7,8 +7,6 @@
   <a href="/"><img src={"/logo.svg"} alt="logo svg" class="w-8 h-8" /></a>
   <Spacer />
   <a href="/stats"><p class="font-medium text-content">Statistics</p></a>
-  <Spacer width={20} />
-  <a href="/"><p class="font-medium text-content">Contact</p></a>
   <!--
   <button>
     <img src={"/navIcon.svg"} alt="Navigation menu icon" class="w-5 h-5" />

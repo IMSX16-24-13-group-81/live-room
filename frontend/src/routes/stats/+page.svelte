@@ -1,12 +1,17 @@
 <script lang="ts">
+  import { getExampleLineChartData } from "$lib/helpers"
   import CustomButton from "../../components/CustomButton.svelte"
   import RoomSelector from "../../components/RoomSelector.svelte"
   import Spacer from "../../components/Spacer.svelte"
   import StatsIllustration from "../../components/StatsIllustration.svelte"
   import TextField from "../../components/TextField.svelte"
+  import LineChart from "../../components/lineChart/LineChart.svelte"
+  import type { PageData } from "./$types"
+
+  export let data: PageData
 
   let showIncorrectToken = false
-  let hasAuthenticated = false
+  let hasAuthenticated = true
 
   let selectedRooms: Set<string> = new Set()
 
@@ -54,10 +59,24 @@
   {/if}
 {:else}
   <Spacer height={40} />
-  <div class="bg-primary w-[800px] aspect-video"></div>
+  <LineChart data={getExampleLineChartData()} />
   <Spacer height={40} />
   <h2 class="text-mediumHeader font-extrabold tracking-tighter leading-none">Select Rooms</h2>
   <h2 class="text-content font-light tracking-tighter leading-none">Data from the rooms selected will be shown in the line chart.</h2>
   <Spacer height={20} />
-  <RoomSelector bind:selectedRooms />
+  <div class="flex">
+    <RoomSelector rooms={data.allRooms} bind:selectedRooms />
+  </div>
+
+  <Spacer height={100} />
+  <div class="w-full bg-dark/[0.07] rounded-lg p-8 flex flex-col items-center">
+    <h2 class="text-smallHeader font-medium leading-none">WANT FULL CONTROL?</h2>
+    <h2 class="text-mediumHeader tablet:text-header font-bold leading-tight">GET RAW DATA</h2>
+    <p class="text-content font-light leading-none text-center max-w-[700px]">If you are from Chalmers administration, you could request access to the raw data from PostgreSQL and InfluxDB. This allows for more fine grain control that enables you to find exactly what you are looking for.</p>
+    <Spacer height={20} />
+    <p class="text-content font-light leading-none text-center max-w-[700px]">Contact: <span class="font-bold">placeholder-email@domain.com</span></p>
+    <Spacer height={40} />
+    <img src={"/stats-pattern.svg"} alt="Pattern illustration" class="  h-full max-w-[400px] object-contain" />
+    <Spacer height={40} />
+  </div>
 {/if}
