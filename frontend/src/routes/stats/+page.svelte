@@ -12,7 +12,7 @@
   export let data: PageData
 
   let showIncorrectToken = false
-  let hasAuthenticated = true
+  let hasAuthenticated = false
 
   let currentLineChartData: LineChartData | undefined
 
