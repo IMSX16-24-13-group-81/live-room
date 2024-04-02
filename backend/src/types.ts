@@ -8,7 +8,20 @@ export interface OccupantsWebsocketMessage {
   occupants: number;
 }
 
+export enum RoomStatus {
+  Occupied = 'occupied',
+  Empty = 'empty',
+  Unknown = 'unknown'
+}
+
 export interface SimplifiedRoomState {
   roomId: string;
+  state: RoomStatus;
   occupants: number;
+}
+
+export interface SensorState {
+  sensorId: string,
+  occupants: number,
+  reportedAt: Date
 }

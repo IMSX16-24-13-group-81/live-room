@@ -1,4 +1,4 @@
-import { serial, text, boolean, pgTable } from 'drizzle-orm/pg-core';
+import { serial, text, pgTable } from 'drizzle-orm/pg-core';
 
 export const buildings = pgTable('buildings', {
   id: serial('id').primaryKey(),

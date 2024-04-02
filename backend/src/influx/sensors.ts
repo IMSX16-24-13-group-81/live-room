@@ -1,10 +1,28 @@
 import { Point } from '@influxdata/influxdb-client';
 import influxClient from './influxClient';
+import { SensorState } from '../types';
 
-let org = process.env.INFLUXDB_ORG || `liveinfo`;
-let bucket = process.env.INFLUXDB_BUCKET || `liveinfo`;
+let org = process.env.INFLUXDB_ORG ?? `liveinfo`;
+let bucket = process.env.INFLUXDB_BUCKET ?? `liveinfo`;
 
 let writeClient = influxClient.getWriteApi(org, bucket, 'ns');
+
+const convertResults = (results: any[]): SensorState[] => {
+  return results
+    .filter(
+      (row: any) =>
+        row._field === 'occupants' &&
+        row.result === '_result' &&
+        row._value !== undefined
+    )
+    .map((row: any) => {
+      return {
+        sensorId: row.sensorId,
+        occupants: row._value,
+        reportedAt: row._time
+      };
+    });
+};
 
 const updateOccupants = (
   firmwareVersion: string,
@@ -30,23 +48,7 @@ const getOccupants = async () => {
   |> range(start: -1h)
   |> filter(fn: (r) => r._measurement == "sensors")
   |> last()`;
-  let result = await queryApi.collectRows(query);
-  return result
-    .filter(
-      (row: any) =>
-        row._field === 'occupants' &&
-        row.result === '_result' &&
-        row._value !== undefined
-    )
-    .map((row: any) => {
-      return {
-        sensorId: row.sensorId,
-        occupants: row._value,
-        lastReported: row._time,
-        // TODO: Use heartbeat timestamp
-        lastSeen: row._time
-      };
-    });
+  return convertResults(await queryApi.collectRows(query));
 };
 
 const getOccupantsHistory = async () => {
@@ -54,21 +56,17 @@ const getOccupantsHistory = async () => {
   const query = `from(bucket: "${bucket}")
   |> range(start: -1h)
   |> filter(fn: (r) => r._measurement == "sensors")`;
-  let result = await queryApi.collectRows(query);
-  return result
-    .filter(
-      (row: any) =>
-        row._field === 'occupants' &&
-        row.result === '_result' &&
-        row._value !== undefined
-    )
-    .map((row: any) => {
-      return {
-        sensorId: row.sensorId,
-        occupants: row._value,
-        timestamp: row._time
-      };
-    });
+  return convertResults(await queryApi.collectRows(query));
 };
 
-export { getOccupants, getOccupantsHistory, updateOccupants };
+const getLastOccupantsChange = async () => {
+  let queryApi = influxClient.getQueryApi(org);
+  const query = `from(bucket: "${bucket}")
+  |> range(start: -1h)
+  |> filter(fn: (r) => r._measurement == "sensors")
+  |> monitor.stateChanges()
+  |> last()`;
+  return convertResults(await queryApi.collectRows(query));
+};
+
+export { getOccupants, getOccupantsHistory, updateOccupants, getLastOccupantsChange };

@@ -1,6 +1,5 @@
 import { Client } from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
-import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import * as schema from './schema';
 
 export const getPG = async () => {
@@ -14,8 +13,8 @@ export const getPG = async () => {
     }
   );
 
+  console.log('Connecting to database');
   await client.connect();
   const db = drizzle(client, { schema });
-  await migrate(db, { migrationsFolder: 'drizzle' });
   return db;
 };

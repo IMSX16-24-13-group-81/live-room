@@ -4,7 +4,6 @@ import {
   getOccupantsHistory,
   updateOccupants
 } from './influx/sensors';
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import WebSocket from 'ws';
 import { OurPGDatabase } from './types';
 import { broadcastOccupants } from './websocket/flushes';
@@ -12,6 +11,7 @@ import crypto from 'crypto';
 import { rooms, sensors } from './db/schema';
 import { getPG } from './db/config';
 import { eq } from 'drizzle-orm';
+import { getRooms, getRoomsStatus } from './status/rooms';
 import { getExampleTimePoints, rooms } from './db/exampleData';
 
 export const setupRoutes = (
@@ -82,7 +82,7 @@ export const setupRoutes = (
     return type === 'csv'
       ? [
           'Timestamp,Sensor ID,Occupants',
-          ...occupants.map((o) => `${o.timestamp},${o.sensorId},${o.occupants}`)
+          ...occupants.map((o) => `${o.reportedAt},${o.sensorId},${o.occupants}`)
         ].join('\n')
       : occupants;
   });
@@ -94,7 +94,7 @@ export const setupRoutes = (
 
     console.log('Received authorization', authorization);
 
-    if (authorization !== process.env.AUTHORIZATION_TOKEN) {
+    if (authorization ?? '' !== process.env.AUTHORIZATION_TOKEN) {
       reply.code(401);
       return 'Unauthorized';
     }
@@ -105,35 +105,26 @@ export const setupRoutes = (
   });
 
   server.get('/api/rooms/status', async (request, reply) => {
-    const pg = await getPG();
-    const roomsStatic = await pg
-      .select()
-      .from(rooms)
-      .innerJoin(sensors, eq(sensors.room, rooms.id));
-    const sensorStatus = await getOccupants();
-
-    const roomsStatus = roomsStatic.reduce((acc: any, room: any) => {
-      const sensor = sensorStatus.find(
-        (sensor) => sensor.sensorId === room.sensors.id
-      );
-
-      if (!sensor) return acc;
-      acc.push({ ...sensor, room: room.rooms.name });
-      return acc;
-    }, []);
-    return roomsStatus;
+    return await getRoomsStatus();
   });
 
   server.get('/api/sensors/report/test', async (request, reply) => {
-    /*const { authorization }: any = request.headers;
+    const { authorization }: any = request.headers;
 
-    if (authorization !== process.env.AUTHORIZATION_TOKEN) {
+    if (authorization ?? '' !== process.env.AUTHORIZATION_TOKEN) {
       reply.code(401);
       return 'Unauthorized';
-    }*/
+    }
 
     const randomOccupants = Math.floor(Math.random() * 10);
-    updateOccupants('1.0.0', 'sensor1', randomOccupants, randomOccupants, true);
+    const randomState = Math.random() > 0.5;
+    updateOccupants(
+      '1.0.0',
+      'sensor1',
+      randomOccupants,
+      randomOccupants,
+      randomState
+    );
     broadcastOccupants(wss, randomOccupants, 'sensor1');
     return 'Success';
   });
