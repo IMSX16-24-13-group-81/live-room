@@ -6,11 +6,19 @@ let bucket = process.env.INFLUXDB_BUCKET || `liveinfo`;
 
 let writeClient = influxClient.getWriteApi(org, bucket, 'ns');
 
-const updateOccupants = (firmwareVersion: string, sensorId: string, occupants: number) => {
+const updateOccupants = (
+  firmwareVersion: string,
+  sensorId: string,
+  occupants: number,
+  radarState: number,
+  pirState: boolean
+) => {
   let point = new Point('sensors')
     .tag('firmwareVersion', firmwareVersion)
     .tag('sensorId', sensorId)
-    .intField('occupants', occupants);
+    .intField('occupants', occupants)
+    .intField('radarState', radarState)
+    .booleanField('pirState', pirState);
 
   writeClient.writePoint(point);
   writeClient.flush();

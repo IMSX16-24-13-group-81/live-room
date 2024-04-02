@@ -7,3 +7,8 @@ export interface OccupantsWebsocketMessage {
   sensorId: string;
   occupants: number;
 }
+
+export interface SimplifiedRoomState {
+  roomId: string;
+  occupants: number;
+}
