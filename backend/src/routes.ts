@@ -8,6 +8,7 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import WebSocket from 'ws';
 import { OurPGDatabase } from './types';
 import { broadcastOccupants } from './websocket/flushes';
+import crypto from 'crypto';
 
 export const setupRoutes = (
   server: FastifyInstance,
@@ -79,5 +80,16 @@ export const setupRoutes = (
     updateOccupants('1.0.0', 'sensor1', randomOccupants);
     broadcastOccupants(wss, randomOccupants, 'sensor1');
     return 'Success';
+  });
+
+  server.setErrorHandler((error, _, reply) => {
+    const errorDigest = crypto
+      .createHash('sha1')
+      .update(error.message)
+      .digest('hex');
+    console.error(`Error occurred with digest ${errorDigest}\n${error.stack}`);
+    reply
+      .code(500)
+      .send({ error: 'Internal server error', digest: errorDigest });
   });
 };
