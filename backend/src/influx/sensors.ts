@@ -24,7 +24,7 @@ const convertResults = (results: any[]): SensorState[] => {
     });
 };
 
-const updateOccupants = (
+export const updateOccupants = (
   firmwareVersion: string,
   sensorId: string,
   occupants: number,
@@ -42,7 +42,7 @@ const updateOccupants = (
   writeClient.flush();
 };
 
-const getOccupants = async () => {
+export const getOccupants = async () => {
   let queryApi = influxClient.getQueryApi(org);
   const query = `from(bucket: "${bucket}")
   |> range(start: -1h)
@@ -51,7 +51,7 @@ const getOccupants = async () => {
   return convertResults(await queryApi.collectRows(query));
 };
 
-const getOccupantsHistory = async () => {
+export const getOccupantsHistory = async () => {
   let queryApi = influxClient.getQueryApi(org);
   const query = `from(bucket: "${bucket}")
   |> range(start: -1h)
@@ -59,14 +59,28 @@ const getOccupantsHistory = async () => {
   return convertResults(await queryApi.collectRows(query));
 };
 
-const getLastOccupantsChange = async () => {
+export const getLastPIRChange = async () => {
   let queryApi = influxClient.getQueryApi(org);
-  const query = `from(bucket: "${bucket}")
+  const query = `from(bucket: "liveinfo")
   |> range(start: -1h)
-  |> filter(fn: (r) => r._measurement == "sensors")
-  |> monitor.stateChanges()
+  |> filter(fn: (r) => r["_field"] == "sensorId" or r["_field"] == "pirState")
+  |> filter(fn: (r) => r["_value"] == true)
+  |> group(columns: ["sensorId"])
   |> last()`;
   return convertResults(await queryApi.collectRows(query));
 };
 
-export { getOccupants, getOccupantsHistory, updateOccupants, getLastOccupantsChange };
+export const getDeadSensors = async () => {
+  let queryApi = influxClient.getQueryApi(org);
+  const query = `import "influxdata/influxdb/monitor"
+  import "date"
+  
+  from(bucket: "liveinfo")
+    |> range(start: -1h)
+    |> filter(fn: (r) => r["_field"] == "sensorId" or r["_field"] == "pirState")
+    |> filter(fn: (r) => r["_measurement"] == "sensors")
+    |> filter(fn: (r) => r["_value"] == true)
+    |> group(columns: ["sensorId"])
+    |> last()`;
+  return await queryApi.collectRows(query);
+};

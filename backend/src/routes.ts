@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import {
+  getDeadSensors,
   getOccupants,
   getOccupantsHistory,
   updateOccupants
@@ -127,6 +128,10 @@ export const setupRoutes = (
     );
     broadcastOccupants(wss, randomOccupants, 'sensor1');
     return 'Success';
+  });
+
+  server.get('/api/sensors/dead', async (request, reply) => {
+    return await getDeadSensors();
   });
 
   server.setErrorHandler((error, _, reply) => {

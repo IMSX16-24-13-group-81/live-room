@@ -2,7 +2,7 @@ import { getPG } from '../db/config';
 import { rooms, sensors } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import { RoomStatus, SensorState, SimplifiedRoomState } from '../types';
-import { getLastOccupantsChange } from '../influx/sensors';
+import { getLastPIRChange } from '../influx/sensors';
 
 type RoomSensorState = SensorState & {
   room: {
@@ -63,7 +63,7 @@ const getRooms = async () => {
 
 const getRoomsStatus = async () => {
   const rooms = await getRooms();
-  const sensorStatus = await getLastOccupantsChange();
+  const sensorStatus = await getLastPIRChange();
   return determineRoomsState(mergeSensorRooms(rooms, sensorStatus));
 };
 
