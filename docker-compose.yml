@@ -3,7 +3,7 @@ version: "3.8"
 services:
   postgres:
     image: postgres:16
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: liveinfo
       POSTGRES_PASSWORD: livepassword
@@ -15,7 +15,7 @@ services:
 
   influxdb:
     image: influxdb:latest
-    restart: always
+    restart: unless-stopped
     environment:
       DOCKER_INFLUXDB_INIT_MODE: setup
       DOCKER_INFLUXDB_INIT_USERNAME: liveinfo

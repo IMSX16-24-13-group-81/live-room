@@ -112,4 +112,15 @@ export const setupRoutes = (
     broadcastOccupants(wss, randomOccupants, 'sensor1');
     return 'Success';
   });
+
+  server.setErrorHandler((error, _, reply) => {
+    const errorDigest = crypto
+      .createHash('sha1')
+      .update(error.message)
+      .digest('hex');
+    console.error(`Error occurred with digest ${errorDigest}\n${error.stack}`);
+    reply
+      .code(500)
+      .send({ error: 'Internal server error', digest: errorDigest });
+  });
 };
