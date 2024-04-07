@@ -15,9 +15,9 @@
   <Spacer />
   <div class="flex gap-1 items-center self-end tablet:self-center">
     <Spacer />
-    <div class="p-[2px] pl-4 pr-4 {room.isAvailable ? ' bg-[#009760]/15' : 'bg-[#97005A]/15'} rounded-full">
-      <p class="{room.isAvailable ? ' text-[#009760]' : 'text-[#97005A]'} font-bold text-smallContent">
-        {room.isAvailable ? "Available" : "In Use"}
+    <div class="p-[2px] pl-4 pr-4 {room.state === 'empty' ? ' bg-[#009760]/15' : 'bg-[#97005A]/15'} rounded-full">
+      <p class="{room.state === 'empty' ? ' text-[#009760]' : 'text-[#97005A]'} font-bold text-smallContent">
+        {room.state === 'empty' ? "Available" : "In Use"}
       </p>
     </div>
     <!--

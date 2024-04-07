@@ -1,66 +1,89 @@
 import { Point } from '@influxdata/influxdb-client';
 import influxClient from './influxClient';
+import { SensorState } from '../types';
 
-let org = process.env.INFLUXDB_ORG || `liveinfo`;
-let bucket = process.env.INFLUXDB_BUCKET || `liveinfo`;
+let org = process.env.INFLUXDB_ORG ?? `liveinfo`;
+let bucket = process.env.INFLUXDB_BUCKET ?? `liveinfo`;
 
 let writeClient = influxClient.getWriteApi(org, bucket, 'ns');
 
-const updateOccupants = (firmwareVersion: string, sensorId: string, occupants: number) => {
+const convertResults = <T>(
+  results: any[],
+  field?: string
+): SensorState<T>[] => {
+  return results
+    .filter(
+      (row: any) =>
+        row._field === (field ?? 'occupants') &&
+        row.result === '_result' &&
+        row._value !== undefined
+    )
+    .map((row: any) => {
+      return {
+        sensorId: row.sensorId,
+        state: row._value as T,
+        reportedAt: row._time
+      };
+    });
+};
+
+export const updateOccupants = (
+  firmwareVersion: string,
+  sensorId: string,
+  occupants: number,
+  radarState: number,
+  pirState: boolean
+) => {
   let point = new Point('sensors')
     .tag('firmwareVersion', firmwareVersion)
     .tag('sensorId', sensorId)
-    .intField('occupants', occupants);
+    .intField('occupants', occupants)
+    .intField('radarState', radarState)
+    .booleanField('pirState', pirState);
 
   writeClient.writePoint(point);
   writeClient.flush();
 };
 
-const getOccupants = async () => {
+export const getOccupants = async () => {
   let queryApi = influxClient.getQueryApi(org);
   const query = `from(bucket: "${bucket}")
   |> range(start: -1h)
   |> filter(fn: (r) => r._measurement == "sensors")
   |> last()`;
-  let result = await queryApi.collectRows(query);
-  return result
-    .filter(
-      (row: any) =>
-        row._field === 'occupants' &&
-        row.result === '_result' &&
-        row._value !== undefined
-    )
-    .map((row: any) => {
-      return {
-        sensorId: row.sensorId,
-        occupants: row._value,
-        lastReported: row._time,
-        // TODO: Use heartbeat timestamp
-        lastSeen: row._time
-      };
-    });
+  return convertResults<number>(await queryApi.collectRows(query));
 };
 
-const getOccupantsHistory = async () => {
+export const getOccupantsHistory = async () => {
   let queryApi = influxClient.getQueryApi(org);
   const query = `from(bucket: "${bucket}")
   |> range(start: -1h)
   |> filter(fn: (r) => r._measurement == "sensors")`;
-  let result = await queryApi.collectRows(query);
-  return result
-    .filter(
-      (row: any) =>
-        row._field === 'occupants' &&
-        row.result === '_result' &&
-        row._value !== undefined
-    )
-    .map((row: any) => {
-      return {
-        sensorId: row.sensorId,
-        occupants: row._value,
-        timestamp: row._time
-      };
-    });
+  return convertResults<number>(await queryApi.collectRows(query));
 };
 
-export { getOccupants, getOccupantsHistory, updateOccupants };
+export const getLastPIRChange = async () => {
+  let queryApi = influxClient.getQueryApi(org);
+  const query = `from(bucket: "liveinfo")
+  |> range(start: -1h)
+  |> filter(fn: (r) => r["_field"] == "sensorId" or r["_field"] == "pirState")
+  |> filter(fn: (r) => r["_value"] == true)
+  |> group(columns: ["sensorId"])
+  |> last()`;
+  return convertResults<boolean>(await queryApi.collectRows(query), 'pirState');
+};
+
+export const getDeadSensors = async () => {
+  let queryApi = influxClient.getQueryApi(org);
+  const query = `import "influxdata/influxdb/monitor"
+  import "date"
+  
+  from(bucket: "liveinfo")
+    |> range(start: -1h)
+    |> filter(fn: (r) => r["_field"] == "sensorId" or r["_field"] == "pirState")
+    |> filter(fn: (r) => r["_measurement"] == "sensors")
+    |> group(columns: ["sensorId"])
+    |> monitor.deadman(t: date.add(d: -1h, to: now()))`;
+  const res = await queryApi.collectRows(query);
+  return res.filter((row: any) => row.dead).map((row: any) => row.sensorId);
+};

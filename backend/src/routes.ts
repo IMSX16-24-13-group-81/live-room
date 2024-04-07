@@ -1,14 +1,22 @@
 import { FastifyInstance } from 'fastify';
 import {
+  getDeadSensors,
   getOccupants,
   getOccupantsHistory,
   updateOccupants
 } from './influx/sensors';
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import WebSocket from 'ws';
 import { OurPGDatabase } from './types';
 import { broadcastOccupants } from './websocket/flushes';
-import { getExampleTimePoints, rooms } from './db/exampleData';
+import crypto from 'crypto';
+import { rooms, sensors } from './db/schema';
+import { getPG } from './db/config';
+import { eq } from 'drizzle-orm';
+import {
+  getBuildingRoomsStatus,
+  getRoomStatusHistory,
+  getRoomsStatus
+} from './status/rooms';
 
 export const setupRoutes = (
   server: FastifyInstance,
@@ -50,67 +58,84 @@ export const setupRoutes = (
       return 'Must include a building ID in request.';
     }
 
-    return rooms.filter((room) => room.buildingId === buildingID);
+    return getBuildingRoomsStatus(buildingID);
   });
 
   //Possibly just a placeholder, returns example data.
-  server.get('/api/all_rooms', async (request, reply) => {
-    return rooms;
+  server.get('/api/rooms', async (request, reply) => {
+    return getRoomsStatus();
   });
 
-  //Possibly just a placeholder, returns example data.
-  server.get('/api/points_for_room/:roomID', async (request, reply) => {
-    const parameters = request.params as any;
-    const roomID = parameters.roomID;
+  server.get('/api/rooms/occupants/history/:roomID', async (request, reply) => {
+    const { type }: any = request.body ?? { type: 'json' };
+    const { roomID }: any = request.params;
+
     if (!roomID) {
       reply.code(400);
-      return 'Must include a room ID in request.';
+      return { error: 'Must include a room ID in request.' };
     }
-    reply.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+
+    reply.header('Access-Control-Allow-Origin', '*');
     reply.header('Access-Control-Allow-Methods', 'GET, POST');
-    return getExampleTimePoints();
-  });
 
-  server.get('/api/sensors/occupants/history', async (request, reply) => {
-    const { type }: any = request.body ?? { type: 'json' };
-    const occupants = await getOccupantsHistory();
-
+    const history = await getRoomStatusHistory(roomID);
     return type === 'csv'
-      ? [
-          'Timestamp,Sensor ID,Occupants',
-          ...occupants.map((o) => `${o.timestamp},${o.sensorId},${o.occupants}`)
-        ].join('\n')
-      : occupants;
+      ? ['Timestamp,Occupants', ...history.map((o) => `${o.time},${o.y}`)].join(
+          '\n'
+        )
+      : history;
   });
 
   server.post('/api/sensors/report', async (request, reply) => {
-    const { firmwareVersion, sensorId, occupants }: any = request.body;
+    const { firmwareVersion, sensorId, occupants, radarState, pirState }: any =
+      request.body;
     const { authorization }: any = request.headers;
 
     console.log('Received authorization', authorization);
 
-    if (authorization !== process.env.AUTHORIZATION_TOKEN) {
+    if (authorization ?? '' !== process.env.AUTHORIZATION_TOKEN) {
       reply.code(401);
       return 'Unauthorized';
     }
 
-    updateOccupants(firmwareVersion, sensorId, occupants);
+    updateOccupants(firmwareVersion, sensorId, occupants, radarState, pirState);
     broadcastOccupants(wss, occupants, sensorId);
     return 'Success';
+  });
+
+  server.get('/api/rooms/status', async (request, reply) => {
+    return await getRoomsStatus();
   });
 
   server.get('/api/sensors/report/test', async (request, reply) => {
     const { authorization }: any = request.headers;
 
-    if (authorization !== process.env.AUTHORIZATION_TOKEN) {
+    if (authorization ?? '' !== process.env.AUTHORIZATION_TOKEN) {
       reply.code(401);
       return 'Unauthorized';
     }
 
     const randomOccupants = Math.floor(Math.random() * 10);
-    updateOccupants('1.0.0', 'sensor1', randomOccupants);
+    const randomState = Math.random() > 0.5;
+    updateOccupants(
+      '1.0.0',
+      'sensor1',
+      randomOccupants,
+      randomOccupants,
+      randomState
+    );
     broadcastOccupants(wss, randomOccupants, 'sensor1');
-    return 'Success';
+    return {
+      firmwareVersion: '1.0.0',
+      sensorId: 'sensor1',
+      occupants: randomOccupants,
+      radarState: randomOccupants,
+      pirState: randomState
+    };
+  });
+
+  server.get('/api/sensors/dead', async (request, reply) => {
+    return await getDeadSensors();
   });
 
   server.setErrorHandler((error, _, reply) => {

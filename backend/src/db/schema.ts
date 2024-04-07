@@ -1,4 +1,4 @@
-import { serial, text, boolean, pgTable } from 'drizzle-orm/pg-core';
+import { serial, text, pgTable } from 'drizzle-orm/pg-core';
 
 export const buildings = pgTable('buildings', {
   id: serial('id').primaryKey(),
@@ -8,6 +8,13 @@ export const buildings = pgTable('buildings', {
 
 export const rooms = pgTable('rooms', {
   id: serial('id').primaryKey(),
+  building: serial('building').references(() => buildings.id),
   name: text('name'),
-  coordiates: text('coordiates')
+  coordiates: text('coordiates'),
+  description: text('description')
+});
+
+export const sensors = pgTable('sensors', {
+  id: text('id').primaryKey(),
+  room: serial('room').references(() => rooms.id),
 });

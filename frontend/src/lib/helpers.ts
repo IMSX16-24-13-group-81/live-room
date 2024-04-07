@@ -25,7 +25,7 @@ export const getRoomsByBuildingID = async (id: string): Promise<Room[]> => {
 
 export const getAllRooms = async (): Promise<Room[]> => {
   try {
-    const response = await fetch(`http://localhost:8080/api/all_rooms`)
+    const response = await fetch(`http://localhost:8080/api/rooms`)
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
@@ -41,7 +41,7 @@ export const getAllRooms = async (): Promise<Room[]> => {
 
 export const getDataPointsForRoom = async (id: string): Promise<Point[]> => {
   try {
-    const response = await fetch(`http://localhost:8080/api/points_for_room/${id}`)
+    const response = await fetch(`http://localhost:8080/api/rooms/occupants/history/${id}`)
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
