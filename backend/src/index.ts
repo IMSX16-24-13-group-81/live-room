@@ -14,7 +14,7 @@ const main = async () => {
 
   const wss = new WebSocket.Server({ port: 8079 });
 
-  server.listen({ port: 8080 }, (err, address) => {
+  server.listen({ host: '0.0.0.0', port: 8080 }, (err, address) => {
     if (err) {
       console.error(err);
       process.exit(1);
