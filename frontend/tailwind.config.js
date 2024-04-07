@@ -11,11 +11,12 @@ export default {
       },
       colors: {
         background: "#FFFFFF",
+        primary: "#00C3D0",
         dark: "#003F54",
       },
       fontSize: {
-        smallContent: "0.85rem",
-        content: "0.9rem",
+        smallContent: "0.8rem",
+        content: "0.95rem",
         smallHeader: "1.2rem",
         mediumHeader: "1.8rem",
         header: "2.5rem"
