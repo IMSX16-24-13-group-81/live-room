@@ -91,11 +91,9 @@ export const setupRoutes = (
       request.body;
     const { authorization }: any = request.headers;
 
-    console.log('Received authorization', authorization);
-
-    if (authorization ?? '' !== process.env.AUTHORIZATION_TOKEN) {
+    if ((authorization ?? '') !== process.env.AUTHORIZATION_TOKEN) {
       reply.code(401);
-      return 'Unauthorized';
+      return { error: 'Unauthorized' };
     }
 
     updateOccupants(firmwareVersion, sensorId, occupants, radarState, pirState);
@@ -110,9 +108,9 @@ export const setupRoutes = (
   server.get('/api/sensors/report/test', async (request, reply) => {
     const { authorization }: any = request.headers;
 
-    if (authorization ?? '' !== process.env.AUTHORIZATION_TOKEN) {
+    if ((authorization ?? '') !== process.env.AUTHORIZATION_TOKEN) {
       reply.code(401);
-      return 'Unauthorized';
+      return { error: 'Unauthorized' };
     }
 
     const randomOccupants = Math.floor(Math.random() * 10);
