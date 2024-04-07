@@ -1,5 +1,6 @@
 export const setupWebsocket = () => {
-  const ws = new WebSocket("ws://localhost:8079")
+  const websocketURL = import.meta.env.BACKEND_WEBSOCKET_URL || "ws://localhost:8079"
+  const ws = new WebSocket(websocketURL)
 
   ws.onopen = () => {}
 

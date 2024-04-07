@@ -1,6 +1,8 @@
 import { buildings } from "./data/buildings"
 import type { Building, LineChartData, Point, Room } from "./data/protocols"
 
+const backendURL = import.meta.env.BACKEND_URL || "http://localhost:8080"
+
 export const getBuildingByID = (id: string): Building | undefined => {
   const matchingBuildings = buildings.filter((building) => building.id === id)
   if (matchingBuildings.length > 1 || matchingBuildings.length === 0) return undefined
@@ -9,7 +11,7 @@ export const getBuildingByID = (id: string): Building | undefined => {
 
 export const getRoomsByBuildingID = async (id: string): Promise<Room[]> => {
   try {
-    const response = await fetch(`http://localhost:8080/api/rooms/${id}`)
+    const response = await fetch(`${backendURL}/api/rooms/${id}`)
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
@@ -25,7 +27,7 @@ export const getRoomsByBuildingID = async (id: string): Promise<Room[]> => {
 
 export const getAllRooms = async (): Promise<Room[]> => {
   try {
-    const response = await fetch(`http://localhost:8080/api/rooms`)
+    const response = await fetch(`${backendURL}/api/rooms`)
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
@@ -41,7 +43,7 @@ export const getAllRooms = async (): Promise<Room[]> => {
 
 export const getDataPointsForRoom = async (id: string): Promise<Point[]> => {
   try {
-    const response = await fetch(`http://localhost:8080/api/rooms/occupants/history/${id}`)
+    const response = await fetch(`${backendURL}/api/rooms/occupants/history/${id}`)
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
