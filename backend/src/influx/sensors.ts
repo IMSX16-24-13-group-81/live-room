@@ -7,18 +7,21 @@ let bucket = process.env.INFLUXDB_BUCKET ?? `liveinfo`;
 
 let writeClient = influxClient.getWriteApi(org, bucket, 'ns');
 
-const convertResults = (results: any[]): SensorState[] => {
+const convertResults = <T>(
+  results: any[],
+  field?: string
+): SensorState<T>[] => {
   return results
     .filter(
       (row: any) =>
-        row._field === 'occupants' &&
+        row._field === (field ?? 'occupants') &&
         row.result === '_result' &&
         row._value !== undefined
     )
     .map((row: any) => {
       return {
         sensorId: row.sensorId,
-        occupants: row._value,
+        state: row._value as T,
         reportedAt: row._time
       };
     });
@@ -48,7 +51,7 @@ export const getOccupants = async () => {
   |> range(start: -1h)
   |> filter(fn: (r) => r._measurement == "sensors")
   |> last()`;
-  return convertResults(await queryApi.collectRows(query));
+  return convertResults<number>(await queryApi.collectRows(query));
 };
 
 export const getOccupantsHistory = async () => {
@@ -56,7 +59,7 @@ export const getOccupantsHistory = async () => {
   const query = `from(bucket: "${bucket}")
   |> range(start: -1h)
   |> filter(fn: (r) => r._measurement == "sensors")`;
-  return convertResults(await queryApi.collectRows(query));
+  return convertResults<number>(await queryApi.collectRows(query));
 };
 
 export const getLastPIRChange = async () => {
@@ -67,7 +70,7 @@ export const getLastPIRChange = async () => {
   |> filter(fn: (r) => r["_value"] == true)
   |> group(columns: ["sensorId"])
   |> last()`;
-  return convertResults(await queryApi.collectRows(query));
+  return convertResults<boolean>(await queryApi.collectRows(query), 'pirState');
 };
 
 export const getDeadSensors = async () => {
@@ -79,8 +82,8 @@ export const getDeadSensors = async () => {
     |> range(start: -1h)
     |> filter(fn: (r) => r["_field"] == "sensorId" or r["_field"] == "pirState")
     |> filter(fn: (r) => r["_measurement"] == "sensors")
-    |> filter(fn: (r) => r["_value"] == true)
     |> group(columns: ["sensorId"])
-    |> last()`;
-  return await queryApi.collectRows(query);
+    |> monitor.deadman(t: date.add(d: -1h, to: now()))`;
+  const res = await queryApi.collectRows(query);
+  return res.filter((row: any) => row.dead).map((row: any) => row.sensorId);
 };

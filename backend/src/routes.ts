@@ -12,8 +12,11 @@ import crypto from 'crypto';
 import { rooms, sensors } from './db/schema';
 import { getPG } from './db/config';
 import { eq } from 'drizzle-orm';
-import { getRooms, getRoomsStatus } from './status/rooms';
-import { getExampleTimePoints, rooms } from './db/exampleData';
+import {
+  getBuildingRoomsStatus,
+  getRoomStatusHistory,
+  getRoomsStatus
+} from './status/rooms';
 
 export const setupRoutes = (
   server: FastifyInstance,
@@ -55,37 +58,32 @@ export const setupRoutes = (
       return 'Must include a building ID in request.';
     }
 
-    return rooms.filter((room) => room.buildingId === buildingID);
+    return getBuildingRoomsStatus(buildingID);
   });
 
   //Possibly just a placeholder, returns example data.
-  server.get('/api/all_rooms', async (request, reply) => {
-    return rooms;
+  server.get('/api/rooms', async (request, reply) => {
+    return getRoomsStatus();
   });
 
-  //Possibly just a placeholder, returns example data.
-  server.get('/api/points_for_room/:roomID', async (request, reply) => {
-    const parameters = request.params as any;
-    const roomID = parameters.roomID;
+  server.get('/api/rooms/occupants/history/:roomID', async (request, reply) => {
+    const { type }: any = request.body ?? { type: 'json' };
+    const { roomID }: any = request.params;
+
     if (!roomID) {
       reply.code(400);
-      return 'Must include a room ID in request.';
+      return { error: 'Must include a room ID in request.' };
     }
-    reply.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+
+    reply.header('Access-Control-Allow-Origin', '*');
     reply.header('Access-Control-Allow-Methods', 'GET, POST');
-    return getExampleTimePoints();
-  });
 
-  server.get('/api/sensors/occupants/history', async (request, reply) => {
-    const { type }: any = request.body ?? { type: 'json' };
-    const occupants = await getOccupantsHistory();
-
+    const history = await getRoomStatusHistory(roomID);
     return type === 'csv'
-      ? [
-          'Timestamp,Sensor ID,Occupants',
-          ...occupants.map((o) => `${o.reportedAt},${o.sensorId},${o.occupants}`)
-        ].join('\n')
-      : occupants;
+      ? ['Timestamp,Occupants', ...history.map((o) => `${o.time},${o.y}`)].join(
+          '\n'
+        )
+      : history;
   });
 
   server.post('/api/sensors/report', async (request, reply) => {
@@ -127,7 +125,13 @@ export const setupRoutes = (
       randomState
     );
     broadcastOccupants(wss, randomOccupants, 'sensor1');
-    return 'Success';
+    return {
+      firmwareVersion: '1.0.0',
+      sensorId: 'sensor1',
+      occupants: randomOccupants,
+      radarState: randomOccupants,
+      pirState: randomState
+    };
   });
 
   server.get('/api/sensors/dead', async (request, reply) => {

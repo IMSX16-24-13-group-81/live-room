@@ -17,7 +17,7 @@
     </div>
     <Spacer />
     <div class="bg-dark/[0.07] p-2 pl-4 pr-4 rounded-md">
-      <h4 class="text-content"><span class="font-bold text-dark">{data.rooms.filter((room) => room.isAvailable).length}</span> of <span class="font-bold text-dark">{data.rooms.length}</span> Available</h4>
+      <h4 class="text-content"><span class="font-bold text-dark">{data.rooms.filter((room) => room.state === 'empty').length}</span> of <span class="font-bold text-dark">{data.rooms.length}</span> Available</h4>
     </div>
   </div>
 

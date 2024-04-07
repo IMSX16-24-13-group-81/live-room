@@ -15,6 +15,13 @@
       "when": 1711465790808,
       "tag": "0001_flippant_magma",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1712500120453,
+      "tag": "0002_fearless_callisto",
+      "breakpoints": true
     }
   ]
 }

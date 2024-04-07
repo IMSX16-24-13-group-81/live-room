@@ -5,12 +5,18 @@ export interface Building {
   address: string
 }
 
+export enum RoomStatus {
+  Occupied = 'occupied',
+  Empty = 'empty',
+  Unknown = 'unknown'
+}
+
 export interface Room {
-  id: string
-  buildingId: string
-  name: string
-  description: string
-  isAvailable: boolean
+  id: string;
+  buildingId: string;
+  name: string;
+  description: string;
+  state: RoomStatus;
 }
 
 export interface Point {

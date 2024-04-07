@@ -15,13 +15,20 @@ export enum RoomStatus {
 }
 
 export interface SimplifiedRoomState {
-  roomId: string;
+  id: string;
+  buildingId: string;
+  name: string;
+  description: string | undefined;
   state: RoomStatus;
+}
+
+export interface RoomState {
+  roomId: string;
   occupants: number;
 }
 
-export interface SensorState {
-  sensorId: string,
-  occupants: number,
-  reportedAt: Date
+export interface SensorState<T> {
+  sensorId: string;
+  reportedAt: Date;
+  state: T;
 }
