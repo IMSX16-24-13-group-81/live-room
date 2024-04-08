@@ -11,7 +11,7 @@
 
   $: if (query !== null) {
     isActive = query !== ""
-    filteredRooms = rooms.filter((room) => room.name.toLowerCase().startsWith(query.toLowerCase()))
+    filteredRooms = rooms.filter((room) => room.name.toLowerCase().includes(query.toLowerCase()))
   }
 </script>
 

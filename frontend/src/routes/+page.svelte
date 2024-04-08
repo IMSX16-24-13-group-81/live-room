@@ -29,6 +29,9 @@
 <p class="font-light text-center">Maybe you are waiting for a special place? Well if yes, perhaps this could help you!</p>
 <Spacer height={30} />
 <div class="flex flex-col gap-3 w-full">
+  {#if data.freeRooms.length === 0}
+    <p class="text-smallHeader font-bold opacity-30 text-center">No rooms are currently available.</p>
+  {/if}
   {#each data.freeRooms as room}
     <RoomCell {room} />
   {/each}
