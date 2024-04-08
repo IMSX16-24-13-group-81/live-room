@@ -1,7 +1,12 @@
 import { buildings } from "./data/buildings"
 import type { Building, LineChartData, Point, Room } from "./data/protocols"
+import { PUBLIC_BACKEND_URL } from "$env/static/public"
 
-const backendURL = import.meta.env.BACKEND_URL || "http://localhost:8080"
+const backendURL = PUBLIC_BACKEND_URL || undefined
+
+if (backendURL === undefined) {
+  console.log("CAN NOT GET BACKEND URL. APP WILL NOT WORK.")
+}
 
 export const getBuildingByID = (id: string): Building | undefined => {
   const matchingBuildings = buildings.filter((building) => building.id === id)

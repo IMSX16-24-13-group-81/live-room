@@ -1,5 +1,13 @@
+import { PUBLIC_BACKEND_WEBSOCKET_URL } from "$env/static/public"
+
+const websocketURL = PUBLIC_BACKEND_WEBSOCKET_URL || undefined
+
 export const setupWebsocket = () => {
-  const websocketURL = import.meta.env.BACKEND_WEBSOCKET_URL || "ws://localhost:8079"
+  if (websocketURL === undefined) {
+    console.log("COULD NOT GET WEBSOCKET URL VARIABLE. WILL NOT TRY TO CONNECT.")
+    return
+  }
+
   const ws = new WebSocket(websocketURL)
 
   ws.onopen = () => {}
