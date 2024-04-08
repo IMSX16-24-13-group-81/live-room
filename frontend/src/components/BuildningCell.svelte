@@ -7,7 +7,7 @@
   const urls: string[] = ["/buildingBlue.jpeg", "/buildingGreen.jpeg", "/buildingGrey.jpeg", "/buildingPurple.jpeg"]
 </script>
 
-<a href="building/{building.id}" class="bg-dark/20 rounded-md w-full h-[140px] hover:opacity-80 overflow-clip relative transition">
+<a href="building/{building.id}" class="bg-dark/20 rounded-md w-full h-[140px] hover:opacity-80 overflow-clip relative transition { building.id !== "4" ? "saturate-[0.15]":"" }">
   <div class="gradient w-full h-full absolute top-0 bottom-0 left-0 right-0 bg-dark/50 flex flex-col p-2">
     <Spacer />
     <h4 class="font-extrabold text-white text-[1rem] leading-none">{building.name}</h4>
