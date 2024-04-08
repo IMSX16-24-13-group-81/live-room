@@ -1,8 +1,7 @@
-import { PUBLIC_BACKEND_WEBSOCKET_URL } from "$env/static/public"
-
-const websocketURL = PUBLIC_BACKEND_WEBSOCKET_URL || undefined
+import { env } from "$env/dynamic/public"
 
 export const setupWebsocket = () => {
+  const websocketURL = env.PUBLIC_BACKEND_WEBSOCKET_URL || undefined
   if (websocketURL === undefined) {
     console.log("COULD NOT GET WEBSOCKET URL VARIABLE. WILL NOT TRY TO CONNECT.")
     return

@@ -1,12 +1,6 @@
 import { buildings } from "./data/buildings"
 import type { Building, LineChartData, Point, Room } from "./data/protocols"
-import { PUBLIC_BACKEND_URL } from "$env/static/public"
-
-const backendURL = PUBLIC_BACKEND_URL || undefined
-
-if (backendURL === undefined) {
-  console.log("CAN NOT GET BACKEND URL. APP WILL NOT WORK.")
-}
+import { env } from "$env/dynamic/public"
 
 export const getBuildingByID = (id: string): Building | undefined => {
   const matchingBuildings = buildings.filter((building) => building.id === id)
@@ -15,6 +9,8 @@ export const getBuildingByID = (id: string): Building | undefined => {
 }
 
 export const getRoomsByBuildingID = async (id: string): Promise<Room[]> => {
+  const backendURL = env.PUBLIC_BACKEND_URL || undefined
+
   try {
     const response = await fetch(`${backendURL}/api/rooms/${id}`)
 
@@ -31,6 +27,8 @@ export const getRoomsByBuildingID = async (id: string): Promise<Room[]> => {
 }
 
 export const getAllRooms = async (): Promise<Room[]> => {
+  const backendURL = env.PUBLIC_BACKEND_URL || undefined
+
   try {
     const response = await fetch(`${backendURL}/api/rooms`)
 
@@ -47,6 +45,8 @@ export const getAllRooms = async (): Promise<Room[]> => {
 }
 
 export const getDataPointsForRoom = async (id: string): Promise<Point[]> => {
+  const backendURL = env.PUBLIC_BACKEND_URL || undefined
+
   try {
     const response = await fetch(`${backendURL}/api/rooms/occupants/history/${id}`)
 
