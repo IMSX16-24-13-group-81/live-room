@@ -76,7 +76,7 @@ export const getPIRStates = async () => {
     |> monitor.deadman(t: date.add(d: -10m, to: now()))`;
   const res = await queryApi.collectRows(query);
   return res.map((row: any) => {
-    return { sensorId: row.sensorId, state: row.dead };
+    return { sensorId: row.sensorId, state: !row.dead };
   });
 };
 
