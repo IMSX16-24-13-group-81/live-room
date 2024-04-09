@@ -2,8 +2,19 @@
   import Spacer from "../../../components/Spacer.svelte"
   import RoomCell from "../../../components/building-page/RoomCell.svelte"
   import type { PageData } from "./$types"
+  import { getRoomsByBuildingID } from "$lib/helpers"
+  import STD from "$lib/STD"
+  import { onDestroy } from "svelte"
 
   export let data: PageData
+
+  const interval = setInterval(async () => {
+    data.rooms = await getRoomsByBuildingID(data.building.id)
+  }, STD.pollingInterval)
+
+  onDestroy(() => {
+    clearInterval(interval)
+  })
 </script>
 
 <div class="flex flex-col w-full">
@@ -17,7 +28,10 @@
     </div>
     <Spacer />
     <div class="bg-dark/[0.07] p-2 pl-4 pr-4 rounded-md">
-      <h4 class="text-content"><span class="font-bold text-dark">{data.rooms.filter((room) => room.state === 'empty').length}</span> of <span class="font-bold text-dark">{data.rooms.length}</span> Available</h4>
+      <h4 class="text-content">
+        <span class="font-bold text-dark">{data.rooms.filter((room) => room.state === "empty").length}</span> of
+        <span class="font-bold text-dark">{data.rooms.length}</span> Available
+      </h4>
     </div>
   </div>
 
