@@ -1,14 +1,14 @@
 import { getPG } from '../db/config';
 import { buildings, rooms, sensors } from '../db/schema';
 import { eq } from 'drizzle-orm';
-import { RoomStatus, SensorState, SimplifiedRoomState } from '../types';
+import { PirSensorState, RoomStatus, SensorState, SimplifiedRoomState } from '../types';
 import {
   getDeadSensors,
-  getLastPIRChange,
+  getPIRStates,
   getOccupantsHistory
 } from '../influx/sensors';
 
-type RoomSensorState<T> = SensorState<T> & {
+type RoomSensorState = PirSensorState & {
   room: {
     id: number;
     name: string | null;
@@ -20,11 +20,11 @@ type RoomSensorState<T> = SensorState<T> & {
   };
 };
 
-const mergeSensorRooms = <T>(
+const mergeSensorRooms = (
   rooms: Awaited<ReturnType<typeof getRooms>>,
-  sensors: SensorState<T>[]
+  sensors: PirSensorState[]
 ) => {
-  return rooms.reduce((acc: RoomSensorState<T>[], room: (typeof rooms)[0]) => {
+  return rooms.reduce((acc: RoomSensorState[], room: (typeof rooms)[0]) => {
     const sensor = sensors.find(
       (sensor) => sensor.sensorId === room.sensors.id
     );
@@ -36,13 +36,13 @@ const mergeSensorRooms = <T>(
 };
 
 const determineRoomsState = (
-  rooms: RoomSensorState<boolean | number>[],
+  rooms: RoomSensorState[],
   deadSensors: string[] = []
 ): SimplifiedRoomState[] => {
   return rooms.map((r) => {
     const state = deadSensors.includes(r.sensorId)
       ? RoomStatus.Unknown
-      : r.state || r.reportedAt.getTime() > Date.now() - 1000 * 60 * 10
+      : r.state
         ? RoomStatus.Occupied
         : RoomStatus.Empty;
 
@@ -67,13 +67,13 @@ const getRooms = async () => {
 
 const getRoomsStatus = async () => {
   const rooms = await getRooms();
-  const sensorStatus = await getLastPIRChange();
-  return determineRoomsState(mergeSensorRooms<boolean>(rooms, sensorStatus));
+  const sensorStatus = await getPIRStates();
+  return determineRoomsState(mergeSensorRooms(rooms, sensorStatus));
 };
 
 const getBuildingRoomsStatus = async (buildingId: string) => {
   const rooms = await getRooms();
-  const sensorStatus = await getLastPIRChange();
+  const sensorStatus = await getPIRStates();
   const buildingRooms = rooms.filter(
     (room) => room.buildings.id.toString() === buildingId
   );
