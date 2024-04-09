@@ -64,19 +64,19 @@ export const getOccupantsHistory = async () => {
 
 export const getPIRStates = async () => {
   let queryApi = influxClient.getQueryApi(org);
-  const query = `import "influxdata/influxdb/monitor"
-  import "date"
-  
-  from(bucket: "liveinfo")
-    |> range(start: -72h)
-    |> filter(fn: (r) => r["_field"] == "sensorId" or r["_field"] == "pirState")
-    |> filter(fn: (r) => r["_value"] == true)
-    |> group(columns: ["sensorId"])
-    |> last()
-    |> monitor.deadman(t: date.add(d: -10m, to: now()))`;
+  const query = `from(bucket: "liveinfo")
+  |> range(start: -10m)
+  |> filter(fn: (r) => r["_field"] == "sensorId" or r["_field"] == "pirState")
+  |> elapsed(unit: 1m)
+  |> toInt()
+  |> sum(column: "_value")
+  |> map(fn: (r) => ({
+      sensorId: r.sensorId,
+      status: r._value >= 1.0
+    }))`;
   const res = await queryApi.collectRows(query);
   return res.map((row: any) => {
-    return { sensorId: row.sensorId, state: !row.dead };
+    return { sensorId: row.sensorId, state: row.status };
   });
 };
 
@@ -86,9 +86,8 @@ export const getDeadSensors = async () => {
   import "date"
   
   from(bucket: "liveinfo")
-    |> range(start: -30d)
-    |> filter(fn: (r) => r["_field"] == "sensorId" or r["_field"] == "pirState")
-    |> filter(fn: (r) => r["_measurement"] == "sensors")
+    |> range(start: -inf)
+    |> filter(fn: (r) => (r["_field"] == "sensorId" or r["_field"] == "pirState") and r["_measurement"] == "sensors")
     |> group(columns: ["sensorId"])
     |> monitor.deadman(t: date.add(d: -1h, to: now()))`;
   const res = await queryApi.collectRows(query);
