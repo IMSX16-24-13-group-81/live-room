@@ -32,3 +32,8 @@ export interface SensorState<T> {
   reportedAt: Date;
   state: T;
 }
+
+export interface PirSensorState {
+  sensorId: string;
+  state: boolean;
+}
