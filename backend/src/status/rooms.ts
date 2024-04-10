@@ -1,14 +1,13 @@
 import { getPG } from '../db/config';
 import { buildings, rooms, sensors } from '../db/schema';
 import { eq } from 'drizzle-orm';
-import { PirSensorState, RoomStatus, SensorState, SimplifiedRoomState } from '../types';
-import {
-  getDeadSensors,
-  getPIRStates,
-  getOccupantsHistory
-} from '../influx/sensors';
+import { PirSensorState, RoomStatus, SimplifiedRoomState } from '../types';
+import { getPIRStates, getOccupantsHistory } from '../influx/sensors';
 
-type RoomSensorState = PirSensorState & {
+type DatabaseRooms = Awaited<ReturnType<typeof getRooms>>;
+
+type RoomSensorState = {
+  sensor?: PirSensorState;
   room: {
     id: number;
     name: string | null;
@@ -20,31 +19,22 @@ type RoomSensorState = PirSensorState & {
   };
 };
 
-const mergeSensorRooms = (
-  rooms: Awaited<ReturnType<typeof getRooms>>,
-  sensors: PirSensorState[]
-) => {
-  return rooms.reduce((acc: RoomSensorState[], room: (typeof rooms)[0]) => {
-    const sensor = sensors.find(
-      (sensor) => sensor.sensorId === room.sensors.id
-    );
-
-    if (!sensor) return acc;
-    acc.push({ ...sensor, room: room.rooms, building: room.buildings });
-    return acc;
-  }, []);
+const mergeSensorRooms = (rooms: DatabaseRooms, sensors: PirSensorState[]) => {
+  return rooms.map((r) => {
+    const sensor = sensors.find((s) => s.sensorId === r.sensors.id);
+    return { sensor, room: r.rooms, building: r.buildings };
+  });
 };
 
 const determineRoomsState = (
-  rooms: RoomSensorState[],
-  deadSensors: string[] = []
+  rooms: RoomSensorState[]
 ): SimplifiedRoomState[] => {
   return rooms.map((r) => {
-    const state = deadSensors.includes(r.sensorId)
-      ? RoomStatus.Unknown
-      : r.state
+    const state = r.sensor
+      ? r.sensor.state
         ? RoomStatus.Occupied
-        : RoomStatus.Empty;
+        : RoomStatus.Empty
+      : RoomStatus.Unknown;
 
     return {
       id: r.room.id.toString(),
@@ -78,10 +68,7 @@ const getBuildingRoomsStatus = async (buildingId: string) => {
     (room) => room.buildings.id.toString() === buildingId
   );
 
-  return determineRoomsState(
-    mergeSensorRooms(buildingRooms, sensorStatus),
-    await getDeadSensors()
-  );
+  return determineRoomsState(mergeSensorRooms(buildingRooms, sensorStatus));
 };
 
 const getRoomStatusHistory = async (
