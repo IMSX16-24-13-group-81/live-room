@@ -2,15 +2,12 @@ import { FastifyInstance } from 'fastify';
 import {
   getDeadSensors,
   getOccupants,
-  getOccupantsHistory,
   updateOccupants
 } from './influx/sensors';
 import WebSocket from 'ws';
 import { OurPGDatabase } from './types';
 import { broadcastOccupants } from './websocket/flushes';
 import crypto from 'crypto';
-import { rooms, sensors } from './db/schema';
-import { eq } from 'drizzle-orm';
 import {
   getBuildingRoomsStatus,
   getRoomStatusHistory,

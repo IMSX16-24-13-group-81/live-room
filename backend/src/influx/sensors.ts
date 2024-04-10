@@ -54,11 +54,12 @@ export const getOccupants = async () => {
   return convertResults<number>(await queryApi.collectRows(query));
 };
 
-export const getOccupantsHistory = async () => {
+export const getOccupantsHistory = async (sensorId: string) => {
   let queryApi = influxClient.getQueryApi(org);
   const query = `from(bucket: "${bucket}")
   |> range(start: -1h)
-  |> filter(fn: (r) => r._measurement == "sensors")`;
+  |> filter(fn: (r) => r._measurement == "sensors")
+  |> filter(fn: (r) => r["sensorId"] == "${sensorId}")`;
   return convertResults<number>(await queryApi.collectRows(query));
 };
 

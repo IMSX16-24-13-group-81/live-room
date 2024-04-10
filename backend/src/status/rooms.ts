@@ -75,16 +75,11 @@ const getRoomStatusHistory = async (
   roomId: string
 ): Promise<{ time: number; y: number }[]> => {
   const rooms = await getRooms();
-  const sensorStatusHistory = await getOccupantsHistory();
   const room = rooms.find((room) => room.rooms.id.toString() === roomId);
   if (!room) return [];
 
-  const sensor = sensorStatusHistory.filter(
-    (sensor) => sensor.sensorId === room.sensors.id
-  );
-  console.log(sensorStatusHistory);
-
-  return sensor.map((s) => {
+  const sensorStatusHistory = await getOccupantsHistory(room.sensors.id);
+  return sensorStatusHistory.map((s) => {
     return { time: new Date(s.reportedAt).getTime(), y: s.state };
   });
 };
