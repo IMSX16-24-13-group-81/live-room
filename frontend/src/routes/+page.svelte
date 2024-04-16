@@ -74,7 +74,7 @@
   </p>
   <Spacer height={20} />
   <p class="text-content font-light leading-none text-center max-w-[700px]">
-    Contact: <span class="font-bold">pelladah@chalmers.se</span>
+    Contact: <span class="font-bold">elladah@chalmers.se</span>
   </p>
   <Spacer height={40} />
   <img src={"/privacy.png"} alt="Pattern illustration" class="max-w-[150px] object-contain pulse-animation" />
