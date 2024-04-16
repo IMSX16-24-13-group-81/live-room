@@ -28,7 +28,10 @@
 <Spacer height={20} />
 <Searchbar rooms={data.allRooms} />
 <Spacer height={10} />
-<a href="https://forms.gle/kCgvct5wckKfyEts8" class=" bg-primary p-2 pl-4 pr-4 rounded-full hover:brightness-[0.8] transition">
+<a
+  href="https://forms.gle/kCgvct5wckKfyEts8"
+  class=" bg-primary p-2 pl-4 pr-4 rounded-full hover:brightness-[0.8] transition"
+>
   <p class="text-white font-medium text-smallContent">Give us feedback!</p>
 </a>
 <Spacer height={40} />
@@ -42,7 +45,9 @@
 
 <Spacer height={70} />
 <h2 class="text-mediumHeader font-extrabold tracking-tighter leading-none">Recently Available</h2>
-<p class="font-light text-center">Maybe you are waiting for a special place? Well if yes, perhaps this could help you!</p>
+<p class="font-light text-center">
+  Maybe you are waiting for a special place? Well if yes, perhaps this could help you!
+</p>
 <Spacer height={30} />
 <div class="flex flex-col gap-3 w-full">
   {#if data.freeRooms.length === 0}
@@ -54,14 +59,22 @@
 </div>
 <Spacer height={70} />
 <div class="w-full bg-dark/[0.07] rounded-xl p-8 flex flex-col items-center">
-  <p class="text-smallContent tablet:text-content font-medium opacity-50 leading-tight italic text-center">Bibbidi-Bobbidi-Boo, here's one found, but now there are two.</p>
+  <p class="text-smallContent tablet:text-content font-medium opacity-50 leading-tight italic text-center">
+    Bibbidi-Bobbidi-Boo, here's one found, but now there are two.
+  </p>
   <Spacer height={5} />
   <h2 class="text-mediumHeader font-bold leading-tight text-center">HOW DOES IT WORK?</h2>
   <Spacer height={10} />
-  <p class="text-content font-light max-w-[700px]">How can the website know what rooms are used? The rooms presented in this application are equiped with a device that combines a PIR-sensor and a radar. These are chosen to measure presence but with privacy in mind. They have no capability of identifing you as an individual, they can only measure if there is someone in the room. It is of high priority for this project that everyone feel comfortable with the technology used. If you have any questions or suggestions you are welcome to contact us.</p>
+  <p class="text-content font-light max-w-[700px]">
+    How can the website know what rooms are used? The rooms presented in this application are equiped with a device that
+    combines a PIR-sensor and a radar. These are chosen to measure presence but with privacy in mind. They have no
+    capability of identifing you as an individual, they can only measure if there is someone in the room. It is of high
+    priority for this project that everyone feel comfortable with the technology used. If you have any questions or
+    suggestions you are welcome to contact us.
+  </p>
   <Spacer height={20} />
   <p class="text-content font-light leading-none text-center max-w-[700px]">
-    Contact: <span class="font-bold">placeholder-email@domain.com</span>
+    Contact: <span class="font-bold">pelladah@chalmers.se</span>
   </p>
   <Spacer height={40} />
   <img src={"/privacy.png"} alt="Pattern illustration" class="max-w-[150px] object-contain pulse-animation" />
