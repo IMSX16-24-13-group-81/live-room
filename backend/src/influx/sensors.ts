@@ -81,6 +81,24 @@ export const getPIRStates = async () => {
   });
 };
 
+export const getTotalUsage = async () => {
+  let queryApi = influxClient.getQueryApi(org);
+  const query = `from(bucket: "liveinfo")
+  |> range(start: -1d)
+  |> filter(fn: (r) => r["_field"] == "pirState")
+  |> toFloat()
+  |> window(every: 1m, period: 10m)
+  |> group(columns: ["_start", "sensorId"])
+  |> max()
+  |> group(columns: ["_start"], mode:"by")
+  |> sum(column: "_value")
+  |> map(fn: (r) => ({
+      _time: r._start,
+      _value: r._value
+    }))`;
+  return convertResults<number>(await queryApi.collectRows(query), 'totalUsage');
+};
+
 export const getDeadSensors = async () => {
   let queryApi = influxClient.getQueryApi(org);
   const query = `import "influxdata/influxdb/monitor"
