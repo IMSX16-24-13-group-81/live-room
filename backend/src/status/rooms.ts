@@ -55,18 +55,12 @@ const getRooms = async () => {
     .innerJoin(buildings, eq(rooms.building, buildings.id));
 };
 
-const getRoomsStatus = async () => {
+const getRoomsStatus = async (buildingId?: string) => {
   const rooms = await getRooms();
   const sensorStatus = await getPIRStates();
-  return determineRoomsState(mergeSensorRooms(rooms, sensorStatus));
-};
-
-const getBuildingRoomsStatus = async (buildingId: string) => {
-  const rooms = await getRooms();
-  const sensorStatus = await getPIRStates();
-  const buildingRooms = rooms.filter(
-    (room) => room.buildings.id.toString() === buildingId
-  );
+  const buildingRooms = buildingId
+    ? rooms.filter((room) => room.buildings.id.toString() === buildingId)
+    : rooms;
 
   return determineRoomsState(mergeSensorRooms(buildingRooms, sensorStatus));
 };
@@ -84,9 +78,4 @@ const getRoomStatusHistory = async (
   });
 };
 
-export {
-  getRooms,
-  getRoomsStatus,
-  getBuildingRoomsStatus,
-  getRoomStatusHistory
-};
+export { getRooms, getRoomsStatus, getRoomStatusHistory };

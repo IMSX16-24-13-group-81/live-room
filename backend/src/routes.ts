@@ -9,7 +9,6 @@ import { OurPGDatabase } from './types';
 import { broadcastOccupants } from './websocket/flushes';
 import crypto from 'crypto';
 import {
-  getBuildingRoomsStatus,
   getRoomStatusHistory,
   getRoomsStatus
 } from './status/rooms';
@@ -54,7 +53,7 @@ export const setupRoutes = (
       return 'Must include a building ID in request.';
     }
 
-    return getBuildingRoomsStatus(buildingID);
+    return getRoomsStatus(buildingID);
   });
 
   //Possibly just a placeholder, returns example data.

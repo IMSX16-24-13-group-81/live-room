@@ -67,8 +67,7 @@ export const getPIRStates = async () => {
   let queryApi = influxClient.getQueryApi(org);
   const query = `from(bucket: "liveinfo")
   |> range(start: -10m)
-  |> filter(fn: (r) => r["_field"] == "sensorId" or r["_field"] == "pirState")
-  |> elapsed(unit: 1m)
+  |> filter(fn: (r) => r["_field"] == "sensorId" or r["_field"] == "occupants")
   |> toInt()
   |> sum(column: "_value")
   |> map(fn: (r) => ({
