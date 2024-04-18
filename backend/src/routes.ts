@@ -2,17 +2,13 @@ import { FastifyInstance } from 'fastify';
 import {
   getDeadSensors,
   getOccupants,
-  getOccupantsHistory,
   updateOccupants
 } from './influx/sensors';
 import WebSocket from 'ws';
 import { OurPGDatabase } from './types';
 import { broadcastOccupants } from './websocket/flushes';
 import crypto from 'crypto';
-import { rooms, sensors } from './db/schema';
-import { eq } from 'drizzle-orm';
 import {
-  getBuildingRoomsStatus,
   getRoomStatusHistory,
   getRoomsStatus
 } from './status/rooms';
@@ -57,7 +53,7 @@ export const setupRoutes = (
       return 'Must include a building ID in request.';
     }
 
-    return getBuildingRoomsStatus(buildingID);
+    return getRoomsStatus(buildingID);
   });
 
   //Possibly just a placeholder, returns example data.
