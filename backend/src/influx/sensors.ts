@@ -1,4 +1,4 @@
-import { Point } from '@influxdata/influxdb-client';
+import { Point, flux } from '@influxdata/influxdb-client';
 import influxClient from './influxClient';
 import { SensorState } from '../types';
 
@@ -47,7 +47,7 @@ export const updateOccupants = (
 
 export const getOccupants = async () => {
   let queryApi = influxClient.getQueryApi(org);
-  const query = `from(bucket: "${bucket}")
+  const query = flux`from(bucket: "${bucket}")
   |> range(start: -1h)
   |> filter(fn: (r) => r._measurement == "sensors")
   |> last()`;
@@ -56,7 +56,7 @@ export const getOccupants = async () => {
 
 export const getOccupantsHistory = async (sensorId: string) => {
   let queryApi = influxClient.getQueryApi(org);
-  const query = `from(bucket: "${bucket}")
+  const query = flux`from(bucket: "${bucket}")
   |> range(start: -1h)
   |> filter(fn: (r) => r._measurement == "sensors")
   |> filter(fn: (r) => r["sensorId"] == "${sensorId}")`;
@@ -95,7 +95,10 @@ export const getTotalUsage = async () => {
       _time: r._start,
       _value: r._value
     }))`;
-  return convertResults<number>(await queryApi.collectRows(query), 'totalUsage');
+  return convertResults<number>(
+    await queryApi.collectRows(query),
+    'totalUsage'
+  );
 };
 
 export const getDeadSensors = async () => {
