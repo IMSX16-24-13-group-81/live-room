@@ -5,6 +5,7 @@
 
   export let data: LineChartData
   export let realData: boolean
+  export let noPoints: boolean
   const canvasID = Math.random().toString(16).slice(2)
   const dragCanvasID = Math.random().toString(16).slice(2)
   const xAxisYPos = -0.91
@@ -59,8 +60,12 @@
       ctx.textBaseline = "top"
       const mediaQuery = window.matchMedia("(min-width: 768px)")
       ctx.font = mediaQuery.matches ? "0.8rem Montserrat" : "0.6rem Montserrat"
-      console.log("TIME", data.points[index].time)
-      ctx.fillText(new Date(data.points[index].time).toLocaleString("en-US", { month: "short", day: "2-digit" }), text.x, text.y)
+      //console.log("TIME", data.points[index].time)
+      ctx.fillText(
+        new Date(data.points[index].time).toLocaleString("en-US", { month: "short", day: "2-digit" }),
+        text.x,
+        text.y
+      )
       ctx.globalAlpha = 1
     })
   }
@@ -235,6 +240,7 @@
   }
 
   const drawMain = () => {
+    if (noPoints) return
     //To update variables that depend on the data prop.
     startTime = data.points[0].time
     endTime = data.points[data.points.length - 1].time
@@ -257,12 +263,22 @@
 </script>
 
 <div class="flex flex-col w-full">
-  <p class="font-medium opacity-50 text-smallContent tablet:text-content">Currenty selected value, <span class="font-bold">{!currentHoverPoint ? "None" : `Value: ${currentHoverPoint.y}, Time: ${formatDateTime(new Date(currentHoverPoint.time))}`}</span></p>
+  <p class="font-medium opacity-50 text-smallContent tablet:text-content">
+    Currenty selected value, <span class="font-bold"
+      >{!currentHoverPoint
+        ? "None"
+        : `Value: ${currentHoverPoint.y}, Time: ${formatDateTime(new Date(currentHoverPoint.time))}`}</span
+    >
+  </p>
   <div class="relative w-full aspect-video">
     <canvas id={canvasID} class="absolute w-full aspect-[16/9]" />
     <canvas id={dragCanvasID} class="absolute w-full aspect-[16/9]" />
-    <div class="absolute w-full aspect-video bg-[#EDF2F3] flex justify-center items-center {realData ? 'opacity-0 pointer-events-none' : 'opacity-100'}">
-      <h2 class="text-smallHeader font-bold opacity-30">SELECT A ROOM</h2>
+    <div
+      class="absolute w-full aspect-video bg-[#EDF2F3] flex justify-center items-center {realData && !noPoints
+        ? 'opacity-0 pointer-events-none'
+        : 'opacity-100'}"
+    >
+      <h2 class="text-smallHeader font-bold opacity-30">{noPoints ? "NO DATA" : "SELECT A ROOM"}</h2>
     </div>
   </div>
 </div>

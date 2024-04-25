@@ -55,7 +55,6 @@ export const getDataPointsForRoom = async (id: string): Promise<Point[]> => {
     }
 
     const points: Point[] = await response.json()
-    console.log("POINTS", points)
     return points
   } catch (error) {
     console.error("There has been a problem with the fetch operation:", error)
@@ -71,7 +70,13 @@ export const truncateString = (str: string, num: number) => {
   }
 }
 
-export const createVector = (start: number, stop: number, numOfSteps: number, withStart: boolean = true, withEnd: boolean = true): number[] => {
+export const createVector = (
+  start: number,
+  stop: number,
+  numOfSteps: number,
+  withStart: boolean = true,
+  withEnd: boolean = true
+): number[] => {
   let vector: number[] = []
   const stepSize = (stop - start) / (numOfSteps - 1)
   for (let i = 0; i < numOfSteps; i++) {
@@ -114,7 +119,20 @@ export const findIndex = (list: number[], value: number): number => {
 
 export const formatDateTime = (date: Date) => {
   const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ]
 
   const dayName = days[date.getDay()]
   const monthName = months[date.getMonth()]

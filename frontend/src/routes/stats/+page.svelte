@@ -66,7 +66,11 @@
   {/if}
 {:else}
   <Spacer height={40} />
-  <LineChart data={currentLineChartData ?? getExampleLineChartData()} realData={!!currentLineChartData} />
+  <LineChart
+    data={currentLineChartData ?? getExampleLineChartData()}
+    realData={!!currentLineChartData}
+    noPoints={currentLineChartData ? currentLineChartData?.points.length === 0 : false}
+  />
   <Spacer height={40} />
   <h2 class="text-mediumHeader font-extrabold tracking-tighter leading-none">Select Rooms</h2>
   <h2 class="text-content font-light tracking-tighter leading-none text-center">
