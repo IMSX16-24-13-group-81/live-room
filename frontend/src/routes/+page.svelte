@@ -8,12 +8,13 @@
   import { getAllRooms } from "../lib/helpers"
   import STD from "$lib/STD"
   import { onDestroy } from "svelte"
+  import { RoomStatus } from "$lib/data/protocols";
 
   export let data: PageData
 
   const interval = setInterval(async () => {
     const allRooms = await getAllRooms()
-    data = { allRooms, freeRooms: allRooms.filter((room) => room.state === "empty") }
+    data = { allRooms, freeRooms: allRooms.filter((room) => room.state === RoomStatus.Empty) }
   }, STD.pollingInterval)
 
   onDestroy(() => {

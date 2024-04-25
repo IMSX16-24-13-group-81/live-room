@@ -9,9 +9,9 @@ export interface OccupantsWebsocketMessage {
 }
 
 export enum RoomStatus {
-  Occupied = 'occupied',
-  Empty = 'empty',
-  Unknown = 'unknown'
+  Unknown = 0,
+  Occupied = 1,
+  Empty = 2
 }
 
 export interface SimplifiedRoomState {
