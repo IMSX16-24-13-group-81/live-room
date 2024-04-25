@@ -62,7 +62,16 @@ const getRoomsStatus = async (buildingId?: string) => {
     ? rooms.filter((room) => room.buildings.id.toString() === buildingId)
     : rooms;
 
-  return determineRoomsState(mergeSensorRooms(buildingRooms, sensorStatus));
+  return sortState(
+    determineRoomsState(mergeSensorRooms(buildingRooms, sensorStatus))
+  );
+};
+
+const sortState = (rooms: SimplifiedRoomState[]) => {
+  return rooms.sort((a, b) => {
+    const stateNum = -(a.state - b.state);
+    return stateNum == 0 ? a.name.localeCompare(b.name) : stateNum;
+  });
 };
 
 const getRoomStatusHistory = async (
