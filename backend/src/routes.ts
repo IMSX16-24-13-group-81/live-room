@@ -53,6 +53,9 @@ export const setupRoutes = (
       return 'Must include a building ID in request.';
     }
 
+    reply.header('Access-Control-Allow-Origin', '*');
+    reply.header('Access-Control-Allow-Methods', 'GET, POST');
+
     return getRoomsStatus(buildingID);
   });
 
