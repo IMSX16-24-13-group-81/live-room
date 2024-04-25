@@ -5,6 +5,7 @@
   import { getRoomsByBuildingID } from "$lib/helpers"
   import STD from "$lib/STD"
   import { onDestroy } from "svelte"
+  import { RoomStatus } from "$lib/data/protocols";
 
   export let data: PageData
 
@@ -29,7 +30,7 @@
     <Spacer />
     <div class="bg-dark/[0.07] p-2 pl-4 pr-4 rounded-md">
       <h4 class="text-content">
-        <span class="font-bold text-dark">{data.rooms.filter((room) => room.state === "empty").length}</span> of
+        <span class="font-bold text-dark">{data.rooms.filter((room) => room.state === RoomStatus.Empty).length}</span> of
         <span class="font-bold text-dark">{data.rooms.length}</span> Available
       </h4>
     </div>
