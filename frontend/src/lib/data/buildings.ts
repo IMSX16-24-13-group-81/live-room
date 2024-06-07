@@ -10,7 +10,7 @@ export const buildings: Building[] = [
   {
     id: "1",
     name: "EDIT-Huset (Inactive)",
-    description: "Building for Electrical engineering, Computer Science och IT. Contains multiple group rooms.",
+    description: "Building for Electrical engineering, Computer Science and IT. Contains multiple group rooms.",
     address: "Maskingränd 2",
   },
   {
