@@ -4,7 +4,7 @@ export const buildings: Building[] = [
   {
     id: "4",
     name: "Idéläran",
-    description: "Idéläran is a free-standing building with a computer room and group rooms. Group rooms EG-3509 - EG-3513 are "first-serve"",
+    description: "Idéläran is a free-standing building with a computer room and group rooms. Group rooms EG-3509 - EG-3513 are \"first-serve\"",
     address: "Rännvägen 8",
   },
   {
