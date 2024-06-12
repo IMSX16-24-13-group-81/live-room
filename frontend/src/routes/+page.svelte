@@ -1,25 +1,39 @@
 <script lang="ts">
-  import { buildings } from "$lib/data/buildings"
-  import BuildningCell from "../components/BuildningCell.svelte"
-  import Searchbar from "../components/Searchbar.svelte"
-  import Spacer from "../components/Spacer.svelte"
-  import RoomCell from "../components/building-page/RoomCell.svelte"
-  import type { PageData } from "./$types"
-  import { getAllRooms } from "../lib/helpers"
-  import STD from "$lib/STD"
-  import { onDestroy } from "svelte"
+  import { buildings } from "$lib/data/buildings";
+  import BuildningCell from "../components/BuildningCell.svelte";
+  import Searchbar from "../components/Searchbar.svelte";
+  import Spacer from "../components/Spacer.svelte";
+  import RoomCell from "../components/building-page/RoomCell.svelte";
+  import type { PageData } from "./$types";
+  import { getAllRooms } from "../lib/helpers";
+  import STD from "$lib/STD";
+  import { onDestroy, onMount } from "svelte";
   import { RoomStatus } from "$lib/data/protocols";
+    import RoomSelector from "../components/RoomSelector.svelte";
 
-  export let data: PageData
+  export let data: PageData;
 
   const interval = setInterval(async () => {
-    const allRooms = await getAllRooms()
-    data = { allRooms, freeRooms: allRooms.filter((room) => room.state === RoomStatus.Empty) }
-  }, STD.pollingInterval)
+    const allRooms = await getAllRooms();
+    data = { allRooms, freeRooms: allRooms.filter((room) => room.state === RoomStatus.Empty) };
+  }, STD.pollingInterval);
 
   onDestroy(() => {
-    clearInterval(interval)
-  })
+    clearInterval(interval);
+  });
+
+  onMount(() => {
+    document.title = 'Find a Room | Live info on Chalmers group rooms';
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Check the occupancy status of Chalmers group rooms, find an available room or check statistics');
+    } else {
+      const newMetaDescription = document.createElement('meta');
+      newMetaDescription.name = 'description';
+      newMetaDescription.content = 'Check the occupancy status of various buildings on our start page.';
+      document.head.appendChild(newMetaDescription);
+    }
+  });
 </script>
 
 <img src={"/chalmersLogo.svg"} alt="Chalmers University Logo" class="w-[110px]" />

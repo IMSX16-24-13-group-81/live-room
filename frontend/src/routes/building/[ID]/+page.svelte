@@ -1,21 +1,35 @@
 <script lang="ts">
-  import Spacer from "../../../components/Spacer.svelte"
-  import RoomCell from "../../../components/building-page/RoomCell.svelte"
-  import type { PageData } from "./$types"
-  import { getRoomsByBuildingID } from "$lib/helpers"
-  import STD from "$lib/STD"
-  import { onDestroy } from "svelte"
+  import Spacer from "../../../components/Spacer.svelte";
+  import RoomCell from "../../../components/building-page/RoomCell.svelte";
+  import type { PageData } from "./$types";
+  import { getRoomsByBuildingID } from "$lib/helpers";
+  import STD from "$lib/STD";
+  import { onDestroy, onMount } from "svelte";
   import { RoomStatus } from "$lib/data/protocols";
 
-  export let data: PageData
+  export let data: PageData;
+  export let buildingId: string;
 
   const interval = setInterval(async () => {
-    data.rooms = await getRoomsByBuildingID(data.building.id)
-  }, STD.pollingInterval)
+    data.rooms = await getRoomsByBuildingID(data.building.id);
+  }, STD.pollingInterval);
 
   onDestroy(() => {
-    clearInterval(interval)
-  })
+    clearInterval(interval);
+  });
+
+  onMount(() => {
+    document.title = `${data.building.name} - find a room`;
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', `Find a free study room or group room in ${data.building.name}, Chalmers, Gothenburg.`);
+    } else {
+      const newMetaDescription = document.createElement('meta');
+      newMetaDescription.name = 'description';
+      newMetaDescription.content = `Check the current occupancy status of ${data.building.name}.`;
+      document.head.appendChild(newMetaDescription);
+    }
+  });
 </script>
 
 <div class="flex flex-col w-full">
