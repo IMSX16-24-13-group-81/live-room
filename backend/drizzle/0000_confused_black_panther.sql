@@ -5,8 +5,7 @@ CREATE TABLE IF NOT EXISTS "buildings" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "rooms" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"name" text,
-	"coordiates" text,
+	"name" text PRIMARY KEY NOT NULL,
+	"coordinates" text,
 	"available" boolean
 );
