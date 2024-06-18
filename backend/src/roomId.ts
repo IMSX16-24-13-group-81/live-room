@@ -1,5 +1,5 @@
 
-interface MacToRoom{
+/*interface MacToRoom{
     mac : String;
     roomId : String;
 }
@@ -36,5 +36,5 @@ function getRoomId(macToRoomList: MacRoomMapping[], mac: string): string {
     });
   }
   
-  main();
+  main();*/
   

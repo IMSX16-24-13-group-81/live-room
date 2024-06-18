@@ -21,6 +21,7 @@ const convertResults = <T>(
     .map((row: any) => {
       return {
         sensorId: row.sensorId,
+        sensorRoom: row.sensorRoom,
         state: row._value as T,
         reportedAt: row._time
       };
@@ -30,6 +31,7 @@ const convertResults = <T>(
 export const updateOccupants = (
   firmwareVersion: string,
   sensorId: string,
+  sensorRoom: string,
   occupants: number,
   radarState: number,
   pirState: boolean
@@ -37,6 +39,7 @@ export const updateOccupants = (
   let point = new Point('sensors')
     .tag('firmwareVersion', firmwareVersion)
     .tag('sensorId', sensorId)
+    .tag('sensorRoom', sensorRoom)
     .intField('occupants', occupants)
     .intField('radarState', radarState)
     .booleanField('pirState', pirState);

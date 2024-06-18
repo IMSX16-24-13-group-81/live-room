@@ -7,14 +7,13 @@ export const buildings = pgTable('buildings', {
 });
 
 export const rooms = pgTable('rooms', {
-  id: serial('id').primaryKey(),
+  name: text('name').primaryKey(),
   building: serial('building').references(() => buildings.id),
-  name: text('name'),
-  coordiates: text('coordiates'),
+  coordinates: text('coordinates'),
   description: text('description')
 });
 
 export const sensors = pgTable('sensors', {
   id: text('id').primaryKey(),
-  room: serial('room').references(() => rooms.id),
+  room: serial('room').references(() => rooms.name),
 });

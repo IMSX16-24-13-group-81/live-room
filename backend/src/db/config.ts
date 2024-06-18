@@ -11,8 +11,8 @@ export const getPG = async () => {
     process.env.PG_CONNECTION_STRING || {
       host: '127.0.0.1',
       port: 5432,
-      user: 'liveinfo',
-      password: 'livepassword',
+      user: 'postgres',
+      password: '123',
       database: 'liveinfo'
     }
   );
