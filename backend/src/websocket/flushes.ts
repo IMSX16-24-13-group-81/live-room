@@ -4,11 +4,13 @@ import { OccupantsWebsocketMessage } from '../types';
 export const broadcastOccupants = (
   wss: WebSocket.Server,
   occupants: number,
-  sensorId: string
+  sensorId: string,
+  roomName: string
 ) => {
   const message: OccupantsWebsocketMessage = {
     occupants,
-    sensorId
+    sensorId,
+    roomName
   };
   const messageString = JSON.stringify(message);
   wss.clients.forEach(function each(client) {
