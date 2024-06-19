@@ -85,7 +85,7 @@ export const setupRoutes = (
   });
 
   server.post('/api/sensors/report', async (request, reply) => {
-    const { firmwareVersion, sensorId, occupants, radarState, pirState }: any =
+    const { firmwareVersion, sensorId, roomName, occupants, radarState, pirState }: any =
       request.body;
     const { authorization }: any = request.headers;
 
@@ -94,8 +94,8 @@ export const setupRoutes = (
       return { error: 'Unauthorized' };
     }
 
-    updateOccupants(firmwareVersion, sensorId, occupants, radarState, pirState);
-    broadcastOccupants(wss, occupants, sensorId);
+    updateOccupants(firmwareVersion, sensorId, roomName, occupants, radarState, pirState);
+    broadcastOccupants(wss, occupants, roomName);
     return 'Success';
   });
 
@@ -116,14 +116,16 @@ export const setupRoutes = (
     updateOccupants(
       '1.0.0',
       'sensor1',
+      'Room1',
       randomOccupants,
       randomOccupants,
       randomState
     );
-    broadcastOccupants(wss, randomOccupants, 'sensor1');
+    broadcastOccupants(wss, randomOccupants, 'Room1');
     return {
       firmwareVersion: '1.0.0',
       sensorId: 'sensor1',
+      roomName: 'Room1',
       occupants: randomOccupants,
       radarState: randomOccupants,
       pirState: randomState

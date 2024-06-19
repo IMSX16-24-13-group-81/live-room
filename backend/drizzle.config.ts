@@ -7,6 +7,6 @@ export default {
   dbCredentials: {
     connectionString:
       process.env.PG_CONNECTION_STRING ||
-      'postgresql://liveinfo:livepassword@127.0.0.1:5432/liveinfo'
+      'postgresql://postgres:123@127.0.0.1:5432/liveinfo'
   }
 } satisfies Config;

@@ -9,10 +9,9 @@ type DatabaseRooms = Awaited<ReturnType<typeof getRooms>>;
 type RoomSensorState = {
   sensor?: PirSensorState;
   room: {
-    id: number;
-    name: string | null;
+    name: string | null
     description: string | null;
-    coordiates: string | null;
+    coordinates: string | null;
   };
   building: {
     id: number;
@@ -37,7 +36,6 @@ const determineRoomsState = (
       : RoomStatus.Unknown;
 
     return {
-      id: r.room.id.toString(),
       buildingId: r.building?.id.toString(),
       name: r.room.name ?? '',
       description: r.room.description ?? '',
@@ -51,7 +49,7 @@ const getRooms = async () => {
   return await pg
     .select()
     .from(rooms)
-    .innerJoin(sensors, eq(sensors.room, rooms.id))
+    .innerJoin(sensors, eq(sensors.room, rooms.name))
     .innerJoin(buildings, eq(rooms.building, buildings.id));
 };
 
@@ -75,10 +73,10 @@ const sortState = (rooms: SimplifiedRoomState[]) => {
 };
 
 const getRoomStatusHistory = async (
-  roomId: string
+  roomName: string
 ): Promise<{ time: number; y: number }[]> => {
   const rooms = await getRooms();
-  const room = rooms.find((room) => room.rooms.id.toString() === roomId);
+  const room = rooms.find((room) => room.rooms.name.toString() === roomName);
   if (!room) return [];
 
   const sensorStatusHistory = await getOccupantsHistory(room.sensors.id);

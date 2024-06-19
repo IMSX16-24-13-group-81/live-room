@@ -4,7 +4,7 @@ export type OurPGDatabase = NodePgDatabase<typeof import('./db/schema')>;
 
 export interface OccupantsWebsocketMessage {
   // sensorID should probabily be roomID in the future
-  sensorId: string;
+  roomName: string;
   occupants: number;
 }
 
@@ -15,7 +15,6 @@ export enum RoomStatus {
 }
 
 export interface SimplifiedRoomState {
-  id: string;
   buildingId: string;
   name: string;
   description: string | undefined;
@@ -23,7 +22,7 @@ export interface SimplifiedRoomState {
 }
 
 export interface RoomState {
-  roomId: string;
+  roomName: string;
   occupants: number;
 }
 

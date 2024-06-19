@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS "sensors" (
 );
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "sensors" ADD CONSTRAINT "sensors_room_rooms_name_fk" FOREIGN KEY ("room") REFERENCES "rooms"("name") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "sensors" ADD CONSTRAINT "sensors_room_rooms_id_fk" FOREIGN KEY ("room") REFERENCES "rooms"("name") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
