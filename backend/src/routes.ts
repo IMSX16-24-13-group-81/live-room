@@ -10,7 +10,8 @@ import { broadcastOccupants } from './websocket/flushes';
 import crypto from 'crypto';
 import {
   getRoomStatusHistory,
-  getRoomsStatus
+  getRoomsStatus,
+  addRoom
 } from './status/rooms';
 
 export const setupRoutes = (
@@ -64,6 +65,18 @@ export const setupRoutes = (
     return getRoomsStatus();
   });
 
+  server.post('api/rooms', async (request, reply) => {
+    const { name, building, coordinates, description}: any =
+    request.body;
+  const { authorization }: any = request.headers;
+
+  if ((authorization ?? '') !== process.env.AUTHORIZATION_TOKEN) {
+    reply.code(401);
+    return { error: 'Unauthorized' };
+  }
+  addRoom(name,building,coordinates, description);
+  return 'Success';
+});
   server.get('/api/rooms/occupants/history/:roomID', async (request, reply) => {
     const { type }: any = request.body ?? { type: 'json' };
     const { roomID }: any = request.params;

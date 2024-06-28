@@ -55,6 +55,18 @@ const getRooms = async () => {
     .innerJoin(buildings, eq(rooms.building, buildings.id));
 };
 
+const addRoom = async (name: string, coordiates: string, building: number, description: string) => {
+  const db = await getPG();
+  return await db
+    .insert(rooms).values({
+    name: name, 
+    coordiates: coordiates, 
+    building: building,
+    description: description
+    });  
+};
+
+
 const getRoomsStatus = async (buildingId?: string) => {
   const rooms = await getRooms();
   const sensorStatus = await getPIRStates();
@@ -87,4 +99,4 @@ const getRoomStatusHistory = async (
   });
 };
 
-export { getRooms, getRoomsStatus, getRoomStatusHistory };
+export { getRooms, getRoomsStatus, getRoomStatusHistory, addRoom };
