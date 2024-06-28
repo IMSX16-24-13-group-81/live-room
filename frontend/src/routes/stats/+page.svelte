@@ -59,9 +59,6 @@
   <Spacer height={40} />
   <CustomButton text={"SEE DATA"} disabled={tokenString === ""} on:click={() => testAccess()} />
 
-  <Spacer height={40} />
-  <CustomButton text={"ADD ROOM"} disabled={tokenString === ""} on:click={() => handlesu()} />
-
   <Spacer height={10} />
 
   {#if showIncorrectToken}
