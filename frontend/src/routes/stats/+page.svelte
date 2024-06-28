@@ -7,7 +7,6 @@
   import StatsIllustration from "../../components/StatsIllustration.svelte"
   import TextField from "../../components/TextField.svelte"
   import LineChart from "../../components/lineChart/LineChart.svelte"
-  import AddRoom from "../../components/AddRoom.svelte"
   import type { PageData } from "./$types"
 
   export let data: PageData
