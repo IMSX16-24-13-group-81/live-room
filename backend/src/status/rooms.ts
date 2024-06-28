@@ -1,8 +1,9 @@
-import { getPG } from '../db/config';
+import { getPG, getClient } from '../db/config';
 import { buildings, rooms, sensors } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import { PirSensorState, RoomStatus, SimplifiedRoomState } from '../types';
 import { getPIRStates, getOccupantsHistory } from '../influx/sensors';
+import { Client } from 'pg';
 
 type DatabaseRooms = Awaited<ReturnType<typeof getRooms>>;
 
@@ -55,6 +56,28 @@ const getRooms = async () => {
     .innerJoin(buildings, eq(rooms.building, buildings.id));
 };
 
+const addRoom = async (name: string, coordinates: string, building: string): Promise<void> => {
+  const client = await getClient();
+  try {
+    await client.query('BEGIN');
+    const queryText = `
+      INSERT INTO rooms (name, coordiates, building)
+      VALUES ($1, $2, $3)
+    `;
+
+    const values = [name, coordinates, building];
+
+    await client.query(queryText, values);
+
+    await client.query('COMMIT');
+
+  } catch (error) {
+    await client.query('ROLLBACK');
+    console.error('Failed to insert room into database', error);
+  } 
+};
+
+
 const getRoomsStatus = async (buildingId?: string) => {
   const rooms = await getRooms();
   const sensorStatus = await getPIRStates();
@@ -87,4 +110,4 @@ const getRoomStatusHistory = async (
   });
 };
 
-export { getRooms, getRoomsStatus, getRoomStatusHistory };
+export { getRooms, getRoomsStatus, getRoomStatusHistory, addRoom };
