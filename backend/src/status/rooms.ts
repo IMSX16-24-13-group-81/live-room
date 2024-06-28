@@ -56,28 +56,15 @@ const getRooms = async () => {
     .innerJoin(buildings, eq(rooms.building, buildings.id));
 };
 
-const addRoom = async (name: string, coordinates: string, building: string): Promise<void> => {
-  const client = new Client();
-  try {
-    await client.connect();
-    client.query('BEGIN');
-    const queryText = `
-      INSERT INTO rooms (name, coordiates, building)
-      VALUES ($1, $2, $3)
-    `;
-
-    const values = [name, coordinates, building];
-
-    await client.query(queryText, values);
-
-    await client.query('COMMIT');
-  }
-   catch (error) {
-    await client.query('ROLLBACK');
-    console.error('Failed to insert room into database', error);
-  } finally{
-  await client.end();
-  }  
+const addRoom = async (name: string, coordiates: string, building: number, description: string) => {
+  const db = await getPG();
+  return await db
+    .insert(rooms).values({
+    name: name, 
+    coordiates: coordiates, 
+    building: building,
+    description: description
+    });  
 };
 
 

@@ -66,7 +66,7 @@ export const setupRoutes = (
   });
 
   server.post('api/rooms', async (request, reply) => {
-    const { name, building, coordinates}: any =
+    const { name, building, coordinates, description}: any =
     request.body;
   const { authorization }: any = request.headers;
 
@@ -74,7 +74,7 @@ export const setupRoutes = (
     reply.code(401);
     return { error: 'Unauthorized' };
   }
-  addRoom(name,building,coordinates);
+  addRoom(name,building,coordinates, description);
   return 'Success';
 });
   server.get('/api/rooms/occupants/history/:roomID', async (request, reply) => {
