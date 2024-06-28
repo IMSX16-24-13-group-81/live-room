@@ -57,9 +57,10 @@ const getRooms = async () => {
 };
 
 const addRoom = async (name: string, coordinates: string, building: string): Promise<void> => {
-  const client = await getClient();
+  const client = new Client();
   try {
-    await client.query('BEGIN');
+    await client.connect();
+    client.query('BEGIN');
     const queryText = `
       INSERT INTO rooms (name, coordiates, building)
       VALUES ($1, $2, $3)
@@ -70,11 +71,13 @@ const addRoom = async (name: string, coordinates: string, building: string): Pro
     await client.query(queryText, values);
 
     await client.query('COMMIT');
-
-  } catch (error) {
+  }
+   catch (error) {
     await client.query('ROLLBACK');
     console.error('Failed to insert room into database', error);
-  } 
+  } finally{
+  await client.end();
+  }  
 };
 
 
