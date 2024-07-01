@@ -66,6 +66,14 @@ const addRoom = async (name: string, coordiates: string, building: number, descr
     });  
 };
 
+const addSensors = async (sensorId: string, roomId: number) => {
+  const db = await getPG();
+  return await db
+    .insert(sensors).values({
+    id: sensorId, 
+    room: roomId
+    });
+}
 
 const getRoomsStatus = async (buildingId?: string) => {
   const rooms = await getRooms();
@@ -99,4 +107,4 @@ const getRoomStatusHistory = async (
   });
 };
 
-export { getRooms, getRoomsStatus, getRoomStatusHistory, addRoom };
+export { getRooms, getRoomsStatus, getRoomStatusHistory, addRoom, addSensors };

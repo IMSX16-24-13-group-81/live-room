@@ -11,7 +11,8 @@ import crypto from 'crypto';
 import {
   getRoomStatusHistory,
   getRoomsStatus,
-  addRoom
+  addRoom,
+  addSensors
 } from './status/rooms';
 
 export const setupRoutes = (
@@ -77,6 +78,19 @@ export const setupRoutes = (
   addRoom(name,building,coordinates, description);
   return 'Success';
 });
+  server.post('api/sensors', async (request, reply) => {
+    const { sensorId, roomId}: any =
+    request.body;
+  const { authorization }: any = request.headers;
+
+  if ((authorization ?? '') !== process.env.AUTHORIZATION_TOKEN) {
+    reply.code(401);
+    return { error: 'Unauthorized' };
+  }
+  addSensors(sensorId,roomId);
+  return 'Success';
+});
+
   server.get('/api/rooms/occupants/history/:roomID', async (request, reply) => {
     const { type }: any = request.body ?? { type: 'json' };
     const { roomID }: any = request.params;
