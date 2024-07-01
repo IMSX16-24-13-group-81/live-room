@@ -8,7 +8,7 @@
   import { RoomStatus } from "$lib/data/protocols";
 
   export let data: PageData;
-  export let buildingId: string;
+  //export let buildingId: string;
 
   const interval = setInterval(async () => {
     data.rooms = await getRoomsByBuildingID(data.building.id);
@@ -19,7 +19,7 @@
   });
 
   onMount(() => {
-    document.title = `${data.building.name} - find a room`;
+    document.title = `${data.building.name} - Find a Room`;
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute('content', `Find a free study room or group room in ${data.building.name}, Chalmers, Gothenburg.`);
