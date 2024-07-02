@@ -66,7 +66,7 @@ export const setupRoutes = (
     return getRoomsStatus();
   });
 
-  server.post('api/rooms', async (request, reply) => {
+  server.post('/api/rooms', async (request, reply) => {
     const { name, building, coordinates, description}: any =
     request.body;
   const { authorization }: any = request.headers;
@@ -78,7 +78,7 @@ export const setupRoutes = (
   addRoom(name,building,coordinates, description);
   return 'Success';
 });
-  server.post('api/sensors', async (request, reply) => {
+  server.post('/api/sensors', async (request, reply) => {
     const { sensorId, roomId}: any =
     request.body;
   const { authorization }: any = request.headers;
