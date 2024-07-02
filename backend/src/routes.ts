@@ -11,7 +11,8 @@ import crypto from 'crypto';
 import {
   getRoomStatusHistory,
   getRoomsStatus,
-  addRoom
+  addRoom,
+  addSensors
 } from './status/rooms';
 
 export const setupRoutes = (
@@ -65,7 +66,7 @@ export const setupRoutes = (
     return getRoomsStatus();
   });
 
-  server.post('api/rooms', async (request, reply) => {
+  server.post('/api/rooms', async (request, reply) => {
     const { name, building, coordinates, description}: any =
     request.body;
   const { authorization }: any = request.headers;
@@ -77,6 +78,19 @@ export const setupRoutes = (
   addRoom(name,building,coordinates, description);
   return 'Success';
 });
+  server.post('/api/sensors', async (request, reply) => {
+    const { sensorId, roomId}: any =
+    request.body;
+  const { authorization }: any = request.headers;
+
+  if ((authorization ?? '') !== process.env.AUTHORIZATION_TOKEN) {
+    reply.code(401);
+    return { error: 'Unauthorized' };
+  }
+  addSensors(sensorId,roomId);
+  return 'Success';
+});
+
   server.get('/api/rooms/occupants/history/:roomID', async (request, reply) => {
     const { type }: any = request.body ?? { type: 'json' };
     const { roomID }: any = request.params;
@@ -98,7 +112,7 @@ export const setupRoutes = (
   });
 
   server.post('/api/sensors/report', async (request, reply) => {
-    const { firmwareVersion, sensorId, occupants, radarState, pirState }: any =
+    const { firmwareVersion, sensorId, RoomName, occupants, radarState, pirState }: any =
       request.body;
     const { authorization }: any = request.headers;
 
@@ -107,8 +121,8 @@ export const setupRoutes = (
       return { error: 'Unauthorized' };
     }
 
-    updateOccupants(firmwareVersion, sensorId, occupants, radarState, pirState);
-    broadcastOccupants(wss, occupants, sensorId);
+    updateOccupants(firmwareVersion, sensorId, RoomName, occupants, radarState, pirState);
+    broadcastOccupants(wss, occupants, sensorId, RoomName);
     return 'Success';
   });
 
@@ -129,14 +143,16 @@ export const setupRoutes = (
     updateOccupants(
       '1.0.0',
       'sensor1',
+      'Room1',
       randomOccupants,
       randomOccupants,
       randomState
     );
-    broadcastOccupants(wss, randomOccupants, 'sensor1');
+    broadcastOccupants(wss, randomOccupants, 'sensor1', 'Room1');
     return {
       firmwareVersion: '1.0.0',
       sensorId: 'sensor1',
+      roomName: 'Room1',
       occupants: randomOccupants,
       radarState: randomOccupants,
       pirState: randomState
