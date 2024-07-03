@@ -4,6 +4,7 @@ import { getPG } from './db/config';
 import { setupRoutes } from './routes';
 import WebSocket from 'ws';
 
+
 //For async runtime without top-level-async-tricks.
 const main = async () => {
   const server = fastify();
