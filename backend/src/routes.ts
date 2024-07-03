@@ -15,8 +15,6 @@ import {
   addSensors
 } from './status/rooms';
 
-const cors = require('fastify-cors');
-
 export const setupRoutes = (
   server: FastifyInstance,
   pg: OurPGDatabase,
@@ -36,12 +34,6 @@ export const setupRoutes = (
     ws.on('close', () => {
       console.log('Client disconnected');
     });
-  });
-
-  server.register(cors, {
-    origin: "*", // allow all origins
-    methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"], // allowed methods
-    allowedHeaders: ["Content-Type", "Authorization"], // allowed headers
   });
 
   //Ping test
