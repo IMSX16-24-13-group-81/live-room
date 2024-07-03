@@ -2,7 +2,7 @@ import { getPG } from '../db/config';
 import { buildings, rooms, sensors } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import { PirSensorState, RoomStatus, SimplifiedRoomState } from '../types';
-import { getPIRStates, getOccupantsHistory } from '../influx/sensors';
+import { getPIRStates, getOccupantsHistory, getOccupants } from '../influx/sensors';
 
 type DatabaseRooms = Awaited<ReturnType<typeof getRooms>>;
 

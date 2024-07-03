@@ -58,9 +58,7 @@
 
   <Spacer height={40} />
   <CustomButton text={"SEE DATA"} disabled={tokenString === ""} on:click={() => testAccess()} />
-
-  <Spacer height={10} />
-
+  <Spacer height={10} />  
   {#if showIncorrectToken}
     <p class="font-bold text-content text-red-500">Incorrect Token</p>
   {/if}
