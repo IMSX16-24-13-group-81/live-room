@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { LineChartData } from "$lib/data/protocols"
-  import { getExampleLineChartData, AddRoom } from "$lib/helpers"
+  import { getExampleLineChartData } from "$lib/helpers"
   import CustomButton from "../../components/CustomButton.svelte"
   import RoomSelector from "../../components/RoomSelector.svelte"
   import Spacer from "../../components/Spacer.svelte"
