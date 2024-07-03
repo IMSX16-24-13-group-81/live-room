@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { LineChartData } from "$lib/data/protocols"
-  import { getExampleLineChartData } from "$lib/helpers"
+  import { getExampleLineChartData, AddRoom } from "$lib/helpers"
   import CustomButton from "../../components/CustomButton.svelte"
   import RoomSelector from "../../components/RoomSelector.svelte"
   import Spacer from "../../components/Spacer.svelte"
@@ -58,9 +58,9 @@
 
   <Spacer height={40} />
   <CustomButton text={"SEE DATA"} disabled={tokenString === ""} on:click={() => testAccess()} />
-
-  <Spacer height={10} />
-
+  <Spacer height={40} />
+  <CustomButton text={"ADD ROOM"} disabled={tokenString === ""} on:click={() => AddRoom()} />
+  <Spacer height={10} />  
   {#if showIncorrectToken}
     <p class="font-bold text-content text-red-500">Incorrect Token</p>
   {/if}
