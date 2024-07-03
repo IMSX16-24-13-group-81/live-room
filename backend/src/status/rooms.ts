@@ -78,7 +78,6 @@ const addSensors = async (sensorId: string, roomId: number) => {
 const getRoomsStatus = async (buildingId?: string) => {
   const rooms = await getRooms();
   const sensorStatus = await getPIRStates();
-  const occupants = await getOccupants();
   const buildingRooms = buildingId
     ? rooms.filter((room) => room.buildings.id.toString() === buildingId)
     : rooms;
