@@ -15,6 +15,8 @@ import {
   addSensors
 } from './status/rooms';
 
+const cors = require('fastify-cors');
+
 export const setupRoutes = (
   server: FastifyInstance,
   pg: OurPGDatabase,
@@ -34,6 +36,12 @@ export const setupRoutes = (
     ws.on('close', () => {
       console.log('Client disconnected');
     });
+  });
+
+  server.register(cors, {
+    origin: "*", // allow all origins
+    methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"], // allowed methods
+    allowedHeaders: ["Content-Type", "Authorization"], // allowed headers
   });
 
   //Ping test
@@ -77,7 +85,7 @@ export const setupRoutes = (
   }
   addRoom(name,building,coordinates, description);
   return 'Success';
-});
+  });
   server.post('/api/sensors', async (request, reply) => {
     const { sensorId, roomId}: any =
     request.body;
@@ -89,7 +97,7 @@ export const setupRoutes = (
   }
   addSensors(sensorId,roomId);
   return 'Success';
-});
+  });
 
   server.get('/api/rooms/occupants/history/:roomID', async (request, reply) => {
     const { type }: any = request.body ?? { type: 'json' };
