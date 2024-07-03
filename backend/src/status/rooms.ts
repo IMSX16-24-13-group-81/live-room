@@ -2,7 +2,7 @@ import { getPG } from '../db/config';
 import { buildings, rooms, sensors } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import { PirSensorState, RoomStatus, SimplifiedRoomState } from '../types';
-import { getPIRStates, getOccupantsHistory } from '../influx/sensors';
+import { getPIRStates, getOccupantsHistory, getOccupants } from '../influx/sensors';
 
 type DatabaseRooms = Awaited<ReturnType<typeof getRooms>>;
 
@@ -78,6 +78,7 @@ const addSensors = async (sensorId: string, roomId: number) => {
 const getRoomsStatus = async (buildingId?: string) => {
   const rooms = await getRooms();
   const sensorStatus = await getPIRStates();
+  const occupants = await getOccupants();
   const buildingRooms = buildingId
     ? rooms.filter((room) => room.buildings.id.toString() === buildingId)
     : rooms;

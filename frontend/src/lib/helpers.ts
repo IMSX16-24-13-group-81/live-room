@@ -44,7 +44,7 @@ export const getAllRooms = async (): Promise<Room[]> => {
   }
 }
 
-export const addRooms = async (room: Room): Promise<void> => {
+/*export const addRooms = async (room: Room): Promise<void> => {
   const backendURL = env.PUBLIC_BACKEND_URL || undefined
 
   try {
@@ -63,7 +63,7 @@ export const addRooms = async (room: Room): Promise<void> => {
   } catch (error) {
     console.error("There has been a problem with the fetch operation:", error)
   }
-}
+}*/
 export const getDataPointsForRoom = async (id: string): Promise<Point[]> => {
   const backendURL = env.PUBLIC_BACKEND_URL || undefined
 
