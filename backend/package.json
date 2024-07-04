@@ -21,7 +21,9 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@fastify/cors": "^9.0.1",
     "@influxdata/influxdb-client": "^1.33.2",
+    "cors": "^2.8.5",
     "drizzle-orm": "^0.29.4",
     "fastify": "^4.26.0",
     "pg": "^8.11.3",
