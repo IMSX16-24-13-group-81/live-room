@@ -15,6 +15,7 @@ import {
   addSensors
 } from './status/rooms';
 
+
 export const setupRoutes = (
   server: FastifyInstance,
   pg: OurPGDatabase,

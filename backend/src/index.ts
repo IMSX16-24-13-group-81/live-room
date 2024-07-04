@@ -1,4 +1,5 @@
 import fastify from 'fastify';
+import cors from '@fastify/cors';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { getPG } from './db/config';
 import { setupRoutes } from './routes';
@@ -8,6 +9,10 @@ import WebSocket from 'ws';
 //For async runtime without top-level-async-tricks.
 const main = async () => {
   const server = fastify();
+
+  await server.register(cors, {
+    hook: 'onRequest', 
+  });
 
   const pg = await getPG();
   console.log('Running migrations');
