@@ -8,20 +8,15 @@
     import TextField from "../../components/TextField.svelte"
     import LineChart from "../../components/lineChart/LineChart.svelte"
     import type { PageData } from "./$types"
+    import { buildings } from "$lib/data/buildings"
   
     export let data: PageData
   
     let showIncorrectToken = false
     let hasAuthenticated = false
   
-    let currentLineChartData: LineChartData | undefined
-  
-    $: if (currentLineChartData) {
-      console.log("FROM OUTSIDE WAS UPDATED")
-    }
-  
     //Placeholder variable
-    const correctToken = "placeholder-token"
+    const correctToken = "1"
   
     let tokenString = ""
   
@@ -37,6 +32,34 @@
         }, 3000)
       }
     }
+
+
+    // Form data
+  let formData = {
+    name: "",
+    roomId: "",
+    selectedBuilding: "",
+  };
+
+  // Function to handle form submission
+  async function handleSubmit() {
+    // Example of form validation
+    if (!formData.name || !formData.selectedBuilding) {
+      alert("Please fill out the required fields.");
+      return;
+    }
+
+    // Simulate sending data to a server
+    try {
+      // Replace with actual API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      alert("Form submitted successfully!");
+    } catch (error) {
+      alert("Failed to submit form. Please try again.");
+    }
+
+    console.log(formData);
+  }
   </script>
   
   <img src={"/chalmersLogo.svg"} alt="Chalmers University Logo" class="w-[110px]" />
@@ -66,15 +89,41 @@
     <Spacer height={40} />
    
     <Spacer height={40} />
-    <h2 class="text-mediumHeader font-extrabold tracking-tighter leading-none">Select Rooms</h2>
-    <h2 class="text-content font-light tracking-tighter leading-none text-center">
-      Data from the rooms selected will be shown in the line chart.
-    </h2>
-    <Spacer height={20} />
-    <div class="flex">
-      <RoomSelector rooms={data.allRooms} bind:currentLineChartData />
+    <h2 class="text-mediumHeader font-extrabold tracking-tighter leading-none">Register new sensor</h2>
+    <Spacer height={25} />
+
+<!-- Form for registration of new sensor-->
+<form on:submit|preventDefault={handleSubmit}>
+    <div>
+      <label for="building" class="block font-bold text-[0.85rem]">Select Building:</label>
+    <select
+      bind:value={formData.selectedBuilding}
+      required
+      class="rounded-md bg-dark/10 p-3 w-full text-content self-stretch font-medium border-transparent focus:outline-none focus:border-text placeholder-dark/70">
+      <option value="" disabled>Click to view</option>
+      {#each buildings as option}
+        <option value={option.name}>{option.name}</option>
+      {/each}
+    </select>
+    </div>
+    <div>
+      <Spacer height = {10} />
+      <label for="name" class="block font-bold text-[0.85rem]">Room ID as written in Campus Maps: </label>
+      <TextField bind:value={formData.name} placeholder="Eg: EG-4201A" example="" />
+    </div>
+    <div>
+      <Spacer height = {10} />
+      <label for="MAC" class="block font-bold text-[0.85rem]">MAC address for new sensor: </label>
+      <TextField bind:value={formData.roomId} placeholder="Eg: 00:00:AA:AA:00:FF" example="" />
     </div>
   
+    <Spacer height = {20} />
+    <div class="flex justify-center">
+      <CustomButton text={"REGISTER NEW SENSOR"} disabled={tokenString === ""} />
+    </div> 
+  </form>   
+
+<!--Footer-->
     <Spacer height={100} />
     <div class="w-full bg-dark/[0.07] rounded-lg p-8 flex flex-col items-center">
       <h2 class="text-smallHeader font-medium leading-none">NEED HELP?</h2>
@@ -91,4 +140,3 @@
       <Spacer height={40} />
     </div>
   {/if}
-  
