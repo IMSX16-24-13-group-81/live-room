@@ -43,7 +43,7 @@ export const getAllRooms = async (): Promise<Room[]> => {
     return []
   }
 }
-
+//Function to add rooms. How? Where? Maybe useful?
 /*export const addRooms = async (room: Room): Promise<void> => {
   const backendURL = env.PUBLIC_BACKEND_URL || undefined
 
@@ -63,7 +63,7 @@ export const getAllRooms = async (): Promise<Room[]> => {
   } catch (error) {
     console.error("There has been a problem with the fetch operation:", error)
   }
-}*/
+} */
 export const getDataPointsForRoom = async (id: string): Promise<Point[]> => {
   const backendURL = env.PUBLIC_BACKEND_URL || undefined
 
