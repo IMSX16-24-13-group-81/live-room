@@ -47,6 +47,7 @@ export const updateOccupants = (
   writeClient.flush();
 };
 
+//Add so that we can choose intervall ourselves.
 export const getOccupants = async () => {
   let queryApi = influxClient.getQueryApi(org);
   const query = flux`from(bucket: "${bucket}")

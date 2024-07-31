@@ -2,7 +2,7 @@ import type { Building } from "./protocols"
 
 export const buildings: Building[] = [
   {
-    id: "4",
+    id: "2",
     name: "Idéläran (NC)",
     description: "Idéläran is a free-standing building with a computer room and group rooms. Group rooms EG-3509 - EG-3513 are \"first-serve\"",
     address: "Rännvägen 8",
@@ -14,7 +14,7 @@ export const buildings: Building[] = [
     address: "Maskingränd 2",
   },
   {
-    id: "2",
+    id: "4",
     name: "Fysik-huset (Inactive)",
     description: "Two houses connected by a glass bridge. Has laboratories, classrooms and group rooms in both houses.",
     address: "Kemigården 1",
@@ -48,5 +48,12 @@ export const buildings: Building[] = [
     name: "Maskinhuset (Inactive)",
     description: "Building for mechanical and automation- and mechatronics engineering.",
     address: "Hörsalsvägen 7A",
+  },
+
+  {
+    id: "9",
+    name: "Vasa (Inactive)",
+    description: "Building for Industrial engineering and management.",
+    address: "Vera Sandbergs allé 8",
   },
 ]

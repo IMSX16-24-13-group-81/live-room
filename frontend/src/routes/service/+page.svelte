@@ -43,7 +43,6 @@
 
   // Function to handle form submission
   async function handleSubmit() {
-    // Example of form validation
     if (!formData.name || !formData.selectedBuilding) {
       alert("Please fill out the required fields.");
       return;
@@ -129,7 +128,7 @@
       <h2 class="text-smallHeader font-medium leading-none">NEED HELP?</h2>
       <h2 class="text-mediumHeader tablet:text-header font-bold leading-tight">Contact developers</h2>
       <p class="text-content font-light leading-none text-center max-w-[700px]">
-        Have you discovered something in the code that needs some love and care? Arn't the registration service working? Please contact us and we will see what we can do!
+        Have you discovered something that needs some love and care? Isn't the registration service working? Please contact us and we will see what we can do!
       </p>
       <Spacer height={20} />
       <p class="text-content font-light leading-none text-center max-w-[700px]">

@@ -3,7 +3,7 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 export type OurPGDatabase = NodePgDatabase<typeof import('./db/schema')>;
 
 export interface OccupantsWebsocketMessage {
-  // sensorID should probabily be roomID in the future
+  // We don't use WS
   sensorId: string;
   roomName: string;
   occupants: number;
