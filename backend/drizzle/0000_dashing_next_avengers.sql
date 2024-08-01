@@ -7,5 +7,5 @@ CREATE TABLE IF NOT EXISTS "buildings" (
 CREATE TABLE IF NOT EXISTS "rooms" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text,
-	"coordiates" text
+	"coordinates" text
 );
