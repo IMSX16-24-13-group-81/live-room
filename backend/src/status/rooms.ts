@@ -60,7 +60,7 @@ const addRoom = async (name: string, coordinates: string, building: number, desc
   return await db
     .insert(rooms).values({
     name: name, 
-    coordiantes: coordinates, 
+    coordinates: coordinates, 
     building: building,
     description: description
     });  
