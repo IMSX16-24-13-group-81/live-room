@@ -55,12 +55,12 @@ const getRooms = async () => {
     .innerJoin(buildings, eq(rooms.building, buildings.id));
 };
 
-const addRoom = async (name: string, coordiates: string, building: number, description: string) => {
+const addRoom = async (name: string, coordinates: string, building: number, description: string) => {
   const db = await getPG();
   return await db
     .insert(rooms).values({
     name: name, 
-    coordiates: coordiates, 
+    coordinates: coordinates, 
     building: building,
     description: description
     });  

@@ -130,7 +130,7 @@ export const setupRoutes = (
     //broadcastOccupants(wss, occupants, sensorId, roomName);
     //return 'Success'; 
     try {
-      await updateOccupants(firmwareVersion, sensorId, occupants, radarState, pirState, pg);
+      await updateOccupants(firmwareVersion, sensorId, occupants, radarState, pirState);
       return 'Success';
     } catch (error) {
       reply.code(400);
@@ -157,7 +157,7 @@ export const setupRoutes = (
     });
     const occupants = totIn - totOut;
 
-    await updateOccupants(firmware_version, device_mac, occupants, pg);
+    await updateOccupants(firmware_version, device_mac, occupants);
     return 'Success';
   } catch (error) {
     reply.code(400);

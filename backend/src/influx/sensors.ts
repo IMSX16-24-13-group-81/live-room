@@ -30,7 +30,7 @@ const convertResults = <T>(
 export const updateOccupants = (
   firmwareVersion: string,
   sensorId: string,
-  roomName: string,
+  //roomName: string,
   occupants: number,
   radarState: number,
   pirState: boolean
@@ -38,7 +38,7 @@ export const updateOccupants = (
   let point = new Point('sensors')
     .tag('firmwareVersion', firmwareVersion)
     .tag('sensorId', sensorId)
-    .tag('roomName', roomName)
+    //.tag('roomName', roomName)
     .intField('occupants', occupants)
     .intField('radarState', radarState)
     .booleanField('pirState', pirState);
