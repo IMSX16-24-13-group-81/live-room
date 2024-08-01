@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS "sensors" (
 	"id" text PRIMARY KEY NOT NULL,
-	"room" serial NOT NULL
+	"room" integer NOT NULL
 );
 --> statement-breakpoint
 DO $$ BEGIN
