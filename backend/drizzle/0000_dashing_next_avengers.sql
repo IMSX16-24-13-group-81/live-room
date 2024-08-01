@@ -8,5 +8,5 @@ CREATE TABLE IF NOT EXISTS "rooms" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text,
 	"coordinates" text
-	
+
 );
