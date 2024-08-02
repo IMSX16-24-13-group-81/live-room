@@ -44,7 +44,7 @@
         },
         "building": {
           "name": "building",
-          "type": "serial",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
