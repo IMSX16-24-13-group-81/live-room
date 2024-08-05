@@ -43,11 +43,13 @@ export const updateOccupants = (
     //.intField('radarState', radarState)
     //booleanField('pirState', pirState);
     
-    if (radarState !== undefined) {
-    point.intField('radarState', radarState);
+    if (typeof radarState === 'number') {
+      point.intField('radarState', radarState);
     }
-    if (pirState !== undefined) {
-        point.booleanField('pirState', pirState);
+  
+    // Add pirState only if it is defined
+    if (typeof pirState === 'boolean') {
+      point.booleanField('pirState', pirState);
     }
 
   writeClient.writePoint(point);
