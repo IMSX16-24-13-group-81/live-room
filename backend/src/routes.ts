@@ -159,7 +159,7 @@ export const setupRoutes = (
     //const radarState  = 0; //default for test
     //const pirState = false; //default for test
   
-    updateOccupants(firmwareVersion, sensorId, occupants, radarState, pirState);
+    updateOccupants(firmwareVersion, sensorId, occupants);
     return 'Success';
   });
 
