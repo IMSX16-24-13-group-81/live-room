@@ -158,8 +158,12 @@ export const setupRoutes = (
     const occupants = totIn - totOut;
     const firmwareVersion = firmware_version;
     const sensorId = device_mac;
+
+    //test
+    const radarState  = 0; //default for test
+    const pirState = false; //default for test
   try {
-    await updateOccupants(firmwareVersion, sensorId, occupants);
+    await updateOccupants(firmwareVersion, sensorId, occupants, radarState, pirState);
     return 'Success';
   } catch (error) {
     reply.code(400);
