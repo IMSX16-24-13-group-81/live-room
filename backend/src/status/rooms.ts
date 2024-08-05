@@ -12,7 +12,7 @@ type RoomSensorState = {
     id: number;
     name: string | null;
     description: string | null;
-    coordiates: string | null;
+    coordinates: string | null;
   };
   building: {
     id: number;

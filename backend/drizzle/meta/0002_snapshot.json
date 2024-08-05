@@ -44,7 +44,7 @@
         },
         "building": {
           "name": "building",
-          "type": "serial",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -54,8 +54,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "coordiates": {
-          "name": "coordiates",
+        "coordinates": {
+          "name": "coordinates",
           "type": "text",
           "primaryKey": false,
           "notNull": false

@@ -10,7 +10,7 @@ export const rooms = pgTable('rooms', {
   id: serial('id').primaryKey(),
   building: serial('building').references(() => buildings.id),
   name: text('name'),
-  coordiates: text('coordiates'),
+  coordinates: text('coordinates'),
   description: text('description')
 });
 
