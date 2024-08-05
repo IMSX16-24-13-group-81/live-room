@@ -32,16 +32,23 @@ export const updateOccupants = (
   sensorId: string,
   //roomName: string,
   occupants: number,
-  radarState: number,
-  pirState: boolean
+  radarState?: number,
+  pirState?: boolean
 ) => {
   let point = new Point('sensors')
     .tag('firmwareVersion', firmwareVersion)
     .tag('sensorId', sensorId)
     //.tag('roomName', roomName)
     .intField('occupants', occupants)
-    .intField('radarState', radarState)
-    .booleanField('pirState', pirState);
+    //.intField('radarState', radarState)
+    //booleanField('pirState', pirState);
+    
+    if (radarState !== undefined) {
+    point.intField('radarState', radarState);
+    }
+    if (pirState !== undefined) {
+        point.booleanField('pirState', pirState);
+    }
 
   writeClient.writePoint(point);
   writeClient.flush();

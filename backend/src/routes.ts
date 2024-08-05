@@ -156,14 +156,17 @@ export const setupRoutes = (
       totOut += line.out;
     });
     const occupants = totIn - totOut;
-
-    await updateOccupants(firmware_version, device_mac, occupants);
+    const firmwareVersion = firmware_version;
+    const sensorId = device_mac;
+  try {
+    await updateOccupants(firmwareVersion, sensorId, occupants);
     return 'Success';
   } catch (error) {
     reply.code(400);
     return { error: error.message };
   }
   });
+
 
   server.get('/api/rooms/status', async (request, reply) => {
     return await getRoomsStatus();
