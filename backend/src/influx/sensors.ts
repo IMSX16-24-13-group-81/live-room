@@ -30,23 +30,33 @@ const convertResults = <T>(
 export const updateOccupants = (
   firmwareVersion: string,
   sensorId: string,
-  roomName: string,
+  //roomName: string,
   occupants: number,
-  radarState: number,
-  pirState: boolean
+  radarState?: number,
+  pirState?: boolean
 ) => {
   let point = new Point('sensors')
     .tag('firmwareVersion', firmwareVersion)
     .tag('sensorId', sensorId)
-    .tag('roomName', roomName)
+    //.tag('roomName', roomName)
     .intField('occupants', occupants)
-    .intField('radarState', radarState)
-    .booleanField('pirState', pirState);
+    //.intField('radarState', radarState)
+    //booleanField('pirState', pirState);
+    
+    if (typeof radarState === 'number') {
+      point.intField('radarState', radarState);
+    }
+  
+    // Add pirState only if it is defined
+    if (typeof pirState === 'boolean') {
+      point.booleanField('pirState', pirState);
+    }
 
   writeClient.writePoint(point);
   writeClient.flush();
 };
 
+//Add so that we can choose intervall ourselves.
 export const getOccupants = async () => {
   let queryApi = influxClient.getQueryApi(org);
   const query = flux`from(bucket: "${bucket}")
