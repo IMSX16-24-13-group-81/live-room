@@ -129,14 +129,10 @@ export const setupRoutes = (
     //updateOccupants(firmwareVersion, sensorId, roomName, occupants, radarState, pirState, pg);
     //broadcastOccupants(wss, occupants, sensorId, roomName);
     //return 'Success'; 
-    try {
-      await updateOccupants(firmwareVersion, sensorId, occupants, radarState, pirState);
+    
+    updateOccupants(firmwareVersion, sensorId, occupants, radarState, pirState);
       return 'Success';
-    } catch (error) {
-      reply.code(400);
-      return { error: error.message };
-    }
-  });
+  });   
 
   // New endpoint for the new sensor VS135-hl
   server.post('/api/sensors/report/vs135hl', async (request, reply) => {
@@ -162,13 +158,9 @@ export const setupRoutes = (
     //test
     const radarState  = 0; //default for test
     const pirState = false; //default for test
-  try {
-    await updateOccupants(firmwareVersion, sensorId, occupants, radarState, pirState);
+  
+    updateOccupants(firmwareVersion, sensorId, occupants, radarState, pirState);
     return 'Success';
-  } catch (error) {
-    reply.code(400);
-    return { error: error.message };
-  }
   });
 
 
