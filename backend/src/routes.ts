@@ -156,8 +156,8 @@ export const setupRoutes = (
     const sensorId = device_mac;
 
     //test
-    const radarState  = 0; //default for test
-    const pirState = false; //default for test
+    //const radarState  = 0; //default for test
+    //const pirState = false; //default for test
   
     updateOccupants(firmwareVersion, sensorId, occupants, radarState, pirState);
     return 'Success';
