@@ -134,6 +134,11 @@ export const setupRoutes = (
       return 'Success';
   });   
 
+  //Test of route setup and sensor connection
+  server.get('/api/sensors/report/vs135hl', async (request, reply) => {
+    return { message: "This is a GET request test for /vs135hl" };
+  });
+
   // New endpoint for the new sensor VS135-hl
   server.post('/api/sensors/report/vs135hl', async (request, reply) => {
     const { firmware_version, device_mac, trigger_data }: any = request.body;
