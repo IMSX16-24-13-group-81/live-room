@@ -66,12 +66,18 @@ export const getOccupants = async () => {
   return convertResults<number>(await queryApi.collectRows(query));
 };
 
-export const getOccupantsHistory = async (sensorId: string) => {
+//Query for current and historical data for statistics
+export const getOccupantsHistory = async (sensorId: string, startDateTime?: string, endDateTime?: string) => {
   let queryApi = influxClient.getQueryApi(org);
+
+  // Constructing the range part of the query
+  let rangeQuery = `|> range(start: ${startDateTime ? startDateTime : '-1h'}${endDateTime ? `, stop: ${endDateTime}` : ''})`;
+
   const query = flux`from(bucket: "${bucket}")
-  |> range(start: -1h)
-  |> filter(fn: (r) => r._measurement == "sensors")
-  |> filter(fn: (r) => r["sensorId"] == "${sensorId}")`;
+    ${rangeQuery}
+    |> filter(fn: (r) => r._measurement == "sensors")
+    |> filter(fn: (r) => r["sensorId"] == "${sensorId}")`;
+
   return convertResults<number>(await queryApi.collectRows(query));
 };
 
