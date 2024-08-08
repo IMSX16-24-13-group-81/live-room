@@ -148,9 +148,9 @@ export const setupRoutes = (
     // Extract username and password from the Authorization header
     const base64Credentials = authHeader.split(' ')[1] || '';
     const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
-    const [username, password] = credentials.split(':');
+    const [Username, Password] = credentials.split(':');
 
-    if (username !== process.env.INFLUXDB_USER || password !== process.env.INFLUXDB_PASSWORD) {
+    if (Username !== process.env.INFLUXDB_USER || Password !== process.env.INFLUXDB_PASSWORD) {
       reply.code(401).header('WWW-Authenticate', 'Basic realm="Access to the staging site"');
       return { error: 'Unauthorized' };
     } 
