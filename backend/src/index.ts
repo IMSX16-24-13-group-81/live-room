@@ -3,6 +3,7 @@ import cors from '@fastify/cors';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { getPG } from './db/config';
 import { setupRoutes } from './routes';
+import {swagger} from './swagger';
 // import WebSocket from 'ws';
 
 
@@ -19,6 +20,9 @@ const main = async () => {
   await migrate(pg, { migrationsFolder: 'drizzle' });
 
   //const wss = new WebSocket.Server({ port: 8079 });
+
+  await swagger(server);
+
 
   server.listen({ host: '0.0.0.0', port: 8080 }, (err, address) => {
     if (err) {
