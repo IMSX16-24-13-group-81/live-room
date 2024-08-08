@@ -142,7 +142,7 @@ export const setupRoutes = (
 
   // New endpoint for the new sensor VS135-hl
   server.post('/api/sensors/report/vs135hl', async (request, reply) => {
-    const { firmware_version, device_mac, trigger_data }: any = request.body;
+    const { device_info, total_data }: any = request.body;
     const authHeader = request.headers.authorization || '';
 
     // Extract username and password from the Authorization header
@@ -159,17 +159,13 @@ export const setupRoutes = (
     let totIn = 0;
     let totOut = 0;
 
-    trigger_data.forEach((line: any) => {
-      totIn += line.in;
-      totOut += line.out;
+    total_data.forEach((line: any) => {
+      totIn += line.in_counted;
+      totOut += line.out_counted;
     });
     const occupants = totIn - totOut;
-    const firmwareVersion = firmware_version;
-    const sensorId = device_mac;
-
-    //test
-    //const radarState  = 0; //default for test
-    //const pirState = false; //default for test
+    const firmwareVersion = device_info.firmware_version;
+    const sensorId = device_info.device_mac;
   
     updateOccupants(firmwareVersion, sensorId, occupants);
     return 'Success';
