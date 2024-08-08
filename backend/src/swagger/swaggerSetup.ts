@@ -9,7 +9,7 @@ import path from 'path';
 
 export const swagger  = async (server: FastifyInstance) => {
 
-  const swaggerFilePath = './src/swagger/swagger.json';
+  const swaggerFilePath = path.resolve(__dirname, 'swagger.json');
   const swaggerFileContent = fs.readFileSync(swaggerFilePath, 'utf-8');
   const swaggerDocument = JSON.parse(swaggerFileContent);
 
