@@ -4,35 +4,42 @@ import {
   getOccupants,
   updateOccupants
 } from './influx/sensors';
-import WebSocket from 'ws';
+//import WebSocket from 'ws';
 import { OurPGDatabase } from './types';
 import { broadcastOccupants } from './websocket/flushes';
 import crypto from 'crypto';
 import {
   getRoomStatusHistory,
-  getRoomsStatus
+  getRoomsStatus,
+  addRoom,
+  addSensors
 } from './status/rooms';
+
 
 export const setupRoutes = (
   server: FastifyInstance,
-  pg: OurPGDatabase,
-  wss: WebSocket.Server
+  pg: OurPGDatabase //,
+  //wss: WebSocket.Server
+  
 ) => {
+  /*
+  //Ws not used
   //Frontend websocket connection
-  wss.on('connection', (ws) => {
-    // Temporary connection log.
-    console.log('A new client connected!');
+    wss.on('connection', (ws) => {
+      // Temporary connection log.
+      console.log('A new client connected!');
 
-    // Temporary verification message.
-    ws.send('Welcome to the WebSocket server!');
+      // Temporary verification message.
+      ws.send('Welcome to the WebSocket server!');
 
-    // Potential future use of messages from client.
-    // ws.on('message', (message) => {});
+      // Potential future use of messages from client.
+      // ws.on('message', (message) => {});
 
-    ws.on('close', () => {
-      console.log('Client disconnected');
+      ws.on('close', () => {
+        console.log('Client disconnected');
+      });
     });
-  });
+    */
 
   
   //Ping test
@@ -65,6 +72,31 @@ export const setupRoutes = (
     return getRoomsStatus();
   });
 
+  server.post('/api/rooms', async (request, reply) => {
+    const { name, building, coordinates, description}: any =
+    request.body;
+  const { authorization }: any = request.headers;
+
+  if ((authorization ?? '') !== process.env.AUTHORIZATION_TOKEN) {
+    reply.code(401);
+    return { error: 'Unauthorized' };
+  }
+  addRoom(name,building,coordinates, description);
+  return 'Success';
+  });
+  server.post('/api/sensors', async (request, reply) => {
+    const { sensorId, roomId}: any =
+    request.body;
+  const { authorization }: any = request.headers;
+
+  if ((authorization ?? '') !== process.env.AUTHORIZATION_TOKEN) {
+    reply.code(401);
+    return { error: 'Unauthorized' };
+  }
+  addSensors(sensorId,roomId);
+  return 'Success';
+  });
+
   server.get('/api/rooms/occupants/history/:roomID', async (request, reply) => {
     const { type }: any = request.body ?? { type: 'json' };
     const { roomID }: any = request.params;
@@ -95,16 +127,60 @@ export const setupRoutes = (
       return { error: 'Unauthorized' };
     }
 
+    //updateOccupants(firmwareVersion, sensorId, roomName, occupants, radarState, pirState, pg);
+    //broadcastOccupants(wss, occupants, sensorId, roomName);
+    //return 'Success'; 
+    
     updateOccupants(firmwareVersion, sensorId, occupants, radarState, pirState);
-    broadcastOccupants(wss, occupants, sensorId);
+      return 'Success';
+  });   
+
+  //Test of route setup and sensor connection
+  server.get('/api/sensors/report/vs135hl', async (request, reply) => {
+    return { message: "This is a GET request test for /vs135hl" };
+  });
+
+  // New endpoint for the new sensor VS135-hl
+  server.post('/api/sensors/report/vs135hl', async (request, reply) => {
+    const { firmware_version, device_mac, trigger_data }: any = request.body;
+    const authHeader = request.headers.authorization || '';
+
+    // Extract username and password from the Authorization header
+    const base64Credentials = authHeader.split(' ')[1] || '';
+    const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
+    const [username, password] = credentials.split(':');
+
+    if (username !== process.env.INFLUXDB_USER || password !== process.env.INFLUXDB_PASSWORD) {
+      reply.code(401);
+      return { error: 'Unauthorized' };
+  } 
+   
+    let totIn = 0;
+    let totOut = 0;
+
+    trigger_data.forEach((line: any) => {
+      totIn += line.in;
+      totOut += line.out;
+    });
+    const occupants = totIn - totOut;
+    const firmwareVersion = firmware_version;
+    const sensorId = device_mac;
+
+    //test
+    //const radarState  = 0; //default for test
+    //const pirState = false; //default for test
+  
+    updateOccupants(firmwareVersion, sensorId, occupants);
     return 'Success';
   });
+
 
   server.get('/api/rooms/status', async (request, reply) => {
     return await getRoomsStatus();
   });
 
-  server.get('/api/sensors/report/test', async (request, reply) => {
+/* Randomized generated data from first test of software. No longer in use.
+   server.get('/api/sensors/report/test', async (request, reply) => {
     const { authorization }: any = request.headers;
 
     if ((authorization ?? '') !== process.env.AUTHORIZATION_TOKEN) {
@@ -117,19 +193,22 @@ export const setupRoutes = (
     updateOccupants(
       '1.0.0',
       'sensor1',
+      'Room1',
       randomOccupants,
       randomOccupants,
       randomState
     );
-    broadcastOccupants(wss, randomOccupants, 'sensor1');
+    broadcastOccupants(wss, randomOccupants, 'sensor1', 'Room1');
     return {
       firmwareVersion: '1.0.0',
       sensorId: 'sensor1',
+      roomName: 'Room1',
       occupants: randomOccupants,
       radarState: randomOccupants,
       pirState: randomState
     };
   });
+*/
 
   server.get('/api/sensors/dead', async (request, reply) => {
     return await getDeadSensors();

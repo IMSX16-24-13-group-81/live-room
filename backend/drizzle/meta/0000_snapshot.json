@@ -48,8 +48,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "coordiates": {
-          "name": "coordiates",
+        "coordinates": {
+          "name": "coordinates",
           "type": "text",
           "primaryKey": false,
           "notNull": false

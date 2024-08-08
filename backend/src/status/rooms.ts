@@ -2,7 +2,7 @@ import { getPG } from '../db/config';
 import { buildings, rooms, sensors } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import { PirSensorState, RoomStatus, SimplifiedRoomState } from '../types';
-import { getPIRStates, getOccupantsHistory } from '../influx/sensors';
+import { getPIRStates, getOccupantsHistory, getOccupants } from '../influx/sensors';
 
 type DatabaseRooms = Awaited<ReturnType<typeof getRooms>>;
 
@@ -12,7 +12,7 @@ type RoomSensorState = {
     id: number;
     name: string | null;
     description: string | null;
-    coordiates: string | null;
+    coordinates: string | null;
   };
   building: {
     id: number;
@@ -55,6 +55,26 @@ const getRooms = async () => {
     .innerJoin(buildings, eq(rooms.building, buildings.id));
 };
 
+const addRoom = async (name: string, coordinates: string, building: number, description: string) => {
+  const db = await getPG();
+  return await db
+    .insert(rooms).values({
+    name: name, 
+    coordinates: coordinates, 
+    building: building,
+    description: description
+    });  
+};
+
+const addSensors = async (sensorId: string, roomId: number) => {
+  const db = await getPG();
+  return await db
+    .insert(sensors).values({
+    id: sensorId, 
+    room: roomId
+    });
+}
+
 const getRoomsStatus = async (buildingId?: string) => {
   const rooms = await getRooms();
   const sensorStatus = await getPIRStates();
@@ -87,4 +107,4 @@ const getRoomStatusHistory = async (
   });
 };
 
-export { getRooms, getRoomsStatus, getRoomStatusHistory };
+export { getRooms, getRoomsStatus, getRoomStatusHistory, addRoom, addSensors };

@@ -3,6 +3,8 @@
   import { getExampleLineChartData } from "$lib/helpers"
   import CustomButton from "../../components/CustomButton.svelte"
   import RoomSelector from "../../components/RoomSelector.svelte"
+  import DatePicker from "../../components/DatePicker.svelte";
+  import TimePicker from "../../components/TimePicker.svelte";
   import Spacer from "../../components/Spacer.svelte"
   import StatsIllustration from "../../components/StatsIllustration.svelte"
   import TextField from "../../components/TextField.svelte"
@@ -13,6 +15,29 @@
 
   let showIncorrectToken = false
   let hasAuthenticated = false
+
+  // Existing variables...
+  let selectedStartDate: Date | null = null;
+  let selectedStartTime: string | null = null;
+  let selectedEndDate: Date | null = null;
+  let selectedEndTime: string | null = null;
+
+  const fetchDataForSelectedRange = async () => {
+    if (selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
+      const startDateTime = new Date(`${selectedStartDate.toISOString().split('T')[0]}T${selectedStartTime}`);
+      const endDateTime = new Date(`${selectedEndDate.toISOString().split('T')[0]}T${selectedEndTime}`);
+    
+      // Call backend with the selected date range
+      const response = await fetch('/api/getRoomData', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ startDateTime, endDateTime })
+      });
+
+      const result = await response.json();
+      currentLineChartData = result.lineChartData;
+    }
+  };
 
   let currentLineChartData: LineChartData | undefined
 
@@ -58,19 +83,30 @@
 
   <Spacer height={40} />
   <CustomButton text={"SEE DATA"} disabled={tokenString === ""} on:click={() => testAccess()} />
-
-  <Spacer height={10} />
-
+  <Spacer height={10} />  
   {#if showIncorrectToken}
     <p class="font-bold text-content text-red-500">Incorrect Token</p>
   {/if}
 {:else}
+
+
   <Spacer height={40} />
   <LineChart
     data={currentLineChartData ?? getExampleLineChartData()}
     realData={!!currentLineChartData}
     noPoints={currentLineChartData ? currentLineChartData?.points.length === 0 : false}
   />
+  <Spacer height={10} />
+  <!-- Add Date and Time Picker UI -->
+<div class="date-time-picker">
+  <DatePicker bind:selectedDate={selectedStartDate} label="Start Date" />
+  <TimePicker bind:selectedTime={selectedStartTime} label="Start Time" />
+  <DatePicker bind:selectedDate={selectedEndDate} label="End Date" />
+  <TimePicker bind:selectedTime={selectedEndTime} label="End Time" />
+</div>
+  <Spacer height={20} />
+  <CustomButton text={"FETCH DATA"} on:click={fetchDataForSelectedRange} disabled={!selectedStartDate || !selectedStartTime || !selectedEndDate || !selectedEndTime} />
+
   <Spacer height={40} />
   <h2 class="text-mediumHeader font-extrabold tracking-tighter leading-none">Select Rooms</h2>
   <h2 class="text-content font-light tracking-tighter leading-none text-center">
