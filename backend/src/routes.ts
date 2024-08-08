@@ -41,6 +41,7 @@ export const setupRoutes = (
     });
     */
 
+  
   //Ping test
   server.get('/api/ping', async (request, reply) => {
     return 'pong\n';
@@ -153,6 +154,7 @@ export const setupRoutes = (
       reply.code(401).header('WWW-Authenticate', 'Basic realm="Access to the staging site"');
       return { error: 'Unauthorized' };
     } 
+
    
     let totIn = 0;
     let totOut = 0;
