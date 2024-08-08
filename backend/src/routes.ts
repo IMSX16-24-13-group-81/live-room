@@ -34,6 +34,7 @@ export const setupRoutes = (
     });
   });
 
+  
   //Ping test
   server.get('/api/ping', async (request, reply) => {
     return 'pong\n';

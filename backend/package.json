@@ -16,17 +16,23 @@
   "devDependencies": {
     "@types/node": "^20.11.17",
     "@types/pg": "^8.11.2",
+    "@types/swagger-ui-express": "^4.1.6",
     "@types/ws": "^8.5.10",
     "drizzle-kit": "^0.20.14",
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@fastify/express": "^3.0.0",
+    "@fastify/swagger": "^8.15.0",
+    "@fastify/swagger-ui": "^4.0.1",
     "@influxdata/influxdb-client": "^1.33.2",
     "drizzle-orm": "^0.29.4",
-    "fastify": "^4.26.0",
+    "fastify": "^4.28.1",
+    "fastify-swagger": "^5.2.0",
     "pg": "^8.11.3",
     "postgres": "^3.4.3",
     "prettier": "^3.2.5",
+    "swagger-ui-express": "^5.0.1",
     "ws": "^8.16.0"
   }
 }
