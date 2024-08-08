@@ -3,7 +3,7 @@ import cors from '@fastify/cors';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { getPG } from './db/config';
 import { setupRoutes } from './routes';
-import {swagger} from './swagger';
+import {swagger} from './swagger/swaggerSetup';
 // import WebSocket from 'ws';
 
 
