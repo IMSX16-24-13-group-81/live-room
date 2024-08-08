@@ -1,0 +1,550 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API for Live-information regarding use of Chalmers facilities",
+    "version": "0.0.1",
+    "title": "Liveinfo Chalmers"
+  },
+  "host": "liveinfo.chalmers.se",
+  "basePath": "/api",
+  "tags": [],
+  "schemes": [
+    "https",
+    "ws"
+  ],
+  "paths": {
+    "/rooms": {
+      "get": {
+        "tags": [
+          "Room information"
+        ],
+        "summary": "Receive room information",
+        "description": ".",
+        "operationId": "getRooms",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "query",
+            "description": "access key for api",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/roomsList"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Add Rooms"
+        ],
+        "summary": "Add rooms",
+        "description": ".",
+        "operationId": "addRooms",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Name of room",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "buildingId",
+            "in": "query",
+            "description": "ID of building",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "coordinates",
+            "in": "query",
+            "description": "Coordinates of room",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "description": "Description of room",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "query",
+            "description": "access key for api",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Room added",
+            "schema": {
+              "$ref": "#/definitions/addRoomDef"
+            }
+          }
+        }
+      }
+    },
+    "/rooms/{buildingID}": {
+      "get": {
+        "tags": [
+          "Building ID"
+        ],
+        "summary": "Receive Building ID",
+        "description": ".",
+        "operationId": "getBuildingID",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "buildingID",
+            "in": "path",
+            "description": "Rooms in a building",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/buildingId"
+            }
+          }
+        }
+      }
+    },
+    "/rooms/occupants/history/{roomId}": {
+      "get": {
+        "tags": [
+          "Room history"
+        ],
+        "summary": "Get history of a room",
+        "description": ".",
+        "operationId": "getRoomHistory",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "description": "History of room",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/roomId"
+            }
+          }
+        }
+      }
+    },
+    "/rooms/status": {
+      "get": {
+        "tags": [
+          "Room status"
+        ],
+        "summary": "Get status of all rooms",
+        "description": ".",
+        "operationId": "getRoomStatus",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/roomStatus"
+            }
+          }
+        }
+      }
+    },
+    "/sensors": {
+      "post": {
+        "tags": [
+          "Add Sensors"
+        ],
+        "summary": "Add sensors",
+        "description": ".",
+        "operationId": "addSensors",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "query",
+            "description": "ID of sensor",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "roomId",
+            "in": "query",
+            "description": "ID of room",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "query",
+            "description": "access key for api",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sensor added",
+            "schema": {
+              "$ref": "#/definitions/addSensorsDesc"
+            }
+          }
+        }
+      }
+    },
+    "/sensors/report": {
+      "post": {
+        "tags": [
+          "Sensors report"
+        ],
+        "summary": "Sensor data",
+        "description": ".",
+        "operationId": "sensorData",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "firmwareVersion",
+            "in": "query",
+            "description": "Firmware Version",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sensorId",
+            "in": "query",
+            "description": "Id of sensor",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "occupants",
+            "in": "query",
+            "description": "Number of occupants",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "radarState",
+            "in": "query",
+            "description": "State of radar",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "pirState",
+            "in": "query",
+            "description": "State of PIR",
+            "required": true,
+            "type": "boolean"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "access key for api",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "data reported",
+            "schema": {
+              "$ref": "#/definitions/sensorReport"
+            }
+          }
+        }
+      }
+    },
+    "/sensors/report/test": {
+      "get": {
+        "tags": [
+          "Report test data"
+        ],
+        "summary": "Test data from sensors",
+        "description": ".",
+        "operationId": "testData",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "access key for api",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/sensorTest"
+            }
+          }
+        }
+      }
+    },
+    "/sensors/dead": {
+      "get": {
+        "tags": [
+          "Get dead sensors"
+        ],
+        "summary": "Get all dead sensors",
+        "description": ".",
+        "operationId": "getDeadSensors",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/deadSensors"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "roomsList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "buildingId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "state": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "buildingId",
+          "name",
+          "description",
+          "state"
+        ]
+      }
+    },
+    "buildingId": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "roomId": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "occupants": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "roomStatus": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "buildingId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "state": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "buildingId",
+          "name",
+          "description",
+          "state"
+        ]
+      }
+    },
+    "addSensorsDesc": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "sensorId": {
+            "type": "string"
+          },
+          "roomId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sensorId",
+          "roomId"
+        ]
+      }
+    },
+    "addRoomDef": {
+      "type": "object",
+      "items": {
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "success"
+        ]
+      }
+    },
+    "sensorTest": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "firmwareVerson": {
+            "type": "string"
+          },
+          "sensorId": {
+            "type": "string"
+          },
+          "occupants": {
+            "type": "integer"
+          },
+          "radarState": {
+            "type": "integer"
+          },
+          "pirState": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "firmwareVersion",
+          "sensorId",
+          "roomName",
+          "occupants",
+          "radarState",
+          "pirState"
+        ]
+      }
+    },
+    "deadSensors": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "firmwareVerson": {
+            "type": "string"
+          },
+          "sensorId": {
+            "type": "string"
+          },
+          "roomName": {
+            "type": "string"
+          },
+          "occupants": {
+            "type": "integer"
+          },
+          "radarState": {
+            "type": "integer"
+          },
+          "pirState": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "firmwareVersion",
+          "sensorId",
+          "roomName",
+          "occupants",
+          "radarState",
+          "pirState"
+        ]
+      }
+    },
+    "sensorReport": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "firmwareVersion": {
+            "type": "string"
+          },
+          "sensorId": {
+            "type": "string"
+          },
+          "occupants": {
+            "type": "integer"
+          },
+          "radarState": {
+            "type": "integer"
+          },
+          "pirState": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "firmwareVersion",
+          "sensorId",
+          "occupants",
+          "radarState",
+          "pirState"
+        ]
+      }
+    }
+  }
+}
