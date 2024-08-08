@@ -150,9 +150,9 @@ export const setupRoutes = (
     const [username, password] = credentials.split(':');
 
     if (username !== process.env.INFLUXDB_USER || password !== process.env.INFLUXDB_PASSWORD) {
-      reply.code(401);
+      reply.code(401).header('WWW-Authenticate', 'Basic realm="Access to the staging site"');
       return { error: 'Unauthorized' };
-  } 
+    } 
    
     let totIn = 0;
     let totOut = 0;
