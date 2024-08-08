@@ -16,7 +16,6 @@ export const getPG = async () => {
       database: 'liveinfo'
     }
   );
-
   console.log('Connecting to database');
   await client.connect();
   db = drizzle(client, { schema });

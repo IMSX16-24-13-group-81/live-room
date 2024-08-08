@@ -43,12 +43,37 @@ export const getAllRooms = async (): Promise<Room[]> => {
     return []
   }
 }
-
-export const getDataPointsForRoom = async (id: string): Promise<Point[]> => {
+//Function to add rooms. How? Where? Maybe useful?
+/*export const addRooms = async (room: Room): Promise<void> => {
   const backendURL = env.PUBLIC_BACKEND_URL || undefined
 
   try {
-    const response = await fetch(`${backendURL}/api/rooms/occupants/history/${id}`)
+    const response = await fetch(`${backendURL}/api/rooms`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(room),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    console.log('Rooms added successfully');
+  } catch (error) {
+    console.error("There has been a problem with the fetch operation:", error)
+  }
+} */
+  export const getDataPointsForRoom = async (id: string, startDateTime?: string, endDateTime?: string): Promise<Point[]> => {
+  const backendURL = env.PUBLIC_BACKEND_URL || undefined
+
+  try {
+    let url = `${backendURL}/api/rooms/occupants/history/${id}`;
+    if (startDateTime && endDateTime) {
+      url += `?start=${encodeURIComponent(startDateTime)}&end=${encodeURIComponent(endDateTime)}`;
+    }
+
+    const response = await fetch(url)
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)

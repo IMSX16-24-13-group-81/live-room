@@ -30,21 +30,33 @@ const convertResults = <T>(
 export const updateOccupants = (
   firmwareVersion: string,
   sensorId: string,
+  //roomName: string,
   occupants: number,
-  radarState: number,
-  pirState: boolean
+  radarState?: number,
+  pirState?: boolean
 ) => {
   let point = new Point('sensors')
     .tag('firmwareVersion', firmwareVersion)
     .tag('sensorId', sensorId)
+    //.tag('roomName', roomName)
     .intField('occupants', occupants)
-    .intField('radarState', radarState)
-    .booleanField('pirState', pirState);
+    //.intField('radarState', radarState)
+    //booleanField('pirState', pirState);
+    
+    if (typeof radarState === 'number') {
+      point.intField('radarState', radarState);
+    }
+  
+    // Add pirState only if it is defined
+    if (typeof pirState === 'boolean') {
+      point.booleanField('pirState', pirState);
+    }
 
   writeClient.writePoint(point);
   writeClient.flush();
 };
 
+//Add so that we can choose intervall ourselves.
 export const getOccupants = async () => {
   let queryApi = influxClient.getQueryApi(org);
   const query = flux`from(bucket: "${bucket}")
@@ -54,12 +66,18 @@ export const getOccupants = async () => {
   return convertResults<number>(await queryApi.collectRows(query));
 };
 
-export const getOccupantsHistory = async (sensorId: string) => {
+//Query for current and historical data for statistics
+export const getOccupantsHistory = async (sensorId: string, startDateTime?: string, endDateTime?: string) => {
   let queryApi = influxClient.getQueryApi(org);
+
+  // Constructing the range part of the query
+  let rangeQuery = `|> range(start: ${startDateTime ? startDateTime : '-1h'}${endDateTime ? `, stop: ${endDateTime}` : ''})`;
+
   const query = flux`from(bucket: "${bucket}")
-  |> range(start: -1h)
-  |> filter(fn: (r) => r._measurement == "sensors")
-  |> filter(fn: (r) => r["sensorId"] == "${sensorId}")`;
+    ${rangeQuery}
+    |> filter(fn: (r) => r._measurement == "sensors")
+    |> filter(fn: (r) => r["sensorId"] == "${sensorId}")`;
+
   return convertResults<number>(await queryApi.collectRows(query));
 };
 
