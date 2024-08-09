@@ -16,6 +16,7 @@
   "devDependencies": {
     "@types/node": "^20.11.17",
     "@types/pg": "^8.11.2",
+    "@types/swagger-schema-official": "^2.0.25",
     "@types/swagger-ui-express": "^4.1.6",
     "@types/ws": "^8.5.10",
     "drizzle-kit": "^0.20.14",
@@ -30,6 +31,7 @@
     "cors": "^2.8.5",
     "drizzle-orm": "^0.29.4",
     "fastify": "^4.28.1",
+    "fastify-oas": "^3.0.8",
     "fastify-swagger": "^5.2.0",
     "pg": "^8.11.3",
     "postgres": "^3.4.3",

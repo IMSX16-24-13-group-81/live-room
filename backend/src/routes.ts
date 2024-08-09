@@ -14,6 +14,13 @@ import {
   addRoom,
   addSensors
 } from './status/rooms';
+const fs = require('fs');
+const path = require('path');
+import {
+  addRoomSchema,
+  addSensorSchema,
+  sensorReportSchema
+} from './swagger/swaggerSchema';
 
 
 export const setupRoutes = (
@@ -43,6 +50,7 @@ export const setupRoutes = (
 
   
   //Ping test
+
   server.get('/api/ping', async (request, reply) => {
     return 'pong\n';
   });
@@ -72,7 +80,7 @@ export const setupRoutes = (
     return getRoomsStatus();
   });
 
-  server.post('/api/rooms', async (request, reply) => {
+  server.post('/api/rooms', {schema : addRoomSchema}, async (request, reply) => {
     const { name, building, coordinates, description}: any =
     request.body;
   const { authorization }: any = request.headers;
@@ -84,7 +92,7 @@ export const setupRoutes = (
   addRoom(name,building,coordinates, description);
   return 'Success';
   });
-  server.post('/api/sensors', async (request, reply) => {
+  server.post('/api/sensors', {schema : addSensorSchema},async (request, reply) => {
     const { sensorId, roomId}: any =
     request.body;
   const { authorization }: any = request.headers;
@@ -117,7 +125,7 @@ export const setupRoutes = (
       : history;
   });
 
-  server.post('/api/sensors/report', async (request, reply) => {
+  server.post('/api/sensors/report', {schema : sensorReportSchema}, async (request, reply) => {
     const { firmwareVersion, sensorId, occupants, radarState, pirState }: any =
       request.body;
     const { authorization }: any = request.headers;
