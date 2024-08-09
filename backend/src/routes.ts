@@ -90,7 +90,8 @@ export const setupRoutes = (
     reply.code(401);
     return { error: 'Unauthorized' };
   }
-  if (findBuilding(building)!= null) {
+  const foundBuilding = await findBuilding(building);
+  if (foundBuilding !== null) {
   addRoom(name,building,coordinates, description);
   return 'Success';
   } else{
