@@ -29,4 +29,4 @@ export const swagger  = async (server: FastifyInstance) => {
     transformSpecificationClone: true
   });
   await server.register(fastifyExpress);
-};
+}
