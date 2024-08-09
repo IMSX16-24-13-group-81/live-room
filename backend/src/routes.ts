@@ -91,8 +91,8 @@ export const setupRoutes = (
     return { error: 'Unauthorized' };
   }
   const foundBuilding = await findBuilding(building);
-  if (foundBuilding !== null) {
-  addRoom(name,building,coordinates, description);
+  if (foundBuilding) {
+  await addRoom(name,building,coordinates, description);
   return 'Success';
   } else{
     reply.code(400);
