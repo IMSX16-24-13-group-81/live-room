@@ -5,6 +5,7 @@ RUN npm install -g pnpm
 WORKDIR /app
 COPY package*.json .
 COPY pnpm-lock.yaml .
+COPY swagger.json /dist/swagger/
 RUN pnpm install --frozen-lockfile
 
 COPY . .

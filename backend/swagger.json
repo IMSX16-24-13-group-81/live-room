@@ -19,7 +19,7 @@
           "Room information"
         ],
         "summary": "Receive room information",
-        "description": ".",
+        "description": "Gives information about all rooms",
         "operationId": "getRooms",
         "produces": [
           "application/json"
