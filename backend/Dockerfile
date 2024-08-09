@@ -18,7 +18,7 @@ WORKDIR /app
 COPY --from=builder /app/dist dist/
 COPY --from=builder /app/node_modules node_modules/
 COPY --from=builder /app/drizzle drizzle/
-COPY --from=builder /app/dist/swagger/swagger.json dist/swagger/
+COPY --from=builder /app/dist/swagger/ dist/swagger/
 COPY package.json .
 
 EXPOSE 8080
