@@ -151,10 +151,10 @@ export const setupRoutes = (
   // New endpoint for the new sensor VS135-hl
   server.post('/api/sensors/report/vs135hl', async (request, reply) => {
     const { device_info, total_data }: any = request.body;
-    const authHeader = request.headers.authorization || '';
+    const { authorization }: any = request.headers;
 
     // Extract username and password from the Authorization header
-    const base64Credentials = authHeader.split(' ')[1] || '';
+    const base64Credentials = authorization?.split(' ')[1] || '';
     const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
     const [Username, Password] = credentials.split(':');
 
@@ -163,7 +163,6 @@ export const setupRoutes = (
       return { error: 'Unauthorized' };
     } 
 
-   
     let totIn = 0;
     let totOut = 0;
 
