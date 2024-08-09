@@ -5,7 +5,7 @@ RUN npm install -g pnpm
 WORKDIR /app
 COPY package*.json .
 COPY pnpm-lock.yaml .
-COPY swagger.json /dist/swagger/
+COPY swagger.json app/dist/swagger/
 RUN pnpm install --frozen-lockfile
 
 COPY . .
@@ -18,6 +18,7 @@ WORKDIR /app
 COPY --from=builder /app/dist dist/
 COPY --from=builder /app/node_modules node_modules/
 COPY --from=builder /app/drizzle drizzle/
+COPY --from=builder /app/dist/swagger/swagger.json /app/dist/swagger/swagger.json
 COPY package.json .
 
 EXPOSE 8080
