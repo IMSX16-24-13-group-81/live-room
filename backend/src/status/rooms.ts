@@ -68,10 +68,16 @@ const addRoom = async (name: string, coordinates: string, building: number, desc
 
 export const findBuilding = async (building : number) => {
   const db = await getPG();
-  return await db
+  const result = await db
     .select()
     .from(buildings)
-    .where(eq(buildings.id, building));
+    .where(eq(buildings.id, building))
+    .limit(1);
+  if (result.length > 0) {
+      return result[0]; // Return the building object if found
+  } else {
+      return null; // Return null if no building was found
+  }
 }
 
 const addSensors = async (sensorId: string, roomId: number) => {
