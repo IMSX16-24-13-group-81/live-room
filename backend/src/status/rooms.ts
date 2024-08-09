@@ -63,8 +63,16 @@ const addRoom = async (name: string, coordinates: string, building: number, desc
     coordinates: coordinates, 
     building: building,
     description: description
-    });  
+  });  
 };
+
+export const findBuilding = async (building : number) => {
+  const db = await getPG();
+  return await db
+    .select()
+    .from(buildings)
+    .where(eq(buildings.id, building));
+}
 
 const addSensors = async (sensorId: string, roomId: number) => {
   const db = await getPG();
