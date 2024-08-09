@@ -12,7 +12,8 @@ import {
   getRoomStatusHistory,
   getRoomsStatus,
   addRoom,
-  addSensors
+  addSensors,
+  findBuilding
 } from './status/rooms';
 const fs = require('fs');
 const path = require('path');
@@ -89,8 +90,13 @@ export const setupRoutes = (
     reply.code(401);
     return { error: 'Unauthorized' };
   }
+  if (findBuilding(building)!= null) {
   addRoom(name,building,coordinates, description);
   return 'Success';
+  } else{
+    reply.code(400);
+    return { error: 'Building doesnt exist' };
+  }
   });
   server.post('/api/sensors', {schema : addSensorSchema},async (request, reply) => {
     const { sensorId, roomId}: any =
