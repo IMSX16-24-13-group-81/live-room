@@ -60,6 +60,14 @@ export const setupRoutes = (
     return 'pong\n';
   });
 
+  server.get('/api/vstest', async (request, reply) => {
+    const { event }: any = request.body;
+    if(event == 'test'){
+      reply.code(200);
+      return 'OK';
+    }
+}); 
+
   server.get('/api/sensors/occupants', async (request, reply) => {
     return await getOccupants();
   });
