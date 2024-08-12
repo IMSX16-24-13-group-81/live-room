@@ -565,7 +565,7 @@
         "type": "object",
         "properties": {
           "sensorId": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
