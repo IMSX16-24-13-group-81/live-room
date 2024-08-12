@@ -23,7 +23,8 @@ const path = require('path');
 import {
   addRoomSchema,
   addSensorSchema,
-  sensorReportSchema
+  sensorReportSchema,
+  sensorDeleteSchema
 } from './swagger/swaggerSchema';
 
 
@@ -195,7 +196,7 @@ export const setupRoutes = (
     return 'Success';
   });
 //Endpoint for sensor delete
-  server.post('/api/sensors/delete', async (request, reply) => {
+  server.post('/api/sensors/delete', {schema: sensorDeleteSchema}, async (request, reply) => {
     const { sensorId }: any = request.body;
     const { authorization }: any = request.headers;
 

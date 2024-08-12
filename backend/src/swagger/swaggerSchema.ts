@@ -58,3 +58,14 @@ export const sensorReportSchema = {
         }
     }
 };
+
+export const sensorDeleteSchema = {
+    body: getSchemaFromSwagger('#/definitions/sensorDelete'),
+    headers: {
+        type: 'object',
+        required: ['authorization'],
+        properties: {
+        authorization: { type: 'string' }
+        }
+    }
+};
