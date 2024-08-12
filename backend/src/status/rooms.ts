@@ -103,6 +103,27 @@ const addSensors = async (sensorId: string, roomId: number) => {
     });
 }
 
+export const findSensor = async (sensorId: string) => {
+  const db = await getPG();
+  const result = await db
+    .select()
+    .from(sensors)
+    .where(eq(sensors.id, sensorId))
+    .limit(1);
+  if (result.length > 0) {
+      return result[0]; // Return the sensor object if found
+  } else {
+      return null; // Return null if no sensor was found
+  }
+}
+
+export const deleteSensors = async (sensorId: string) => { 
+  const db = await getPG();
+  return await db
+    .delete(sensors)
+    .where(eq(sensors.id, sensorId));
+}
+
 const getRoomsStatus = async (buildingId?: string) => {
   const rooms = await getRooms();
   const sensorStatus = await getPIRStates();

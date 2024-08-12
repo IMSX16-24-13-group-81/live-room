@@ -14,7 +14,9 @@ import {
   addRoom,
   addSensors,
   findBuilding,
-  findRoom
+  findRoom,
+  findSensor,
+  deleteSensors
 } from './status/rooms';
 const fs = require('fs');
 const path = require('path');
@@ -192,7 +194,25 @@ export const setupRoutes = (
     updateOccupants(firmwareVersion, sensorId, occupants);
     return 'Success';
   });
+//Endpoint for sensor delete
+  server.post('/api/sensors/delete', async (request, reply) => {
+    const { sensorId }: any = request.body;
+    const { authorization }: any = request.headers;
 
+    if ((authorization ?? '') !== process.env.AUTHORIZATION_TOKEN) {
+      reply.code(401);
+      return { error: 'Unauthorized' };
+    }
+
+    const foundSensor = await findSensor(sensorId);
+    if (foundSensor) {
+      await deleteSensors(sensorId);
+      return 'Success';
+    } else {
+      reply.code(400);
+      return { error: 'Sensor doesnt exist' };
+    }
+  });
 
   server.get('/api/rooms/status', async (request, reply) => {
     return await getRoomsStatus();

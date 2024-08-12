@@ -209,6 +209,48 @@
         }
       }
     },
+    "/sensors/delete": {
+      "post": {
+        "tags": [
+          "Delete sensor"
+        ],
+        "summary": "Delete sensor from database",
+        "description": "Deletes a sensor with a given MAC-adress from the database",
+        "operationId": "sensorDelete",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "sensor delete",
+            "in": "body",
+            "description": "Deletes a given sensor from the database",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/sensorDelete"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "Access key for API",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sensor removed successfully",
+            "schema": {
+              "$ref": "#/definitions/sensorDelete"
+            }
+          }
+        }
+      }
+    },
     "/sensors/report": {
       "post": {
         "tags": [
@@ -517,6 +559,17 @@
             "occupants",
             "radarState",
             "pirState"
+        ]
+      },
+      "sensorDelete": {
+        "type": "object",
+        "properties": {
+          "sensorId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sensorId"
         ]
       }
     }
