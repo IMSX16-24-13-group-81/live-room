@@ -176,7 +176,7 @@ export const setupRoutes = (
 
   // New endpoint for the new sensor VS135-hl
   server.post('/api/sensors/report/vs135hl', async (request, reply) => {
-    const { event, device_info, total_data, }: any = request.body;
+    const { event, device_info, total_data }: any = request.body;
     const { authorization }: any = request.headers;
 
     if(event == 'test'){
@@ -184,29 +184,51 @@ export const setupRoutes = (
       return 'OK';
     }
 
+    console.log('Request body:', request.body);
+
+    if (!authorization) {
+      reply.code(401).header('WWW-Authenticate', 'Basic realm="Access to the site"');
+      return { error: 'Unauthorized' };
+    }
+
     // Extract username and password from the Authorization header
-    const base64Credentials = authorization?.split(' ')[1] || '';
+    const base64Credentials = authorization.split(' ')[1] || '';
     const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
     const [Username, Password] = credentials.split(':');
 
     if (Username !== process.env.INFLUXDB_USER || Password !== process.env.INFLUXDB_PASSWORD) {
-      reply.code(401).header('WWW-Authenticate', 'Basic realm="Access to the staging site"');
+      reply.code(401).header('WWW-Authenticate', 'Basic realm="Access to the site"');
       return { error: 'Unauthorized' };
-    } 
+    }
+
+    // Check if total_data is an array
+    if (!Array.isArray(total_data)) {
+      reply.code(400);
+      return { error: 'Invalid data: total_data should be an array' };
+    }
 
     let totIn = 0;
     let totOut = 0;
 
     total_data.forEach((line: any) => {
-      totIn += line.in_counted;
-      totOut += line.out_counted;
+      totIn += line.in_counted || 0;  // Ensure 'in_counted' is a number
+      totOut += line.out_counted || 0; // Ensure 'out_counted' is a number
     });
+
     const occupants = totIn - totOut;
-    const firmwareVersion = device_info.firmware_version;
-    const sensorId = device_info.device_mac;
-  
-    updateOccupants(firmwareVersion, sensorId, occupants);
-    return 'Success';
+    const firmwareVersion = device_info?.firmware_version;
+    const sensorId = device_info?.device_mac;
+
+    if (!firmwareVersion || !sensorId) {
+      reply.code(400);
+      return { error: 'Invalid data: Missing firmwareVersion or sensorId' };
+    }
+
+    // Assuming updateOccupants is an async function
+    await updateOccupants(firmwareVersion, sensorId, occupants);
+    
+    return { status: 'Success' };
+
   });
 //Endpoint for sensor delete
   server.delete('/api/sensors/delete', {schema: sensorDeleteSchema}, async (request, reply) => {
