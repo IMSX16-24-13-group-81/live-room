@@ -13,7 +13,8 @@ import {
   getRoomsStatus,
   addRoom,
   addSensors,
-  findBuilding
+  findBuilding,
+  findRoom
 } from './status/rooms';
 const fs = require('fs');
 const path = require('path');
@@ -108,8 +109,15 @@ export const setupRoutes = (
     reply.code(401);
     return { error: 'Unauthorized' };
   }
-  addSensors(sensorId,roomId);
+  const foundRoom = await findRoom(roomId);
+  if (foundRoom) {
+  await addSensors(sensorId,roomId);
   return 'Success';
+  }
+  else {
+    reply.code(400);
+    return { error: 'Room doesnt exist' };
+  }
   });
 
   server.get('/api/rooms/occupants/history/:roomID', async (request, reply) => {
