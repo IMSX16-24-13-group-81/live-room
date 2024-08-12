@@ -32,6 +32,7 @@ COPY --from=builder /app/dist/swagger/swagger.json /app/dist/swagger/swagger.jso
 
 # Copy package.json and expose the port
 COPY package.json .
+ENV TZ=Europe/Sweden
 EXPOSE 8080
 ENV NODE_ENV=production
 
