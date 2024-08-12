@@ -210,7 +210,7 @@
       }
     },
     "/sensors/delete": {
-      "post": {
+      "delete": {
         "tags": [
           "Delete sensor"
         ],
