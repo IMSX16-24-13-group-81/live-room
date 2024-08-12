@@ -342,8 +342,7 @@
           "id": {
             "type": "string"
           }
-        },
-        "required": ["id"]
+        }
       }
     },
     "roomId": {
@@ -354,8 +353,7 @@
           "occupants": {
             "type": "string"
           }
-        },
-        "required": ["occupants"]
+        }
       }
     },
     "roomStatus": {
@@ -395,7 +393,7 @@
             "type": "string"
           },
           "roomId": {
-            "type": "string"
+            "type": "integer"
           }
         },
         "required": [

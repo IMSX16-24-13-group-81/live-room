@@ -80,6 +80,20 @@ export const findBuilding = async (building : number) => {
   }
 }
 
+export const findRoom = async (roomId: number) => {
+  const db = await getPG();
+  const result = await db
+    .select()
+    .from(rooms)
+    .where(eq(rooms.id, roomId))
+    .limit(1);
+  if (result.length > 0) {
+      return result[0]; // Return the room object if found
+  } else {
+      return null; // Return null if no room was found
+  }
+}
+
 const addSensors = async (sensorId: string, roomId: number) => {
   const db = await getPG();
   return await db
