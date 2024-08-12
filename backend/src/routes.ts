@@ -92,7 +92,7 @@ export const setupRoutes = (
   }
   const foundBuilding = await findBuilding(building);
   if (foundBuilding) {
-  await addRoom(name,building,coordinates, description);
+  await addRoom(name, coordinates, building, description);
   return 'Success';
   } else{
     reply.code(400);
