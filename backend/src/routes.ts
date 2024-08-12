@@ -196,7 +196,7 @@ export const setupRoutes = (
     return 'Success';
   });
 //Endpoint for sensor delete
-  server.post('/api/sensors/delete', {schema: sensorDeleteSchema}, async (request, reply) => {
+  server.delete('/api/sensors/delete', {schema: sensorDeleteSchema}, async (request, reply) => {
     const { sensorId }: any = request.body;
     const { authorization }: any = request.headers;
 
