@@ -176,7 +176,7 @@ export const setupRoutes = (
 
   // New endpoint for the new sensor VS135-hl
   server.post('/api/sensors/report/vs135hl', async (request, reply) => {
-    const { event, device_info, total_data }: any = request.body;
+    const { event, device_info, line_total_data }: any = request.body;
     const { authorization }: any = request.headers;
 
     if(event == 'test'){
@@ -202,7 +202,7 @@ export const setupRoutes = (
     }
 
     // Check if total_data is an array
-    if (!Array.isArray(total_data)) {
+    if (!Array.isArray(line_total_data)) {
       reply.code(400);
       return { error: 'Invalid data: total_data should be an array' };
     }
@@ -210,14 +210,14 @@ export const setupRoutes = (
     let totIn = 0;
     let totOut = 0;
 
-    total_data.forEach((line: any) => {
+    line_total_data.forEach((line: any) => {
       totIn += line.in_counted || 0;  // Ensure 'in_counted' is a number
       totOut += line.out_counted || 0; // Ensure 'out_counted' is a number
     });
 
     const occupants = totIn - totOut;
-    const firmwareVersion = device_info?.firmware_version;
-    const sensorId = device_info?.device_mac;
+    const firmwareVersion = device_info.firmware_version;
+    const sensorId = device_info.device_mac;
 
     if (!firmwareVersion || !sensorId) {
       reply.code(400);
@@ -225,7 +225,7 @@ export const setupRoutes = (
     }
 
     // Assuming updateOccupants is an async function
-    await updateOccupants(firmwareVersion, sensorId, occupants);
+    updateOccupants(firmwareVersion, sensorId, occupants);
     
     return { status: 'Success' };
 
