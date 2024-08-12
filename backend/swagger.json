@@ -210,7 +210,7 @@
       }
     },
     "/sensors/delete": {
-      "post": {
+      "delete": {
         "tags": [
           "Delete sensor"
         ],
@@ -565,7 +565,7 @@
         "type": "object",
         "properties": {
           "sensorId": {
-            "type": "string"
+            "type": "integer"
           }
         },
         "required": [
