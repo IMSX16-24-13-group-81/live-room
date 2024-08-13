@@ -83,6 +83,7 @@
     fetchDataForSelectedRange()
   } 
 
+
 </script>
 
 <img src={"/chalmersLogo.svg"} alt="Chalmers University Logo" class="w-[110px]" />
