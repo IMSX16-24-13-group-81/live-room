@@ -7,7 +7,7 @@
 
   export let rooms: Room[]
   export let selectedRoomID: string | undefined
-  export let onRoomSelected: (roomID: string) => void
+  export let onRoomSelected: (roomID: string) => void;
 
   /*let currentLineChartData: LineChartData | undefined;
 

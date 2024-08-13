@@ -35,7 +35,7 @@
       const response = await fetch('/api/getRoomData', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({startDateTime, endDateTime })
+        body: JSON.stringify({startDateTime, endDateTime, roomID: selectedRoomID })
       });
 
       const result = await response.json();
@@ -79,9 +79,9 @@
     }
   };
 
-  /* $: if (selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
+  $: if (hasAuthenticated && selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
     fetchDataForSelectedRange()
-  } */
+  } 
 
 </script>
 
