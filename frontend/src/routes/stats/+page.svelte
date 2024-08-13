@@ -35,7 +35,7 @@
       const response = await fetch('/api/getRoomData', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ startDateTime, endDateTime })
+        body: JSON.stringify({startDateTime, endDateTime })
       });
 
       const result = await response.json();
@@ -43,15 +43,23 @@
     }
   };
 
-  $: if (selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
+
+
+  const handleRoomSelection = (roomID: string) => {
+    selectedRoomID = roomID;
+    fetchDataForSelectedRange();
+  };
+
+  /*   $: if (selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
     fetchDataForSelectedRange()
   }
-  /*
+ 
   let currentLineChartData: LineChartData | undefined
 
   $: if (currentLineChartData) {
     console.log("FROM OUTSIDE WAS UPDATED")
-  } */
+  } 
+  */
 
   //Placeholder variable
   const correctToken = "placeholder-token"
@@ -71,11 +79,9 @@
     }
   };
 
-    // Handle room selection but do not fetch data automatically
-    const handleRoomSelection = (roomID: string) => {
-    selectedRoomID = roomID;
-    // Data will be fetched when the "FETCH DATA" button is clicked
-  };
+  /* $: if (selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
+    fetchDataForSelectedRange()
+  } */
 
 </script>
 
@@ -103,8 +109,6 @@
     <p class="font-bold text-content text-red-500">Incorrect Token</p>
   {/if}
 {:else}
-
-
   <Spacer height={40} />
   <LineChart
     data={currentLineChartData ?? getExampleLineChartData()}
@@ -120,7 +124,7 @@
   <TimePicker bind:selectedTime={selectedEndTime} label="End Time" />
 </div>
   <Spacer height={20} />
-  <CustomButton text={"FETCH DATA"} on:click={fetchDataForSelectedRange} disabled={!selectedStartDate || !selectedStartTime || !selectedEndDate || !selectedEndTime} />
+  <CustomButton text={"FETCH DATA"} on:click={fetchDataForSelectedRange} disabled={ !selectedRoomID || !selectedStartDate || !selectedStartTime || !selectedEndDate || !selectedEndTime } />
 
   <Spacer height={40} />
   <h2 class="text-mediumHeader font-extrabold tracking-tighter leading-none">Select Rooms</h2>

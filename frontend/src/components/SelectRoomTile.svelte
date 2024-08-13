@@ -3,16 +3,13 @@
 
   export let room: Room
   export let selectedRoomID: string | undefined
+  export let select: () => void;
 
   $: isSelected = selectedRoomID === room.id
 
   const onTileClicked = () => {
-    if (isSelected) {
-      selectedRoomID = undefined
-    } else {
-      selectedRoomID = room.id
-    }
-  }
+    select(); // Notify parent component of the selection
+  };
 </script>
 
 <button on:click={() => onTileClicked()} class="p-1 pl-4 pr-4 rounded-full transition hover:brightness-75 {isSelected ? 'bg-dark text-white' : 'bg-dark/10'}">
