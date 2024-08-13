@@ -1,6 +1,6 @@
 <script lang="ts">
   import { buildings } from "$lib/data/buildings"
-  import type { Room } from "$lib/data/protocols"
+  import type { Room, LineChartData } from "$lib/data/protocols"
   import { getDataPointsForRoom } from "$lib/helpers"
   import SelectRoomTile from "./SelectRoomTile.svelte"
   import Spacer from "./Spacer.svelte"
@@ -9,23 +9,28 @@
   export let selectedRoomID: string | undefined
   export let onRoomSelected: (roomID: string) => void
 
-  const handleRoomSelect = (roomID: string) => {
-    onRoomSelected(roomID)
+  let currentLineChartData: LineChartData | undefined;
 
-   /* const updateLineChartData = async (roomID: string) => {
+
+    //Svelte trick "$:" and if statement
+    $: if (selectedRoomID) {
+    console.log("THIS RUNS")
+    updateLineChartData(selectedRoomID)
+  } else {
+    currentLineChartData = undefined 
+  }
+
+  const updateLineChartData = async (roomID: string) => {
     const points = await getDataPointsForRoom(roomID)
     currentLineChartData = {
       points,
     } 
   }
 
-  //Svelte trick "$:" and if statement
-  $: if (selectedRoomID) {
-    console.log("THIS RUNS")
-    updateLineChartData(selectedRoomID)
-  } else {
-    currentLineChartData = undefined */
-  } 
+  const handleRoomSelection = (roomID: string) => {
+    onRoomSelected(roomID);
+  };
+ 
 </script>
 
 <div class="flex flex-col w-full items-center">
@@ -38,7 +43,7 @@
         <SelectRoomTile
           {room}
           selectedRoomID={selectedRoomID}
-          on:click={() => handleRoomSelect(room.id)}
+          select={() => handleRoomSelection(room.id)}
         />
       {/each}
     </div>
