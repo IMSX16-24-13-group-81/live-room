@@ -52,12 +52,12 @@
   };
 
   /* 
-  
   let currentLineChartData: LineChartData | undefined
 
   $: if (currentLineChartData) {
     console.log("FROM OUTSIDE WAS UPDATED")
-  } */
+  } 
+  */
 
   //Placeholder variable
   const correctToken = "placeholder-token"

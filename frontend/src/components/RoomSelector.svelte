@@ -30,7 +30,6 @@
   const handleRoomSelection = (roomID: string) => {
     onRoomSelected(roomID);
   };
- 
 </script>
 
 <div class="flex flex-col w-full items-center">
