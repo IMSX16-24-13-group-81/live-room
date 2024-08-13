@@ -7,7 +7,7 @@
   $: isSelected = selectedRoomID === room.id
 
   const onTileClicked = () => {
-    if (selectedRoomID === room.id) {
+    if (isSelected) {
       selectedRoomID = undefined
     } else {
       selectedRoomID = room.id

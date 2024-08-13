@@ -17,13 +17,17 @@
   let hasAuthenticated = false
 
   // Existing variables...
+
   let selectedStartDate: Date | null = null;
   let selectedStartTime: string | null = null;
   let selectedEndDate: Date | null = null;
   let selectedEndTime: string | null = null;
 
+  let selectedRoomID: string | undefined;
+  let currentLineChartData: LineChartData | undefined
+
   const fetchDataForSelectedRange = async () => {
-    if (selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
+    if (selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
       const startDateTime = new Date(`${selectedStartDate.toISOString().split('T')[0]}T${selectedStartTime}`);
       const endDateTime = new Date(`${selectedEndDate.toISOString().split('T')[0]}T${selectedEndTime}`);
     
@@ -39,11 +43,15 @@
     }
   };
 
+  $: if (selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
+    fetchDataForSelectedRange()
+  }
+  /*
   let currentLineChartData: LineChartData | undefined
 
   $: if (currentLineChartData) {
     console.log("FROM OUTSIDE WAS UPDATED")
-  }
+  } */
 
   //Placeholder variable
   const correctToken = "placeholder-token"
@@ -61,7 +69,14 @@
         showIncorrectToken = false
       }, 3000)
     }
-  }
+  };
+
+    // Handle room selection but do not fetch data automatically
+    const handleRoomSelection = (roomID: string) => {
+    selectedRoomID = roomID;
+    // Data will be fetched when the "FETCH DATA" button is clicked
+  };
+
 </script>
 
 <img src={"/chalmersLogo.svg"} alt="Chalmers University Logo" class="w-[110px]" />
@@ -114,7 +129,11 @@
   </h2>
   <Spacer height={20} />
   <div class="flex">
-    <RoomSelector rooms={data.allRooms} bind:currentLineChartData />
+    <RoomSelector
+      rooms={data.allRooms}
+      selectedRoomID={selectedRoomID}
+      onRoomSelected={handleRoomSelection}
+    />
   </div>
 
   <Spacer height={100} />
