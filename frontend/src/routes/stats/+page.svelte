@@ -44,6 +44,7 @@
   };
 
 
+
   const handleRoomSelection = (roomID: string) => {
     selectedRoomID = roomID;
     if (selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
@@ -51,7 +52,10 @@
     }
   };
 
-  /* 
+  /*   $: if (selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
+    fetchDataForSelectedRange()
+  }
+ 
   let currentLineChartData: LineChartData | undefined
 
   $: if (currentLineChartData) {
@@ -80,6 +84,7 @@
   $: if (selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
     fetchDataForSelectedRange()
   }
+
 </script>
 
 <img src={"/chalmersLogo.svg"} alt="Chalmers University Logo" class="w-[110px]" />
