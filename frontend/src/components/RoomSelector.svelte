@@ -20,7 +20,8 @@
     currentLineChartData = undefined 
   }
 
-  const updateLineChartData = async (roomID: string) => {
+
+   /* const updateLineChartData = async (roomID: string) => {
     const points = await getDataPointsForRoom(roomID)
     currentLineChartData = {
       points,
@@ -31,6 +32,7 @@
     onRoomSelected(roomID);
   };
  
+
 </script>
 
 <div class="flex flex-col w-full items-center">
