@@ -26,6 +26,11 @@
   let selectedRoomID: string | undefined;
   let currentLineChartData: LineChartData | undefined
 
+  const handleRoomSelection = (roomID: string) => {
+    selectedRoomID = roomID;
+    fetchDataForSelectedRange();
+  };
+
   const fetchDataForSelectedRange = async () => {
     if (selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
       const startDateTime = new Date(`${selectedStartDate.toISOString().split('T')[0]}T${selectedStartTime}`);
@@ -43,12 +48,6 @@
     }
   };
 
-
-
-  const handleRoomSelection = (roomID: string) => {
-    selectedRoomID = roomID;
-    fetchDataForSelectedRange();
-  };
 
   /*   $: if (selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
     fetchDataForSelectedRange()
@@ -137,7 +136,7 @@
     <RoomSelector
       rooms={data.allRooms}
       selectedRoomID={selectedRoomID}
-      onRoomSelected={handleRoomSelection}
+      onRoomSelected={(roomID) => handleRoomSelection(roomID)}
     />
   </div>
 
