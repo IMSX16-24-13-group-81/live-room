@@ -9,7 +9,7 @@
   export let selectedRoomID: string | undefined
   export let onRoomSelected: (roomID: string) => void
 
-  let currentLineChartData: LineChartData | undefined;
+  /*let currentLineChartData: LineChartData | undefined;
 
 
     //Svelte trick "$:" and if statement
@@ -21,18 +21,16 @@
   }
 
 
-   /* const updateLineChartData = async (roomID: string) => {
+    const updateLineChartData = async (roomID: string) => {
     const points = await getDataPointsForRoom(roomID)
     currentLineChartData = {
       points,
     } 
-  }
+  }  */
 
   const handleRoomSelection = (roomID: string) => {
     onRoomSelected(roomID);
   };
- 
-
 </script>
 
 <div class="flex flex-col w-full items-center">
