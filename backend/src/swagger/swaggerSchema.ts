@@ -68,4 +68,4 @@ export const sensorDeleteSchema = {
         authorization: { type: 'string' }
         }
     }
-};
+};    

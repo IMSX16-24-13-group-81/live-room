@@ -15,6 +15,15 @@ export interface Room {
   isAvailable: boolean;
 }
 
+export interface BigRoom {
+  id: string;
+  buildingId: string;
+  name: string;
+  places: number;
+  description: string;
+  isAvailable: boolean;
+}
+
 export interface Point {
   time: number; //Integer since 1970 in milliseconds
   y: number; //Number of people in a room as an integer
@@ -247,6 +256,17 @@ export const rooms: Room[] = [
     name: 'SB-D209',
     description: `SB-D209 finns på Campus Johanneberg.
     Gå till byggnad Samhällsbyggnad I-II. Ingång från Sven Hultins Gata 6. Ta trappa E (SB2). Gå till våning 2. Rum 2233.`,
+    isAvailable: true
+  }
+];
+
+export const bigRooms: BigRoom [] = [
+  {
+    id: '1',
+    buildingId: '1',
+    name: 'EG-3215',
+    places: 20,
+    description: 'Tyst läsesal i EDIT-huset',
     isAvailable: true
   }
 ];

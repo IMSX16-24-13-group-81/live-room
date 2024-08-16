@@ -22,6 +22,20 @@
       "when": 1712500120453,
       "tag": "0002_fearless_callisto",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1723739909588,
+      "tag": "0003_adorable_korvac",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1723743322768,
+      "tag": "0004_amused_magma",
+      "breakpoints": true
     }
   ]
 }

@@ -215,14 +215,14 @@ export const setupRoutes = (
       totOut += line.out_counted || 0; // Ensure 'out_counted' is a number
     });
 
-    const occupants = totIn - totOut;
+    let number = 0;
+    if(totIn - totOut >= 0) {
+    number = totIn - totOut;
+    }
+    
+    const occupants = number;
     const firmwareVersion = device_info.firmware_version;
     const sensorId = device_info.device_mac;
-
-    if (!firmwareVersion || !sensorId) {
-      reply.code(400);
-      return { error: 'Invalid data: Missing firmwareVersion or sensorId' };
-    }
 
     // Assuming updateOccupants is an async function
     updateOccupants(firmwareVersion, sensorId, occupants);

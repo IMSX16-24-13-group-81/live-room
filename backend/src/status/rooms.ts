@@ -1,5 +1,5 @@
 import { getPG } from '../db/config';
-import { buildings, rooms, sensors } from '../db/schema';
+import { buildings, rooms, sensors, bigrooms } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import { PirSensorState, RoomStatus, SimplifiedRoomState } from '../types';
 import { getPIRStates, getOccupantsHistory, getOccupants } from '../influx/sensors';
@@ -66,6 +66,19 @@ const addRoom = async (name: string, coordinates: string, building: number, desc
   });  
 };
 
+const addBigRoom = async (id: number, name: string, building: number, places: number, description: string, coordinates: string) => {
+  const db = await getPG();
+  return await db 
+    .insert(bigrooms).values({
+    id: id,
+    name: name,
+    building: building,
+    places: places,
+    description: description,
+    coordinates: coordinates
+  });
+};
+
 export const findBuilding = async (building : number) => {
   const db = await getPG();
   const result = await db
@@ -75,10 +88,10 @@ export const findBuilding = async (building : number) => {
     .limit(1);
   if (result.length > 0) {
       return result[0]; // Return the building object if found
-  } else {
+  } else {  
       return null; // Return null if no building was found
   }
-}
+};
 
 export const findRoom = async (roomId: number) => {
   const db = await getPG();
