@@ -64,7 +64,7 @@ export const getAllRooms = async (): Promise<Room[]> => {
     console.error("There has been a problem with the fetch operation:", error)
   }
 } */
-  export const getDataPointsForRoom = async (id: string, startDateTime?: string, endDateTime?: string): Promise<Point[]> => {
+  export const getDataPointsForRoom = async (id: string, startDateTime?: string, endDateTime?: string): Promise<LineChartData> => {
   const backendURL = env.PUBLIC_BACKEND_URL || undefined
   let url = `${backendURL}/api/rooms/occupants/history/${id}`;
   if (startDateTime && endDateTime) {
@@ -75,7 +75,7 @@ export const getAllRooms = async (): Promise<Room[]> => {
     throw new Error(`HTTP error! status: ${response.status}`)
   }
   const points: Point[] = await response.json()
-  return points
+  return { points };
   }
 
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { LineChartData } from "$lib/data/protocols"
-  import { getExampleLineChartData } from "$lib/helpers"
+  import { getExampleLineChartData, getDataPointsForRoom } from "$lib/helpers"
   import CustomButton from "../../components/CustomButton.svelte"
   import RoomSelector from "../../components/RoomSelector.svelte"
   import DatePicker from "../../components/DatePicker.svelte";
@@ -33,10 +33,10 @@
 
   const fetchDataForSelectedRange = async () => {
     if (selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
-      const startDateTime = new Date(`${selectedStartDate.toISOString().split('T')[0]}T${selectedStartTime}:00`);
-      const endDateTime = new Date(`${selectedEndDate.toISOString().split('T')[0]}T${selectedEndTime}:00`);
+      const startDateTime = new Date(`${selectedStartDate.toISOString().split('T')[0]}T${selectedStartTime}:00`).toISOString();
+      const endDateTime = new Date(`${selectedEndDate.toISOString().split('T')[0]}T${selectedEndTime}:00`).toISOString();
     
-      // Call backend with the selected date range
+      /*// Call backend with the selected date range
       const response = await fetch('/api/getRoomDataForRange', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -45,9 +45,9 @@
           endDateTime: endDateTime.toISOString(), 
           roomID: selectedRoomID })
       });
-
       const result = await response.json();
-      currentLineChartData = result.lineChartData;
+      */
+      currentLineChartData = await getDataPointsForRoom(selectedRoomID, startDateTime, endDateTime);
     }
   };
 
