@@ -2,7 +2,8 @@ import { FastifyInstance } from 'fastify';
 import {
   getDeadSensors,
   getOccupants,
-  updateOccupants
+  updateOccupants,
+  getOccupantsHistory
 } from './influx/sensors';
 //import WebSocket from 'ws';
 import { OurPGDatabase } from './types';
@@ -17,6 +18,7 @@ import {
   findRoom,
   findSensor,
   deleteSensors
+  
 } from './status/rooms';
 const fs = require('fs');
 const path = require('path');
@@ -132,25 +134,36 @@ export const setupRoutes = (
   });
 
   server.get('/api/rooms/occupants/history/:roomID', async (request, reply) => {
-    const { type }: any = request.body ?? { type: 'json' };
-    const { roomID }: any = request.params;
+    const { roomID } = request.params as { roomID: string };
+    const { startDateTime, endDateTime, type = 'json' } = request.query as { startDateTime?: string; endDateTime?: string; type?: string };
+
 
     if (!roomID) {
       reply.code(400);
       return { error: 'Must include a room ID in request.' };
     }
+    if (startDateTime && isNaN(Date.parse(startDateTime))) {
+      reply.code(400).send({ error: 'Invalid start date.' });
+      return;
+    }
+    if (endDateTime && isNaN(Date.parse(endDateTime))) {
+      reply.code(400).send({ error: 'Invalid end date.' });
+      return;
+    }
 
     reply.header('Access-Control-Allow-Origin', '*');
     reply.header('Access-Control-Allow-Methods', 'GET, POST');
 
-    const history = await getRoomStatusHistory(roomID);
+    const history = await getOccupantsHistory(roomID, startDateTime, endDateTime);
     return type === 'csv'
-      ? ['Timestamp,Occupants', ...history.map((o) => `${o.time},${o.y}`)].join(
+      ? ['Timestamp,Occupants', ...history.map((o: any) => `${o.time},${o.y}`)].join(
           '\n'
         )
       : history;
   });
 
+
+  //Endpoint for PICO sensors from spring 2024
   server.post('/api/sensors/report', {schema : sensorReportSchema}, async (request, reply) => {
     const { firmwareVersion, sensorId, occupants, radarState, pirState }: any =
       request.body;
@@ -168,11 +181,6 @@ export const setupRoutes = (
     updateOccupants(firmwareVersion, sensorId, occupants, radarState, pirState);
       return 'Success';
   });   
-
-  //Test of route setup and sensor connection
-  server.get('/api/sensors/report/vs135hl', async (request, reply) => {
-    return { message: "This is a GET request test for /vs135hl" };
-  });
 
   // New endpoint for the new sensor VS135-hl
   server.post('/api/sensors/report/vs135hl', async (request, reply) => {

@@ -70,16 +70,14 @@ export const getAllRooms = async (): Promise<Room[]> => {
   if (startDateTime && endDateTime) {
       url += `?start=${encodeURIComponent(startDateTime)}&end=${encodeURIComponent(endDateTime)}`;
   }
-
   const response = await fetch(url)
-
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`)
   }
-
   const points: Point[] = await response.json()
   return points
   }
+
 
 export const truncateString = (str: string, num: number) => {
   if (str.length > num) {
