@@ -2,7 +2,8 @@ import { FastifyInstance } from 'fastify';
 import {
   getDeadSensors,
   getOccupants,
-  updateOccupants
+  updateOccupants,
+  getOccupantsHistory
 } from './influx/sensors';
 //import WebSocket from 'ws';
 import { OurPGDatabase } from './types';
@@ -17,6 +18,7 @@ import {
   findRoom,
   findSensor,
   deleteSensors
+  
 } from './status/rooms';
 const fs = require('fs');
 const path = require('path');
@@ -132,7 +134,7 @@ export const setupRoutes = (
   });
 
   server.get('/api/rooms/occupants/history/:roomID', async (request, reply) => {
-    const { roomID } = request.params;
+    const { roomID } = request.params as { roomID: string };
     const { startDateTime, endDateTime, type = 'json' } = request.query as { startDateTime?: string; endDateTime?: string; type?: string };
 
 
@@ -154,7 +156,7 @@ export const setupRoutes = (
 
     const history = await getOccupantsHistory(roomID, startDateTime, endDateTime);
     return type === 'csv'
-      ? ['Timestamp,Occupants', ...history.map((o) => `${o.time},${o.y}`)].join(
+      ? ['Timestamp,Occupants', ...history.map((o: any) => `${o.time},${o.y}`)].join(
           '\n'
         )
       : history;
