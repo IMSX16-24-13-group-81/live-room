@@ -77,7 +77,7 @@ export const getOccupantsHistory = async (sensorId: string, startDateTime?: stri
     |> filter(fn: (r) => r._measurement == "sensors")
     |> filter(fn: (r) => r["sensorId"] == "${sensorId}")`;
 
-  const results = await queryApi.collectRows(query);
+  
   return convertResults<number>(await queryApi.collectRows(query));
 };
 
