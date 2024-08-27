@@ -15,7 +15,6 @@ const convertResults = <T>(
     .filter(
       (row: any) =>
         row._field === field &&
-        row.result === '_result' &&
         row._value !== undefined
     )
     .map((row: any) => {
@@ -78,7 +77,8 @@ export const getOccupantsHistory = async (sensorId: string, startDateTime?: stri
     |> filter(fn: (r) => r._measurement == "sensors")
     |> filter(fn: (r) => r["sensorId"] == "${sensorId}")`;
 
-  return convertResults<number>(await queryApi.collectRows(query));
+  const results = await queryApi.collectRows(query);
+  return convertResults<number>(results, 'occupants');
 };
 
 export const getPIRStates = async () => {
