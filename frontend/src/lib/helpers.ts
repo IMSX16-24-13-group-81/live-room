@@ -66,26 +66,20 @@ export const getAllRooms = async (): Promise<Room[]> => {
 } */
   export const getDataPointsForRoom = async (id: string, startDateTime?: string, endDateTime?: string): Promise<Point[]> => {
   const backendURL = env.PUBLIC_BACKEND_URL || undefined
-
-  try {
-    let url = `${backendURL}/api/rooms/occupants/history/${id}`;
-    if (startDateTime && endDateTime) {
+  let url = `${backendURL}/api/rooms/occupants/history/${id}`;
+  if (startDateTime && endDateTime) {
       url += `?start=${encodeURIComponent(startDateTime)}&end=${encodeURIComponent(endDateTime)}`;
-    }
-
-    const response = await fetch(url)
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-
-    const points: Point[] = await response.json()
-    return points
-  } catch (error) {
-    console.error("There has been a problem with the fetch operation:", error)
-    return []
   }
-}
+
+  const response = await fetch(url)
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`)
+  }
+
+  const points: Point[] = await response.json()
+  return points
+  }
 
 export const truncateString = (str: string, num: number) => {
   if (str.length > num) {

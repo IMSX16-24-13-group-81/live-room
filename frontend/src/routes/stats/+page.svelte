@@ -33,14 +33,17 @@
 
   const fetchDataForSelectedRange = async () => {
     if (selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
-      const startDateTime = new Date(`${selectedStartDate.toISOString().split('T')[0]}T${selectedStartTime}`);
-      const endDateTime = new Date(`${selectedEndDate.toISOString().split('T')[0]}T${selectedEndTime}`);
+      const startDateTime = new Date(`${selectedStartDate.toISOString().split('T')[0]}T${selectedStartTime}:00`);
+      const endDateTime = new Date(`${selectedEndDate.toISOString().split('T')[0]}T${selectedEndTime}:00`);
     
       // Call backend with the selected date range
-      const response = await fetch('/api/getRoomData', {
+      const response = await fetch('/api/getRoomDataForRange', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({startDateTime, endDateTime, roomID: selectedRoomID })
+        body: JSON.stringify({
+          startDateTime: startDateTime.toISOString(), 
+          endDateTime: endDateTime.toISOString(), 
+          roomID: selectedRoomID })
       });
 
       const result = await response.json();
@@ -81,7 +84,6 @@
   $: if (hasAuthenticated && selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
     fetchDataForSelectedRange()
   } 
-
 
 </script>
 
