@@ -68,7 +68,7 @@ export const getAllRooms = async (): Promise<Room[]> => {
   const backendURL = env.PUBLIC_BACKEND_URL || undefined
   let url = `${backendURL}/api/rooms/occupants/history/${id}`;
   if (startDateTime && endDateTime) {
-      url += `?start=${encodeURIComponent(startDateTime)}&end=${encodeURIComponent(endDateTime)}`;
+      url += `?startDateTime=${encodeURIComponent(startDateTime)}&endDateTime=${encodeURIComponent(endDateTime)}`;
   }
   const response = await fetch(url)
   if (!response.ok) {
