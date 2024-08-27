@@ -15,7 +15,7 @@
   let startTime: number
   let endTime: number
 
-  let pointsAsTimes: number[]
+  let pointsAsTimes: number[] 
 
   let yValues: number[]
   let minY: number
