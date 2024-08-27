@@ -142,14 +142,6 @@ export const setupRoutes = (
       reply.code(400);
       return { error: 'Must include a room ID in request.' };
     }
-    if (startDateTime && isNaN(Date.parse(startDateTime))) {
-      reply.code(400).send({ error: 'Invalid start date.' });
-      return;
-    }
-    if (endDateTime && isNaN(Date.parse(endDateTime))) {
-      reply.code(400).send({ error: 'Invalid end date.' });
-      return;
-    }
 
     reply.header('Access-Control-Allow-Origin', '*');
     reply.header('Access-Control-Allow-Methods', 'GET, POST');

@@ -9,6 +9,7 @@ export const load: PageServerLoad = async () => {
   };
 }; //satisfies PageServerLoad
 
+/*
 //Call for statistics for certain dates and time
 export const actions = {
   getRoomDataForRange: async ({ request }) => {
@@ -23,3 +24,4 @@ export const actions = {
     };
   }
 };
+*/
