@@ -191,7 +191,7 @@ export const setupRoutes = (
       return { error: 'Unauthorized' };
     }
 
-    // Extract username and password from the Authorization header
+      // Extract username and password from the Authorization header
     const base64Credentials = authorization.split(' ')[1] || '';
     const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
     const [Username, Password] = credentials.split(':');
@@ -201,7 +201,7 @@ export const setupRoutes = (
       return { error: 'Unauthorized' };
     }
 
-    // Check if total_data is an array
+      // Check if total_data is an array
     if (!Array.isArray(line_total_data)) {
       reply.code(400);
       return { error: 'Invalid data: total_data should be an array' };

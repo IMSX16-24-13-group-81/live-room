@@ -13,14 +13,8 @@ export const load: PageServerLoad = async () => {
 export const actions = {
   getRoomDataForRange: async ({ request }) => {
     const { startDateTime, endDateTime, roomID } = await request.json();
-    
-    // Use startDateTime and endDateTime to query the InfluxDB
-    const startISO = new Date(startDateTime).toISOString();
-    const endISO = new Date(endDateTime).toISOString();
-
     // Fetch room status history
-    const lineChartData = await getDataPointsForRoom(roomID, startISO, endISO);
-
+    const lineChartData = await getDataPointsForRoom(roomID, startDateTime, endDateTime);
     return {
       status: 200,
       body: {
