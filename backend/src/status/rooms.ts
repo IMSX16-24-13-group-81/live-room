@@ -144,13 +144,15 @@ const sortState = (rooms: SimplifiedRoomState[]) => {
 };
 
 const getRoomStatusHistory = async (
-  roomId: string
+  roomId: string,
+  startDateTime?: string,
+  endDateTime?: string
 ): Promise<{ time: number; y: number }[]> => {
   const rooms = await getRooms();
   const room = rooms.find((room) => room.rooms.id.toString() === roomId);
   if (!room) return [];
 
-  const sensorStatusHistory = await getOccupantsHistory(room.sensors.id);
+  const sensorStatusHistory = await getOccupantsHistory(room.sensors.id, startDateTime, endDateTime);
   return sensorStatusHistory.map((s) => {
     return { time: new Date(s.reportedAt).getTime(), y: s.state };
   });

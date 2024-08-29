@@ -2,8 +2,7 @@ import { FastifyInstance } from 'fastify';
 import {
   getDeadSensors,
   getOccupants,
-  updateOccupants,
-  getOccupantsHistory
+  updateOccupants
 } from './influx/sensors';
 //import WebSocket from 'ws';
 import { OurPGDatabase } from './types';
@@ -146,7 +145,7 @@ export const setupRoutes = (
     reply.header('Access-Control-Allow-Origin', '*');
     reply.header('Access-Control-Allow-Methods', 'GET, POST');
 
-    const history = await getOccupantsHistory(roomID, startDateTime, endDateTime);
+    const history = await getRoomStatusHistory(roomID, startDateTime, endDateTime);
     return type === 'csv'
       ? ['Timestamp,Occupants', ...history.map((o: any) => `${o.time},${o.y}`)].join(
           '\n'
