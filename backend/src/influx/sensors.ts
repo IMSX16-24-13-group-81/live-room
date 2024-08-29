@@ -1,4 +1,4 @@
-import { Point, flux, date } from '@influxdata/influxdb-client';
+import { Point, flux } from '@influxdata/influxdb-client';
 import influxClient from './influxClient';
 import { SensorState } from '../types';
 
@@ -69,13 +69,14 @@ export const getOccupants = async () => {
 export const getOccupantsHistory = async (sensorId: string, startDateTime?: string, endDateTime?: string) => {
   let queryApi = influxClient.getQueryApi(org);
 
+  // Constructing the range part of the query
+  let rangeQuery = `|> range(start: ${startDateTime ? `"${startDateTime}"` : '-1h'}${endDateTime ? `, stop: "${endDateTime}"` : ''})`;
+
   const query = flux`from(bucket: "${bucket}")
-    startRange = time(v: ${JSON.stringify(startDateTime)})
-    endRange = time(v: ${JSON.stringify(endDateTime)})
-    |> range(start: startRange, stop: endRange)
+    ${rangeQuery}
     |> filter(fn: (r) => r._measurement == "sensors")
     |> filter(fn: (r) => r["sensorId"] == "${sensorId}")`;
-
+  
   return convertResults<number>(await queryApi.collectRows(query));
 
 };

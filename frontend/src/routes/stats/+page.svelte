@@ -35,6 +35,9 @@
     if (selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
       const startDateTime = new Date(`${selectedStartDate.toISOString().split('T')[0]}T${selectedStartTime}:00`).toISOString();
       const endDateTime = new Date(`${selectedEndDate.toISOString().split('T')[0]}T${selectedEndTime}:00`).toISOString();
+
+      console.log("Start DateTime (UTC):", startDateTime);
+      console.log("End DateTime (UTC):", endDateTime);
     
       /*// Call backend with the selected date range
       const response = await fetch('/api/getRoomDataForRange', {
