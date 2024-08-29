@@ -70,15 +70,13 @@ export const getOccupantsHistory = async (sensorId: string, startDateTime?: stri
   let queryApi = influxClient.getQueryApi(org);
 
   // Constructing the range part of the query
-  let rangeQuery = `|> range(start: ${startDateTime ? startDateTime : '-1h'}${endDateTime ? `, stop: ${endDateTime}` : ''})`;
+  let rangeQuery = `|> range(start: ${startDateTime ? `"${startDateTime}"` : '-1h'}${endDateTime ? `, stop: "${endDateTime}"` : ''})`;
 
   const query = flux`from(bucket: "${bucket}")
     ${rangeQuery}
     |> filter(fn: (r) => r._measurement == "sensors")
     |> filter(fn: (r) => r["sensorId"] == "${sensorId}")`;
-
   
-  console.log("Executing InfluxDB Query:", query);
   return convertResults<number>(await queryApi.collectRows(query));
 
 };
