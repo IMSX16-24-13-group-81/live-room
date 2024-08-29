@@ -86,9 +86,8 @@ export const getOccupantsHistory = async (sensorId: string, startDateTime?: stri
     |> filter(fn: (r) => r["sensorId"] == "${sensorId}")`;
 
   
-  rawResults = await queryApi.collectRows(query)
-  console.log("Raw InfluxDB Results:", rawResults);
-  return convertResults<number>(rawResults);
+  console.log("Executing InfluxDB Query:", query);
+  return convertResults<number>(await queryApi.collectRows(query));
 
 };
 
