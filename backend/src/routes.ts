@@ -136,20 +136,19 @@ export const setupRoutes = (
     const { roomID } = request.params as { roomID: string };
     const { startDateTime, endDateTime, type = 'json' } = request.query as { startDateTime?: string; endDateTime?: string; type?: string };
 
+    console.log('Received Parameters:', { roomID, startDateTime, endDateTime });
 
     if (!roomID) {
       reply.code(400);
       return { error: 'Must include a room ID in request.' };
     }
-
+  
     reply.header('Access-Control-Allow-Origin', '*');
     reply.header('Access-Control-Allow-Methods', 'GET, POST');
-
+  
     const history = await getRoomStatusHistory(roomID, startDateTime, endDateTime);
     return type === 'csv'
-      ? ['Timestamp,Occupants', ...history.map((o: any) => `${o.time},${o.y}`)].join(
-          '\n'
-        )
+      ? ['Timestamp,Occupants', ...history.map((o: any) => `${o.time},${o.y}`)].join('\n')
       : history;
   });
 

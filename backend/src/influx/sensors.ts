@@ -69,16 +69,9 @@ export const getOccupants = async () => {
 export const getOccupantsHistory = async (sensorId: string, startDateTime?: string, endDateTime?: string) => {
   let queryApi = influxClient.getQueryApi(org);
 
-  const formatDateTime = (dateTime: string) => {
-    const date = new Date(dateTime);
-    return date.toISOString(); // Converts to RFC3339 format
-  };
-
-  const start = startDateTime ? formatDateTime(startDateTime) : '-1h';
-  const end = endDateTime ? formatDateTime(endDateTime) : '';
 
   // Constructing the range part of the query
-  let rangeQuery = `|> range(start: ${start ? start : '-1h'}${end ? `, stop: ${end}` : ''})`;
+  let rangeQuery = `|> range(start: ${startDateTime ? startDateTime : '-1h'}${endDateTime ? `, stop: ${endDateTime}` : ''})`;
 
   const query = flux`from(bucket: "${bucket}")
     ${rangeQuery}
