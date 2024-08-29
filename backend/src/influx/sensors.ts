@@ -70,7 +70,6 @@ export const getOccupantsHistory = async (sensorId: string, startDateTime?: stri
   let queryApi = influxClient.getQueryApi(org);
 
   const query = flux`from(bucket: "${bucket}")
-    import "date"
     startRange = time(v: ${JSON.stringify(startDateTime)})
     endRange = time(v: ${JSON.stringify(endDateTime)})
     |> range(start: startRange, stop: endRange)
