@@ -32,6 +32,12 @@
   };
 
   const fetchDataForSelectedRange = async () => {
+    console.log("fetchDataForSelectedRange called");
+    console.log("selectedRoomID:", selectedRoomID);
+    console.log("selectedStartDate:", selectedStartDate);
+    console.log("selectedStartTime:", selectedStartTime);
+    console.log("selectedEndDate:", selectedEndDate);
+    console.log("selectedEndTime:", selectedEndTime);
     if (selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
       const startDateTime = new Date(`${selectedStartDate.toISOString().split('T')[0]}T${selectedStartTime}:00`).toISOString();
       const endDateTime = new Date(`${selectedEndDate.toISOString().split('T')[0]}T${selectedEndTime}:00`).toISOString();
