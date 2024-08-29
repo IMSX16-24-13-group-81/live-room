@@ -69,7 +69,6 @@ export const getOccupants = async () => {
 export const getOccupantsHistory = async (sensorId: string, startDateTime?: string, endDateTime?: string) => {
   let queryApi = influxClient.getQueryApi(org);
 
-
   // Constructing the range part of the query
   let rangeQuery = `|> range(start: ${startDateTime ? startDateTime : '-1h'}${endDateTime ? `, stop: ${endDateTime}` : ''})`;
 
