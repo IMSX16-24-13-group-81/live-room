@@ -55,29 +55,18 @@ const getRooms = async () => {
     .innerJoin(buildings, eq(rooms.building, buildings.id));
 };
 
-const addRoom = async (name: string, coordinates: string, building: number, description: string) => {
+const addRoom = async (name: string, coordinates: string, building: number, description: string, places: string) => {
   const db = await getPG();
   return await db
     .insert(rooms).values({
     name: name, 
     coordinates: coordinates, 
     building: building,
-    description: description
+    description: description,
+    places: places
   });  
 };
 
-const addBigRoom = async (id: number, name: string, building: number, places: number, description: string, coordinates: string) => {
-  const db = await getPG();
-  return await db 
-    .insert(bigrooms).values({
-    id: id,
-    name: name,
-    building: building,
-    places: places,
-    description: description,
-    coordinates: coordinates
-  });
-};
 
 export const findBuilding = async (building : number) => {
   const db = await getPG();
@@ -155,6 +144,17 @@ const sortState = (rooms: SimplifiedRoomState[]) => {
     return stateNum == 0 ? a.name.localeCompare(b.name) : stateNum;
   });
 };
+
+const placesLeft = async (roomId: string, sensorId: SimplifiedRoomState[]) => {
+  const room = await findRoom(parseInt(roomId));
+  const sensor = await findSensor(sensorId);
+  if (!room || !sensor) return 0;
+  if (room.places){
+  var x : number=+room.places;  
+  var y = =+sensorId.state.occupants;
+  return x - 
+  }
+}
 
 const getRoomStatusHistory = async (
   roomId: string

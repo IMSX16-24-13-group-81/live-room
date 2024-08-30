@@ -94,7 +94,7 @@ export const setupRoutes = (
   });
 
   server.post('/api/rooms', {schema : addRoomSchema}, async (request, reply) => {
-    const { name, building, coordinates, description}: any =
+    const { name, building, coordinates, description, places}: any =
     request.body;
   const { authorization }: any = request.headers;
 
@@ -104,7 +104,7 @@ export const setupRoutes = (
   }
   const foundBuilding = await findBuilding(building);
   if (foundBuilding) {
-  await addRoom(name, coordinates, building, description);
+  await addRoom(name, coordinates, building, description,places);
   return 'Success';
   } else{
     reply.code(400);
@@ -171,7 +171,19 @@ export const setupRoutes = (
 
   //Test of route setup and sensor connection
   server.get('/api/sensors/report/vs135hl', async (request, reply) => {
-    return { message: "This is a GET request test for /vs135hl" };
+    //return { message: "This is a GET request test for /vs135hl" };
+    const { type }: any = request.body ?? { type: 'json' };
+    const { sensorId }: any = request.params;
+
+    if (!sensorId) {
+      reply.code(400);
+      return { error: 'Must include a sensor ID in request.' };
+    }
+
+    reply.header('Access-Control-Allow-Origin', '*');
+    reply.header('Access-Control-Allow-Methods', 'GET, POST');
+
+    return getOccupants();
   });
 
   // New endpoint for the new sensor VS135-hl
