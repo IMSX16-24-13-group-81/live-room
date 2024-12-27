@@ -1,3 +1,8 @@
+
+<!-- This file sets up the frontpage -->
+
+  
+
 <script lang="ts">
   import { buildings } from "$lib/data/buildings";
   import BuildningCell from "../components/BuildningCell.svelte";
@@ -57,6 +62,8 @@
 </div>
 <Spacer height={15} />
 <Searchbar rooms={data.allRooms} />
+
+<!-- Feedback was active during testing, currently not active. Update the link to activate and get new feedback-->
 <!-- Feedback button -->
 <!-- <Spacer height={10} /> -->
 <!-- <a
@@ -91,6 +98,7 @@
 </div>
 <Spacer height={70} />
 <div class="w-full bg-dark/[0.07] rounded-xl p-8 flex flex-col items-center">
+  <!-- Placeholder text. Currently this space is empty.-->
   <!--<p class="text-smallContent tablet:text-content font-medium opacity-50 leading-tight italic text-center">
     Bibbidi-Bobbidi-Boo, here's one found, but now there are two.
   </p>
@@ -106,9 +114,10 @@
   </p>
   <Spacer height={20} />
   <a
-  href="https://forms.office.com/e/nD4aFBBjhZ"
+  href="https://forms.office.com/e/nD4aFBBjhZ" 
   class=" bg-primary p-2 pl-5 pr-5 rounded-full hover:brightness-[0.8] transition"
->
+> <!-- Form currently operated by Ella Dahlström -->
+
   <p class="text-white font-medium text-smallHeader">Contact us!</p>
 </a>
  <!-- <p class="text-content font-light leading-none text-center max-w-[700px]">

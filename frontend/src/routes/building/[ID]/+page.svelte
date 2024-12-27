@@ -1,3 +1,6 @@
+
+<!-- Sets up the building pages, will change depending on chosen building id-->
+
 <script lang="ts">
   import Spacer from "../../../components/Spacer.svelte";
   import RoomCell from "../../../components/building-page/RoomCell.svelte";

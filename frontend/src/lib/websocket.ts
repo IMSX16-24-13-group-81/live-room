@@ -1,3 +1,6 @@
+
+// websoccket is no longer used. This file is just a survivior we've been afraid to remove.
+
 import { env } from "$env/dynamic/public"
 
 export const setupWebsocket = () => {

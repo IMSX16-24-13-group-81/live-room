@@ -1,3 +1,6 @@
+
+<!-- THis file sets up the service page. Curerntly, only the frontend works, nothing gets written to the server -->
+
 <script lang="ts">
     import type { LineChartData } from "$lib/data/protocols"
     import { getExampleLineChartData } from "$lib/helpers"

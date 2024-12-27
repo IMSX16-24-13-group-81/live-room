@@ -9,7 +9,11 @@ export const load: PageServerLoad = async () => {
   };
 }; //satisfies PageServerLoad
 
-/*
+
+
+
+
+/* Old unused code, ignore
 //Call for statistics for certain dates and time
 export const actions = {
   getRoomDataForRange: async ({ request }) => {

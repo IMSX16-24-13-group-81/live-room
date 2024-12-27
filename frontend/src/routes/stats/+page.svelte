@@ -1,3 +1,6 @@
+
+<!-- This file sets up the statistics/analysis page -->
+
 <script lang="ts">
   import type { LineChartData } from "$lib/data/protocols"
   import { getExampleLineChartData, getDataPointsForRoom } from "$lib/helpers"
@@ -45,6 +48,7 @@
       console.log("Start DateTime (UTC):", startDateTime);
       console.log("End DateTime (UTC):", endDateTime);
     
+      // This code was used previously. Now, getDataPointsForRoom will query the server for the data points during the chosen interval.
       /*// Call backend with the selected date range
       const response = await fetch('/api/getRoomDataForRange', {
         method: 'POST',
@@ -61,7 +65,8 @@
   };
 
 
-  /*   $: if (selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
+  /* More code that was used previously. Only kept since nothing has worked yet. Can be ignored. 
+    $: if (selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
     fetchDataForSelectedRange()
   }
  
@@ -90,9 +95,11 @@
     }
   };
 
+  // This code might be intefering with the query button further down
   $: if (hasAuthenticated && selectedRoomID && selectedStartDate && selectedStartTime && selectedEndDate && selectedEndTime) {
     fetchDataForSelectedRange()
   } 
+  // ------------------------------------------------------------------
 
 </script>
 
@@ -135,8 +142,9 @@
   <TimePicker bind:selectedTime={selectedEndTime} label="End Time" />
 </div>
   <Spacer height={20} />
+  <!-- Button which calls the fetch function if all is selected. Might intefere with code above -->
   <CustomButton text={"FETCH DATA"} on:click={fetchDataForSelectedRange} disabled={ !selectedRoomID || !selectedStartDate || !selectedStartTime || !selectedEndDate || !selectedEndTime } />
-
+  <!-- ---------------------------------------------------------------------------------------- -->
   <Spacer height={40} />
   <h2 class="text-mediumHeader font-extrabold tracking-tighter leading-none">Select Rooms</h2>
   <h2 class="text-content font-light tracking-tighter leading-none text-center">

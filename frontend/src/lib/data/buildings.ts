@@ -1,3 +1,9 @@
+
+// Change this file to change the building descriptions in frontend. 
+// Be aware that building id here must be equal to the id in the server. Do not change only one - this will lead to errors.
+// You should be able to rewrite descriptions and addresses without problems.
+// Having the name (inactive) will not activate black-and-white theme, and removing the black-and-white theme will not remove the (inactive) in the name.
+
 import type { Building } from "./protocols"
 
 export const buildings: Building[] = [

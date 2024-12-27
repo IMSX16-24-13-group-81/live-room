@@ -1,3 +1,7 @@
+
+// This file contains many functions that are used throughout the frontend application. 
+// Many of them utilize the backend_url
+
 import { buildings } from "./data/buildings"
 import type { Building, LineChartData, Point, Room } from "./data/protocols"
 import { env } from "$env/dynamic/public"
@@ -43,7 +47,10 @@ export const getAllRooms = async (): Promise<Room[]> => {
     return []
   }
 }
-//Function to add rooms. How? Where? Maybe useful?
+
+//Function to add rooms. The frontend for this function is complete, however the communication with the server doesn't work yet. 
+// This is the frontend-part of that communication. 
+
 /*export const addRooms = async (room: Room): Promise<void> => {
   const backendURL = env.PUBLIC_BACKEND_URL || undefined
 
@@ -64,6 +71,8 @@ export const getAllRooms = async (): Promise<Room[]> => {
     console.error("There has been a problem with the fetch operation:", error)
   }
 } */
+
+// Function used to get historical data. Historical data doesn't currently work. This might be the reason. 
   export const getDataPointsForRoom = async (id: string, startDateTime?: string, endDateTime?: string): Promise<LineChartData> => {
   const backendURL = env.PUBLIC_BACKEND_URL || undefined
   let url = `${backendURL}/api/rooms/occupants/history/${id}`;
