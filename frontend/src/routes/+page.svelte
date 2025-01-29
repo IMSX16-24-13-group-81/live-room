@@ -9,7 +9,7 @@
   import STD from "$lib/STD";
   import { onDestroy, onMount } from "svelte";
   import { RoomStatus } from "$lib/data/protocols";
-    import RoomSelector from "../components/RoomSelector.svelte";
+  import RoomSelector from "../components/RoomSelector.svelte";
 
   export let data: PageData;
 
